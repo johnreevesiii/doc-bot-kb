@@ -20,3 +20,5 @@ So both things are true at once: the breeding value does not roll, but the fresh
 
 - To lock in a bloodline's circles, breed toward the target bands: the bands are the deterministic average, so they hold generation to generation.
 - Do not expect two siblings' current externals to be identical. The small 0-3 roll per external is normal and does NOT change the breeding bands they will pass on.
+
+Common follow-up: no, the current-external roll does not make one sibling a better breeder than another; siblings pass on the same breeding bands.
