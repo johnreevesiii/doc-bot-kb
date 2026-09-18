@@ -4,12 +4,16 @@ Player-facing answers for the online arcade at play.johnreevesiii.com. Written f
 questions. Where a detail is a community heuristic rather than decoded fact, it says so.
 
 ## Community vocabulary (seals, jackpots, anomalies)
-- **Bloodline grade seals** (shown in the Studbook, stable, and Genealogy): struck at BIRTH from the
-  foal's hidden birth internals. One stat at the 45 ceiling = **Blue Chip**, two at the ceiling =
-  **Elite**, all three = **Jackpot** 🏇🏇🏇. The seal is about the birth roll, not race results.
-- **"Anomaly"** is the community's name for a foal that hit the rare +5 birth band (roughly 1 in 32
-  rolls): ALL THREE internals get +5, which is the only way past the 45 ceiling (up to ~50/50/50,
-  the ~250 stat-sum ceiling seen in-game). "Fishing" or "shiny hunting" = re-rolling pairings for it.
+- **Bloodline grade seals** (Studbook, stable, Genealogy, Breeding Lab): struck at BIRTH from the
+  foal's hidden TRUE birth internals, never the card's printed numbers. Full ladder and the OG tag:
+  see **bloodline-seals.md**, which is authoritative and supersedes anything older.
+  One at the 45 ceiling = **Blue Chip**, two = **Elite**, all three = **Trifecta** (renamed from
+  "Jackpot" on 2026-07-18). Above those sit the 50-rungs, below.
+- **"Anomaly"** is the rare +5 birth band (~1 in 32): ALL THREE internals get +5 at once, the only way
+  past the 45 ceiling. Because it lifts all three, the number of 50s equals the number of stats the
+  pairing brought to the wall — so **one 50 = Anomaly, two = Double Anomaly, three = Triple Anomaly**.
+  Since 2026-09-17 "Anomaly" means exactly ONE 50, not "any 50". "Fishing" or "shiny hunting" =
+  re-rolling pairings for the band.
 - **A caution the community itself discovered**: anomalies have big INTERNALS, but races are won by
   EXTERNALS and riding. A mass-produced anomaly with weak externals loses to a well-raised horse.
 - **"Monster"** just means an exceptionally strong racer, usually strong externals + good riding.

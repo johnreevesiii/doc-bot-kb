@@ -33,9 +33,11 @@ older document, this file and arcade-live-rules win.
 - **Whip/leaderboard pages showing stale or partial data:** two data-window bugs (a race-identity
   feed outage and a query cap) meant charts sometimes showed only a slice of recent races. Both
   fixed with self-healing.
-- **OG Jackpot invisible in the Breeder's Cup:** it always SCORED (same as Elite) but displayed as
-  plain Elite. Now the best-foal chip shows the true OG Jackpot seal and the 🕹️ Old School
-  achievement exists for breeding the original 45/45/33.
+- **OG Jackpot was treated as a TIER (retired 2026-09-17):** it used to be its own rung, scored in the
+  Breeder's Cup and drawn as a purple or indigo disc. It is now a **tag** — a small "OG" chip worn
+  beside a Triple Anomaly's seal saying which shape that horse's card prints — and it outranks nothing.
+  Nothing grades into it any more. See **bloodline-seals.md**. The Cup itself is OFF while its scoring
+  is re-cut.
 - **The 20-breed Lab stud limit (lived 07-24 to 07-26):** removed. Lines culled under it are
   restorable via the Glue Factory's ♻ Restore.
 - **"Saved twice and it never saved" (mid-July, house cabinets):** stale seat-card reads on save;
