@@ -1,4 +1,4 @@
-# Arcade FAQ: the questions players actually ask (updated 2026-07-26)
+# Arcade FAQ: the questions players actually ask (updated 2026-09-23)
 
 Player-facing answers for the online arcade at play.johnreevesiii.com. Written from real community
 questions. Where a detail is a community heuristic rather than decoded fact, it says so.
@@ -8,7 +8,7 @@ questions. Where a detail is a community heuristic rather than decoded fact, it 
   foal's hidden TRUE birth internals, never the card's printed numbers. Full ladder and the OG tag:
   see **bloodline-seals.md**, which is authoritative and supersedes anything older.
   One at the 45 ceiling = **Blue Chip**, two = **Elite**, all three = **Trifecta** (renamed from
-  "Jackpot" on 2026-07-18). Above those sit the 50-rungs, below.
+  "Jackpot" on 2026-07-18). Above those sit the 50-rungs: Anomaly, Double Anomaly, Triple Anomaly.
 - **"Anomaly"** is the rare +5 birth band (~1 in 32): ALL THREE internals get +5 at once, the only way
   past the 45 ceiling. Because it lifts all three, the number of 50s equals the number of stats the
   pairing brought to the wall — so **one 50 = Anomaly, two = Double Anomaly, three = Triple Anomaly**.
@@ -28,6 +28,21 @@ questions. Where a detail is a community heuristic rather than decoded fact, it 
 - It is normal for double circles to take generations: raise, retire well, pair matched parents,
   repeat. Starting CPU stock (Thunder Boy, Ferranti's Folly, SaraBeara, Scarecrow etc.) mostly
   carries circles, not double circles.
+
+## "All O" horses: which CPU sires and dams have every external at circle or better?
+- "All O" / "all circles" means all SIX externals at ○ or better (◎ counts). "All double circles" means
+  all six at ◎. Bands are graded on the display value (raw+1), the rule the site uses.
+- **No CPU sire or dam in ANY version has all six at ◎.** The most is four: Scarecrow ◎◎××◎◎ (Rev C,
+  Rev D); Sukeakurou (スケアクロウ) and Osutaakaapetto (オスターカーペット) in the JP versions.
+- All six at ○ or better, by version (answer per version, the catalogs differ):
+  - **Rev C** (6): dam **Lovely Run** ○○○○○○ (the ONLY such dam); sires Broadway Dreu, Glass Glider,
+    Hit Maker, Sunday Silence, Flash Point.
+  - **Rev D** (9): dam **Lovely Run** (still the only dam); sires Broadway Dreu, Glass Glider, Hit Maker,
+    Flash Point, Maverick, The Rain Maker, It's About Time, Bet the Rent.
+  - **DOC 2000** (6): dam Shinkouraburii (シンコウラブリイ); sires Eajihaado, Gurasuwandaa (Grass Wonder),
+    Hittomeekaa, Sandeesairensu (Sunday Silence), Buraianzutaimu.
+  - **DOC '99** (2): dam Shinkouraburii, sire Sandeesairensu.
+- Lovely Run's internals are modest (22/32/44), so she is a bands pick, not an internals pick.
 
 ## When should I retire a horse?
 - Measured fact (fleet data, 4,722 save pairs, 2026-07-29): stat growth is race-driven and
