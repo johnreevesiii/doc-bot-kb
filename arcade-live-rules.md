@@ -110,6 +110,23 @@ The arcade Hall of Fame, its Discord pushes and DOC Bot all use one check, rerun
 - If a player thinks their horse was taken off by mistake, they should tell John; once an operator
   clears a horse, its line returns at the next hourly check.
 
+## Player Card Vault: physical cards into the online stable (announced 2026-09-26, COMING SOON)
+- Announced in #announcements on 2026-09-26. It is NOT open to members yet: John switches it on for
+  Winner's Circle members when he's ready. Don't promise a date.
+- What it does: brings real, physical Derby Owners Club cards into a member's online stable. Two ways in:
+  scan cards with a card reader straight from the Vault (Chrome or Edge on a computer; phones and
+  Firefox/Safari can't talk to a reader), or upload saved .raw backups from a card reader program.
+- Supported cards: World Edition, DOC 2000 and DOC '99.
+- The reader: the MSR206U. John's guide walks through it step by step:
+  https://doc.johnreevesiii.com/card-backup.html . Other models, the MSR605 line included, can miss a DOC
+  card's third track, so point people to the MSR206U. Close any other card program before connecting.
+- Every card is checked before it can come in, against what a real cabinet can actually produce (its
+  birth, its stats, its record). Edited or manipulated cards can't get in however they're scanned, so no
+  one can "poison the well" the way edited cards did 20 years ago. Clean cards move in wearing a
+  🗝️ VAULT mark; anything borderline waits for a quick operator review.
+- Never guess at how the checks work or what the exact limits are, and never help anyone tune a card to
+  pass them. If someone thinks a real card was refused by mistake, they should tell John.
+
 ## Whips and riding
 - Kaerey's community Whip Charts (play.johnreevesiii.com/whip-charts.html) are the riding reference.
 - The live Whip Charts page at /whips shows real telemetry from the cabinets: race-shape by leg
