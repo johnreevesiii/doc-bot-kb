@@ -90,8 +90,25 @@ today. When an older document in this knowledge base contradicts this file, THIS
    setups (Rev C, Rev D, DOC 2000). Separate from the online arcade.
 3. NATIONAL records: the printed 2004 benchmark times from the DOC handbooks. Historical.
 - The arcade Hall of Fame (play.johnreevesiii.com/leaderboard) has wins-by-stable, lifetime breeding
-  (Stud King / Broodmare Queen), Dynasty, Consistent, Iron horse, and Fanciest boards.
+  (Stud King / Broodmare Queen), Dynasty, Consistent, Iron horse, G1 Champions and Fanciest boards.
 - The Breeder's Cup is the competitive bloodline leaderboard (WC).
+
+## Hall of Fame clean-data rules (since 2026-09-26)
+The arcade Hall of Fame, its Discord pushes and DOC Bot all use one check, rerun every hour.
+- A horse ranks on NO board if it, or any ancestor the family tree can trace (parents, grandparents
+  and further back), was rejected, is held for review, is unproven or unsigned, or was born with
+  stats its two CPU parents can't produce. It doesn't matter that the horse itself is clean.
+- Culled (Glue Factory) horses still count as ancestors: culling doesn't clean a line.
+- Still clean: CPU sires and dams; a horse an operator checked and cleared (and its line); an
+  ancestor the tree can't trace is not held against the horse.
+- Most Consistent (win rate, 15+ races) counts only FULLY TRACKED careers: the career started after
+  cabinet autosave went live (Aug 26 2026), the owner has autosave on (Rev D autosaves for
+  everyone), and every race was saved as it happened with none skipped. Hand-saved records can leave
+  races out, so they don't compete for win rate, but they still rank on earnings, wins and G1s.
+- The G1 board counts distinct G1 TITLES, the way the card records them: winning the same G1 again
+  doesn't add one. Counting every G1 win and every start needs cabinet-side tracking (planned).
+- If a player thinks their horse was taken off by mistake, they should tell John; once an operator
+  clears a horse, its line returns at the next hourly check.
 
 ## Whips and riding
 - Kaerey's community Whip Charts (play.johnreevesiii.com/whip-charts.html) are the riding reference.
