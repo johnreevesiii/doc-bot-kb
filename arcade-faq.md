@@ -90,6 +90,22 @@ questions. Where a detail is a community heuristic rather than decoded fact, it 
 - CPU/ROM horses never lock anything. If the message names what looks like a CPU horse, you have a
   horse with that same name in YOUR OWN stable, and that card is the parent it wants raced.
 
+## Starter Lab (free breeding, since 2026-09-25)
+- The Starter Lab is the free, basic Breeding Lab for players who are NOT in Winner's Circle. It lives at
+  play.johnreevesiii.com/breeding (free players see it there automatically).
+- How it works: pick a sire and a dam from the house CPU stallions and mares (the Rev C roster), press
+  "Breed my foal" once, and meet the foal (its seal, coat, and colt or filly). You can name it right there
+  before its first race. It goes straight into your stable with the 🧪 LAB mark and races on Cab A and Cab B.
+- Why it exists: every roll at a cabinet holds a racing seat. The Starter Lab moves casual breeding off
+  the cabinets so the seats go back to racing. Cabinet breeding still works exactly as before.
+- Limits of the basic version: 3 foals a day per account and per connection, resetting at midnight
+  Pacific; letting a foal go does not give the roll back. House CPU horses only, Rev C only (no breeding
+  your own horses, Studbook stock, or the DOC 2000 Legends). Colt or filly and coat are rolled for you;
+  silks are plain white and white. No predictions, no stats behind the pick, no re-rolls.
+- Winner's Circle members use the full Breeding Lab instead: their own horses, the Studbook and the
+  Legends, choosing colt or filly and silks (8 patterns, 15 colors), the predicted foal before breeding,
+  Japanese output, and as many foals as they like.
+
 ## Studbook and stable features people miss
 - Studbook has a filter/sort bar (public pool / my stable active / retired, plus sorting).
 - Share codes: open one of your retired horses in the Studbook and use the share option to mint a
