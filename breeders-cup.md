@@ -51,6 +51,23 @@ in the Breeding Lab can get you a better horse, but only racing earns points.
 - The boards rebuild **every hour at :15**, so a new result can take up to an hour to show.
 - Each stable's row shows how many horses it kept vs culled (for barns of 20+) and any former stable names.
 
+## How a season is won, and announced
+
+- The **Season Champion** is the stable with the most season points on the **All** board when the month ends
+  (midnight Pacific on the 1st).
+- **Ties:** more points first; if level, more of your bred horses winning races that season; then more G1 titles
+  won that season. Stables level on all three share first place, and the title is shared.
+- A race counts in the month its **cabinet save** lands. A session saved after midnight Pacific on the 1st
+  counts for the new month.
+- The **top horse of the season** is the horse with the most season points: its race points (at most 100 in a
+  season) plus its seal bonus if it is a committed foal that won its first race that month.
+- **On the 1st, around 9am Pacific (16:00 UTC), DOC Bot posts the result in #announcements:** the champion, the
+  final top five and the season's top horse. Between the 15th and 20th it posts a halfway standings update in
+  #leaderboards. Each post goes out once.
+- The first season scored under these rules is **September 2026**; its champion is announced on October 1, 2026.
+- A stable with no public name appears as **"Unnamed Stable"** on the boards and in these posts. To be credited
+  by name, set a stable name with the pencil (✏️) beside your name at the top of the site and press Save.
+
 ## Fair play
 
 - **The breeder keeps the credit forever.** The breeder of record is fixed the first time the Cup sees the
