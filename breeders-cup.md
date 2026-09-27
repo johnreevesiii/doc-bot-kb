@@ -1,4 +1,4 @@
-# The Breeder's Cup (v2) — how it scores
+# The Breeder's Cup (v2): how it scores
 
 **Status: LIVE since 2026-09-27** at play.johnreevesiii.com/breeders, open to everyone (no sign-in needed to
 read it). It was paused 2026-09-12 to 2026-09-27 and came back rebuilt. Any older note saying the Cup is off,
