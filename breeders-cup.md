@@ -61,7 +61,7 @@ in the Breeding Lab can get you a better horse, but only racing earns points.
   counts for the new month.
 - The **top horse of the season** is the horse with the most season points: its race points (at most 100 in a
   season) plus its seal bonus if it is a committed foal that won its first race that month.
-- **On the 1st, around 9am Pacific (16:00 UTC), DOC Bot posts the result in #announcements:** the champion, the
+- **On the 1st at 16:00 UTC (9am PDT in summer, 8am PST in winter), DOC Bot posts the result in #announcements:** the champion, the
   final top five and the season's top horse. Between the 15th and 20th it posts a halfway standings update in
   #leaderboards. Each post goes out once.
 - The first season scored under these rules is **September 2026**; its champion is announced on October 1, 2026.
