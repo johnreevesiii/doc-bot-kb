@@ -11,8 +11,8 @@ older document, this file and arcade-live-rules win.
 - Records set on community-hosted cabinets do not post to the official online track-record board.
 - The Stretch-runner handbook chart appears to fight how the game actually plays; almost no rider
   follows it (see the whip telemetry findings).
-- Very new horses bred moments ago won't appear in the Breeder's Cup until campaigned (10+ races or
-  retired). That's the anti-farm rule, not a bug.
+- A horse appears in the Breeder's Cup once it has raced and scored; the boards rebuild hourly at :15, so a
+  new result can take up to an hour. (The old "10+ races or retired" rule ended with Cup v2, 2026-09-27.)
 - Track records leave a cabinet only when the machine writes its save, so a new record can take a
   little while to appear on the board. The board footer shows the honest cadence.
 

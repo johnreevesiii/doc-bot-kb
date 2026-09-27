@@ -2,7 +2,8 @@
 
 **Status: LIVE since 2026-09-17.** They were paused 2026-09-12 to 2026-09-17 while the ladder was
 rebuilt. Any older note saying the seals are hidden, or telling you not to name a player's tier, is out
-of date. The **Breeder's Cup is still OFF** and its scores should not be quoted.
+of date. The **Breeder's Cup is back (v2, since 2026-09-27)** and no longer scores seals directly: it scores
+racing, with a one-time seal bonus for committed foals. See breeders-cup.md.
 
 ## The one sentence
 

@@ -91,7 +91,8 @@ today. When an older document in this knowledge base contradicts this file, THIS
 3. NATIONAL records: the printed 2004 benchmark times from the DOC handbooks. Historical.
 - The arcade Hall of Fame (play.johnreevesiii.com/leaderboard) has wins-by-stable, lifetime breeding
   (Stud King / Broodmare Queen), Dynasty, Consistent, Iron horse, G1 Champions and Fanciest boards.
-- The Breeder's Cup is the competitive bloodline leaderboard (WC).
+- The Breeder's Cup (play.johnreevesiii.com/breeders, open to everyone) ranks stables by what the horses
+  they BRED do at the cabinets, in monthly seasons plus an all-time board. Full rules: breeders-cup.md.
 
 ## Hall of Fame clean-data rules (since 2026-09-26)
 The arcade Hall of Fame, its Discord pushes and DOC Bot all use one check, rerun every hour.
