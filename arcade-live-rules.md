@@ -32,8 +32,13 @@ today. When an older document in this knowledge base contradicts this file, THIS
 - Parents must be RETIRED to breed (both Lab and game).
 - The "puppy mill" chain lock: a foal bred from a parent that was still unretired and under 20 races
   is locked from breeding until that parent reaches 20 races or retires. It unlocks automatically.
-- The Lab supports all four game versions: World Edition Rev C/D combined, DOC 2000 (derbyo2k), and
-  DOC '99 (derbyoc). Japanese foals get katakana names and real JP pedigree handling.
+- The Lab breeds for World Edition (Rev C), DOC 2000 (derbyo2k) and DOC '99 (derbyoc), and DOC II has its
+  own Labs. Japanese foals get katakana names and real JP pedigree handling.
+- **Cab C (the Rev D "Classic Arcade" cabinet) is cabinet-breeding only.** It is kept as close to the
+  original arcade as possible, so Lab foals can't be loaded there; Cab C horses are bred at the cabinet.
+  Lab foals race on the Rev C cabinets (Cab A and Cab B).
+- There IS a Rev D Breeding Lab for Cab C, but it is hidden for now: it isn't open to players and there
+  is no date. It's fine to say it exists; don't promise when it opens.
 - You can pick the foal's name, sex, and silk pattern/colors. Sex does not change stats.
 
 ## How foal stats actually work (byte-exact, decoded from the ROM)
