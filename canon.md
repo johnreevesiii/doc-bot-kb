@@ -23,7 +23,8 @@ Always write links in full with https:// so Discord makes them clickable.
 
 ## How do I get double circles (◎) or all circles?
 - From PARENTS, over generations. A foal's band can never beat its better parent's band on that
-  external. For ◎ the two parents' shown values must add to 26 or more (◎ 16 with ○ 10). CONFIRMED.
+  external. For ◎ the two parents' shown values must add to 26 or more (◎ 16 with ○ 10); for ○ or
+  better they must add to 18 or more. CONFIRMED.
 - Pick a sire and dam that are strong on the externals you want, breed, keep the best foals, repeat.
 - For the game's built-in CPU horses, use the catalog tools; no CPU horse in any version has all six ◎
   (the most is four). CONFIRMED.
@@ -68,7 +69,9 @@ Always write links in full with https:// so Discord makes them clickable.
   PRINTS lower. Nothing after conception changes the odds. CONFIRMED (measured 3.5% cabinet, 2.7% Lab).
 - Another rare band raises only the printed numbers, on stats under 40. CONFIRMED.
 - For about 94% of horses the printed birth stats ARE the true birth internals. Don't tell an ordinary
-  owner their card is lying. CONFIRMED (measured).
+  owner their card is lying. CONFIRMED (measured). The card popup on /stable shows them as "born x/y/z",
+  so a Blue Chip's 45 is usually visible there. SITE.
+- Birth internals are only the starting point: racing grows them afterwards (see growth below).
 
 ## What do the bloodline seals mean?
 - Seals grade TRUE birth internals: three / two / one 50 = Triple Anomaly / Double Anomaly / Anomaly;
@@ -85,7 +88,7 @@ Always write links in full with https:// so Discord makes them clickable.
   about zero on average after 25; over half in the first 10 races; +30 to +35 in total. CONFIRMED
   (measured on 4,722 save pairs). This curve is for internals; the externals curve is UNKNOWN.
 - The exact per-race growth rules, and whether stats can decline late in a career, are still being
-  verified. Don't quote specific numbers. UNKNOWN.
+  verified. Don't quote specific numbers, and don't tell players that racing late is harmless. UNKNOWN.
 - Retiring does NOT change breeding symbols. Retire when you want to stop racing or start breeding.
   Retiring is done in-game at the cabinet; the website has no retire button. SITE.
 - Sega's brochure: a horse is asked about retirement after race 20 and "will no longer be competitive
@@ -105,7 +108,8 @@ Always write links in full with https:// so Discord makes them clickable.
   racing style has changed." CONFIRMED.
 - Training drills steer it (measured): Turf builds Start, Slope/Hill and the Spurt drill build Spurt,
   Dirt builds Tenacious, Wood mainly Corner and OOB. CONFIRMED (measured).
-- A breeding predictor's style for an unborn foal is an estimate. Style is not a power tier: CPU
+- A breeding predictor's style for an unborn foal is an estimate: the parents' bands only shape the
+  foal's starting externals, and the style can change as it races. Style is not a power tier: CPU
   external totals are flat by style. CONFIRMED.
 
 ## Does a race run in phases? What does each external or internal do in a race?
@@ -153,6 +157,7 @@ Always write links in full with https:// so Discord makes them clickable.
   not verified, the menu has 14 replies, and the game's own messages say the right reply depends on how
   the race went. UNKNOWN. (Older notes printed per-button numbers from a table that was later
   retracted.)
+- How a post-race reply changes the horse's hearts (or any other bond value) is not established. UNKNOWN.
 - "You are using the whip at the wrong timing" is a post-race message about whipping during the race,
   not about when you pressed a reply. CONFIRMED (game text).
 - Pasture tells (Rough kicks, Imposing rears, Honest shakes its head, Coward shimmies, Sloppy lies down)
@@ -175,8 +180,8 @@ Always write links in full with https:// so Discord makes them clickable.
   Glass Glider, Abukuma Poro = Bubble Boy, El Condor Pasa = El Condor Pasa, Taiki Shuttle = Big Man.
   CONFIRMED.
 - The race-opponent roster and the breeding catalog carry DIFFERENT English names for the same Japanese
-  horse (Oguri Cap = breeding sire Wild Jaguar but racer Gray Bullet; Sakura Laurel = Cherry Song /
-  Royal Flush). Breeding questions use the catalog names. CONFIRMED.
+  horse (Oguri Cap = breeding sire Wild Jaguar but racer Gray Bullet; Air Groove = Hollywood Hills /
+  racer Golf of Singapore; Sakura Laurel = Cherry Song / Royal Flush). Breeding questions use the catalog names. CONFIRMED.
 - Japanese names: search the katakana exactly as written, or its romaji. CONFIRMED.
 - The CPU catalog lists internals in Stamina / Speed / Sharp order; relabel before quoting.
 
@@ -198,7 +203,8 @@ Always write links in full with https:// so Discord makes them clickable.
   Pacific day, name the foal before its first race). SITE.
 - Winner's Circle is a subscription: $8 a month or $80 a year at https://play.johnreevesiii.com/membership .
   It is NOT a donor or invite-only tier. It includes the full Breeding Lab, Studbook with Potential
-  Mates, Breeding Advisor, Breeding Planner, Genealogy, Feeding Advisor and a 200-horse stable. SITE.
+  Mates, Breeding Advisor, Breeding Planner, Genealogy, Feeding Advisor and a 200-horse stable.
+  Breeding your OWN horses online needs Winner's Circle; the free Starter Lab uses CPU parents only. SITE.
 
 ## Breeding Lab: which games? What are "greedy" and "outcross"?
 - The Lab breeds World Edition Rev C, DOC 2000 and DOC '99 (DOC II has its own Labs). Rev D (Cab C)
@@ -206,7 +212,8 @@ Always write links in full with https:// so Discord makes them clickable.
 - Breeding Planner: "greedy" picks, each generation, the mate whose predicted foal scores best on your
   goal; "outcross" does the same but every Nth generation picks for a second stat you choose. Neither
   looks at relatedness. SITE.
-- Naming: a Lab or Starter Lab foal can be named until its first race; there is no general rename.
+- Naming: a Lab or Starter Lab foal is named on the Lab's result panel, any time before its first race;
+  there is no general rename.
   Stable name: the pencil icon beside your name at the top of the site. SITE.
 
 ## Stable, Glue Factory, seats, records
