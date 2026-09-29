@@ -24,7 +24,8 @@ Always write links in full with https:// so Discord makes them clickable.
 ## How do I get double circles (◎) or all circles?
 - From PARENTS, over generations. A foal's band can never beat its better parent's band on that
   external. For ◎ the two parents' shown values must add to 26 or more (◎ 16 with ○ 10); for ○ or
-  better they must add to 18 or more. CONFIRMED.
+  better they must add to 18 or more (◎ 13 with △ 5 gives ○ 9), so both parents do NOT need ○.
+  CONFIRMED.
 - Pick a sire and dam that are strong on the externals you want, breed, keep the best foals, repeat.
 - For the game's built-in CPU horses, use the catalog tools; no CPU horse in any version has all six ◎
   (the most is four). CONFIRMED.
@@ -144,6 +145,7 @@ Always write links in full with https:// so Discord makes them clickable.
 
 ## How do I get a food? What about liked and disliked foods?
 - The feed menu only offers foods that pass a per-food check; what drives it is not decoded. UNKNOWN.
+  No shop, drop or rotation system is documented in the game either: never describe one.
   The 2004 handbook lists how players believed each food was earned. COMMUNITY CLAIM (export handbook).
 - The website has no food shop or inventory. The Feeding Advisor (https://play.johnreevesiii.com/feeding,
   Winner's Circle) plans against the ROM table but doesn't know what a cabinet is offering. SITE.
