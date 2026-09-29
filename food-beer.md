@@ -70,6 +70,10 @@ your horse like other feed" is false: its six growth bytes are all zero, so it
 confers no stat gain. Instead the game special-cases beer to play a unique
 reaction (state 1 for draft, 2 for black draft, with dedicated asset tables).
 Net: beer is real and feedable, but nutritionally inert, a novelty reaction.
+(Corrected 2026-09-28: "feedable" means the feed code handles beer if it is
+chosen. Whether a cabinet's feed menu ever offers beer is UNCONFIRMED; see
+Finding 5. What is verified: two real food records with an all-zero stat
+payload, and no disable switch in any static layer.)
 
 ## Finding 5: is beer "turned off" in Rev C? (access vs effect)
 Tested the hypothesis that beer is in the game but disabled for us.

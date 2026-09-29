@@ -5,7 +5,7 @@ TWO different packs exist; don't mix them up:
    your own PC(s) with Flycast. Standalone, includes card reading; it can NEVER write to the online
    cloud stable. Get it from the community downloads at doc.johnreevesiii.com.
 2. The **online cabinet HOST pack**: for hosting your own cabinet INTO the online lobby at
-   play.johnreevesiii.com so remote players can join. Type /hostpack in Discord for the download +
+   https://play.johnreevesiii.com so remote players can join. Type /hostpack in Discord for the download +
    login. This one pairs with the arcade, streams, and saves to the cloud (server-validated).
 
 ## Local pack: setup basics (community-tested answers)

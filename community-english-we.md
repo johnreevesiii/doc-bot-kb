@@ -100,16 +100,22 @@ English/Japanese agreement is often the same knowledge twice, not independent co
   Start Dash, Last Spurt, Stretch Runner) is determined by where your Start is. When figuring this
   out, do not count your Cornering stat. If Start is the highest you will be a Front Runner; second
   highest, Start Dash; third highest, Last Spurt; fourth highest or worse, Stretch Runner." That is
-  precisely the rule the project's SH-4 decode recovered — running style is Start's rank among the
-  five non-Corner externals — plus the fifth case, Almighty when all are equal, and the tie-break
-  (Start wins ties). There is even an OFFICIAL capstone (Sega's English FAQ, 2002): "Front-runner,
+  precisely the rule the arcade site uses (running style is Start's rank among the five non-Corner
+  externals), plus the fifth case, Almighty when all five are equal, and the tie-break (Start wins
+  ties). (Corrected 2026-09-28: this said the project's SH-4 decode recovered the rule. The ROM's
+  style routine has been located but not transcribed; the rule comes from Sega's FAQ, the owner's
+  specification and the site code, and matches the in-game screen.) There is even an OFFICIAL capstone (Sega's English FAQ, 2002): "Front-runner,
   Start dash, Last spurt, Stretch-runner and Almighty. The horse leg type will be set as Almighty
-  when the grade of five abilities except Corner are same points." **Community, developer, and ROM
-  all agree — the strongest-attested mechanic in either wing.** Cultural twist: where the Japanese
+  when the grade of five abilities except Corner are same points." **Community and developer agree, and the
+  site matches the game screen: the strongest-attested mechanic in either wing** (ROM transcription
+  still pending; corrected 2026-09-28, this said "Community, developer, and ROM all agree"). Cultural twist: where the Japanese
   scene chased Almighty, the English scene told players to *avoid* it (HEEHEE, 2004: "There is NO
   effective whipping technique for these horses, so avoid getting them always!!") — same rule,
   opposite doctrine, because the English game was a whip-chart culture and a style with no chart
   had no value.
+
+## What they knew about the machine: breeding formula and the symbol legend
+
 - **The floor-average breeding formula — CONFIRMED (second flagship).** OOP's Corner, "Retirement
   Stats": "Retirement stats are Sire + Dam / 2 (rounded down)... Fixed at birth. No amount of
   training, foods, or winning will raise an external stat." Canonical worked example: Thunder Boy
@@ -122,7 +128,13 @@ English/Japanese agreement is often the same knowledge twice, not independent co
   print symbol and number side by side, resolving the mapping: **✕ = 1-4, △ (triangle) = 5-8,
   ○ (circle) = 9-12, ◎ (double circle) = 13-16.** This is the same hidden 1-16 scale the Japanese
   16-Step Theory described, with the same off-by-one caution — treat 1-16 as the community's
-  display-side model of a 0-63 byte drawn in 16 blocks (see `community-japanese`).
+  display-side view of the breeding band. (Corrected 2026-09-28: this said the 1-16 value models
+  "a 0-63 byte drawn in 16 blocks". The card stores a separate breeding band per external, 0-15
+  shown 1-16, fixed at birth; it is not the current 0-63 external divided by four. See us-card
+  and `community-japanese`.)
+
+## What they knew about the machine: Best Right and the rosters
+
 - **Best Right — the jackpot method (COMMUNITY CLAIM, US origin).** The cleverest piece of English
   play-science, and a US addition absent from every Hong Kong source. Best Right is a CPU benchmark
   horse that reliably appears in specific 4R races and "pulls all double circles when no players
@@ -143,7 +155,9 @@ English/Japanese agreement is often the same knowledge twice, not independent co
 ## What the English community never found
 
 The gaps matter as much as the hits. Nothing recovered in the entire English corpus mentions: the
-~1-in-32 jackpot/dud bands on foal internals; the 45 internal birth cap; the internals-sum-160
+~1-in-32 birth noise bands (one lifts the true internals while the card prints lower numbers,
+the other changes only the printed numbers; corrected 2026-09-28, this said "jackpot/dud bands on
+foal internals"); the 45 internal birth cap; the internals-sum-160
 growth wall on Rev D; the hearts thresholds gating internal growth (or hearts as anything more than
 a relationship meter); the training damper driven by the externals total; or that running style is
 recomputed before every race rather than stored (they knew the rule but not that it is re-run).
@@ -189,7 +203,9 @@ because the export localisation's errors are themselves findings.
   Trumpeter Call to Post" attract audio.
 - **The fork as players felt it — COMMUNITY CLAIM.** EX renamed sires and dams "to make it more
   difficult to identify the strong breeding pairs" (e.g. Butter Popcorn → "Layin Back," Ferranti's
-  Folly → "Sarabeara," Lucky Laurie → "Peach Girl"). EX also handicapped over-developed young
+  Folly → "Sarabeara," Lucky Laurie → "Peach Girl"; note added 2026-09-28: the ROM rosters give that
+  last pair the other way round, Peach Girl in World Edition became Lucky Laurie in EX, see
+  roster-name-changes). EX also handicapped over-developed young
   horses, and the jackpot definition changed (WE = steal a symbol from Best Right; EX = any symbols
   drawn in the first race). Version tell taught to players: "If you see EX on the screen [at the
   pre-race logo], you are running EX software."

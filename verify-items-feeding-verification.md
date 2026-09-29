@@ -29,7 +29,7 @@ Verdict: **mostly-solid**. The structural core (table location, geometry, record
 ### §3 Effect columns / value ranges — CONFIRMED (numeric), labels partial
 - Per-column max across the 45 RevC foods = **[5, 6, 7, 4, 4, 5, 1]** for cols 0..6. Confirms "0..7, col2 peaks at 7 (? MUSHROOM), col6 only 0/1." 
 - Single-stat anchor foods reproduce: CARROT 0200000000000001, FODDER 0002000000000001, WATERMELON 0000020000000001, APPLE 0000000000020001, KOREAN GINSENG 0202020202020001, LARGE KOREAN GINSENG 0404040404040001 — all exact.
-- On-screen labels block @ **0x12874C** confirmed: bytes are `Speed\x00\x01\x02Stamina\x00Sharp\x00\xfd\xfdFriendship\x00\xfeMost favorite food...`. So the visible feed-screen stat labels are **Speed / Stamina / Sharp / Friendship** (4 labels), immediately followed by the food flavor-text strings. Anchors cols 0/1/2 = Speed/Stamina/Sharp solidly. **NEW**: the 4th visible label is "Friendship," which is a better candidate for col 3 than the doc's "Spirit/Guts" guess.
+- On-screen labels block @ **0x12874C** confirmed: bytes are `Speed\x00\x01\x02Stamina\x00Sharp\x00\xfd\xfdFriendship\x00\xfeMost favorite food...`. So the visible feed-screen stat labels are **Speed / Stamina / Sharp / Friendship** (4 labels), immediately followed by the food flavor-text strings. Suggests cols 0/1/2 = Speed/Stamina/Sharp (Corrected 2026-09-28: this said "anchors ... solidly". The label block proves which words the feed screen prints, not which column feeds which stat; whether cols 0-2 raise the internals or the externals is an OPEN conflict, see items-feeding section 3). **NEW**: the 4th visible label is "Friendship," which is a better candidate for col 3 than the doc's "Spirit/Guts" guess.
 
 ### §4 Class flag +35 — CONFIRMED
 - Domain {0,1}. The exactly-7 records with +35==0: MUSHROOM, LARGE MUSHROOM, WHITE MUSHROOM, ? MUSHROOM, LARGE ? MUSHROOM, BANANA, LARGE BANANA. Matches §4 list verbatim.
@@ -59,7 +59,7 @@ beer_effects_test.ic22 vs epr-22336c.ic22: **exactly 12 bytes, 2 runs**:
 
 3. Minor: the other "Sharp" hit at 0x11005C is inside a temperament word list (Charmy/Lucky/Hot/Cool/Sharp/Friendly/Funky...), unrelated to feeding — worth noting so a future editor does not bind feed columns to that block.
 
-Net: cols 0/1/2 = Speed/Stamina/Sharp are solid (anchored at 0x12874C). Col 3 is most likely **Friendship**. Cols 4-6 remain unbound and the doc's Spirit/Power guesses should be treated as unsupported.
+Net: the column bytes are solid; the names Speed/Stamina/Sharp for cols 0/1/2 are a reading of the label block at 0x12874C, not a traced binding. (Corrected 2026-09-28: this said the names "are solid". Whether cols 0-2 raise the internals or the visible externals is an OPEN conflict, see items-feeding section 3.) Col 3 is most likely **Friendship**. Cols 4-6 remain unbound and the doc's Spirit/Power guesses should be treated as unsupported.
 
 ---
 

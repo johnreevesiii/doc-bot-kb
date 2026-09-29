@@ -68,8 +68,13 @@ counts, oc 28-byte layout, G1/track offsets, and the beer/item table all confirm
   111,116,117,123,157,161,181,195,197,201,207. ALL 16 names match the doc's table
   byte-for-byte (Gold fighter->Gold Fighter, El Condor Pasa->Steppin' Out, ...,
   Tomrrow's Dream->Tomorrow's Dream, Flower Dance->Mr. Vice President). CONFIRMED exactly.
-- **WE breeders revc->revd: 26 sires + 84/84 dams differ.** CONFIRMED exactly.
-  Examples confirmed: sire Vinny, Maverick, Malski; dam Pierogi Prince, It's About Time,
+- **WE breeders revc->revd: 26 sire slots + 84/84 dam slots hold a different name.**
+  (Corrected 2026-09-28: this was labelled "CONFIRMED exactly", but it compares slot k with
+  slot k, the Rev D dam order is shuffled, and the Rev D dam base used here assumes 84 sire
+  records. It does NOT mean all dams were renamed. By identity (same stats): 2 sires and
+  about 34 dams renamed, 24 sires dropped, about 30 horses added, 58 sires and 49 dams kept
+  their names; see version-diff section 4b. Whether the four "dams" below are really dams
+  is OPEN: the site catalog lists them as sires.) Examples read: sire Vinny, Maverick, Malski; dam Pierogi Prince, It's About Time,
   Bet the Rent, Mr. Original. Bases revc sire 0x10BF1C / dam 0x10D2CC; revd sire 0x10D264 /
   dam 0x10E614, stride 60 — all decode sanely. CONFIRMED.
   (Minor: doc's prose says revc sires include "Sunday Silence, Helissio, Tony Bin, Carnegie";
@@ -129,7 +134,7 @@ byte with at least one deviation; the "(index+1)&0xFF" formula is not exact. Low
 - revc==o2k stats byte-identical: REFUTED (0.99 confidence it is false; 22 diffs).
 - Field map (+0..+31): 0.9 (distributions/ranges all reproduced; +25 formula partial).
 - Name tables + 16/64 roster diffs: 0.99 (exact match).
-- Breeder 26 sire / 84 dam: 0.97 (counts + examples exact; one loose prose detail).
+- Breeder 26 sire / 84 dam: slot-by-slot name differences only, NOT renames (Corrected 2026-09-28: this read 0.97 as if the counts were renames; by identity 2 sires and about 34 dams were renamed, see version-diff section 4b).
 - oc 28-byte layout: 0.95.
 - G1/tracks + -0x6E0 shift: 0.98.
 - Beer/item table @0x167200: 0.99.

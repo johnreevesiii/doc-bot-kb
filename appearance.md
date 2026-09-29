@@ -54,9 +54,12 @@ WillyJR        c1c2=129  0 -> Black       pat6 sc1=Maroon    sc2=Teal   hood 7 s
 
 ## 2. Coat color — the full code→name tables
 
-### 2a. Special (starred) coats — card only (a1[8]=63, a1[9]=sub-id) — VERIFIED
+### 2a. Special (starred) coats, card only (a1[8]=63, a1[9]=sub-id): card bytes VERIFIED, 2 of 9 names seen on real cards
 Source: `COLOR_OPTIONS` in `DOC-Card-Creator.html`; confirmed live on Gulf/Phil (112→Org Panda) and
-Xi (48→Panda). The full sub-id table:
+Xi (48→Panda). (Corrected 2026-09-28: this was labelled VERIFIED as a whole. The card bytes are
+verified and sub-ids 48 and 112 were seen on real cards; the other seven names are the community
+Card Creator tool's labels and are not in the ROM. No special-coat odds table has been found in the
+ROM either, so any odds or rarity figure for these coats is UNCONFIRMED.) The full sub-id table:
 
 | a1[9] | name | | a1[9] | name |
 |---|---|---|---|---|

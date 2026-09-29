@@ -144,9 +144,9 @@ Record starts (verified):
 | +13 | **tenacious** | 3–62 | | 1.0 |
 | +14 | **spurt** | 4–63 | | 1.0 |
 | +15..+20 | const 0 | | | 1.0 |
-| +21 | **RUNNING STYLE / leg type** | {0:Front-runner, 1:Start dash, 2:Last spurt, 3:Stretch-runner, 7:Almighty} | **1:1 vs DB "Style", 244/244** | **1.0 (NEW decode — contradicts ROM-Studio note "leg type is derived from externals"; it is STORED)** |
+| +21 | **RUNNING STYLE / leg type** | {0:Front-runner, 1:Start dash, 2:Last spurt, 3:Stretch-runner, 7:Almighty} | **1:1 vs DB "Style", 244/244** | **1.0 (NEW decode: contradicts ROM-Studio note "leg type is derived from externals"; it is STORED)**. (Clarified 2026-09-28: stored for CPU horses only. A player horse's style is computed from its current externals, Start's rank among the five non-Corner externals.) |
 | +22 | **COAT color** | {0:Default,192:Chestnut,193:Black,199:Brown,202:Bay,204:Dark Gray,207:Light Gray,222:Special} | **1:1 vs DB "Coat", 244/244** | **1.0 (NEW decode)** |
-| +23 | **PERSONALITY (banded)** | byte→band: 0-47 Rough, 48-63 Imposing, 64-111 Calm, 112-127 Firm, 128-175 Sensitive, 176-191 Moody, 192-239 Gentle, 240-255 Proud | 1:1 vs DB "Personality" by band, 244/244 | **0.9 (NEW decode — band boundaries empirical; ROM-Studio wrongly says "personality not stored")** |
+| +23 | **PERSONALITY (banded)** | byte→band: 0-47 Rough, 48-63 Imposing, 64-111 Calm, 112-127 Firm, 128-175 Sensitive, 176-191 Moody, 192-239 Gentle, 240-255 Proud | 1:1 vs DB "Personality" by band, 244/244 | **0.9 (NEW decode: band boundaries empirical; ROM-Studio wrongly says "personality not stored")**. (Corrected 2026-09-28: the eight band names are the outside database's labels, not ROM text. The game has five personalities, Imposing, Honest, Rough, Coward, Sloppy, and sorts the byte into them by its high nibble.) |
 | +24 | personality-aux / condition seed | low byte varying (0,48,160,165,170…), pairs with +23 | likely the 16-bit (LE) temperament word `[+23][+24]` whose high part = personality band | 0.5 |
 | +25 | **horse ID (0-based)** | 0..243 (= record index) | sequential | 1.0 |
 | +26..+28 | const 0 | | | 1.0 |

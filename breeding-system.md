@@ -10,9 +10,15 @@ community tool, it is flagged.
 
 ## 0. TL;DR
 
-- **Sire/Dam tables are ONE 168-entry breeding-stock pool**, split as 84 sires + 84 dams on the EN
-  World Edition (Rev C). They are stored as two physically separate 60-byte-record arrays but share a
-  single 1-based index space (sires `idx 1..84`, dams `idx 85..168`).
+- **Foal inheritance (DECODED from the ROM, see §6 and decode-foal_average.md):** each external band =
+  floor((sire + dam) / 2), no roll, fixed for life. Each internal = floor-average of the parents, minus 5
+  if over 45, plus 5 if under 10, plus a small pedigree bonus (sire and dam both ◎ or both ✕ on 4+
+  externals), capped at 45; about 1 birth in 32 then adds 5 to all three true internals. (Corrected
+  2026-09-28: this line used to give the community simulator's model, externals ± 2 plus invented
+  "bloodline" bonuses, as the best reconstruction. That model is superseded and removed from §6.)
+- **Sire/Dam tables are ONE breeding-stock pool**, 84 sires then the dams on the EN World Edition
+  (Rev C), in a single 1-based index space. (Corrected 2026-09-28: the adversarial re-read found ONE
+  contiguous array of 167 valid records on Rev C and 177 on Rev D, not two arrays of 168/178; see §1.)
 - The **JP "mater" list (167 entries, `jp_mater_names.json`) is the JP equivalent of that same pool**,
   merged into a single 167-record array. Stats line up record-for-record with the EN sires/dams.
 - **60-byte sire/dam record (EN), anchored at the name:**
@@ -25,12 +31,6 @@ community tool, it is flagged.
   *Conflict:* the "DOCWE Master Source of Truth" doc instead labels the byte at name+36 as the
   **personality byte** (8-range table). Both interpretations are recorded below; the dirt correlation
   is the empirically stronger one.
-- **Foal inheritance rule (community-modelled, NOT yet confirmed in ROM code):** internal stats are the
-  **floor of the parent average**, `ac` is the parent average plus ±18 noise, externals are the parent
-  average ±2 clamped 1-16, plus a few "bloodline" bonuses when both parents are high in a stat. The
-  in-sim "dominant parent" is chosen 50/50 but does not actually weight the math (display only). The
-  true ROM breeding routine has not been disassembled; the averaging model is the current best
-  reconstruction and is consistent with observed foals.
 
 ---
 
@@ -43,16 +43,17 @@ community tool, it is flagged.
 | DOC 2000 JP | derbyo2k | — (merged) | — | `0x11106C` | 60 | 20B EUC-JP (name at +4) |
 | DOC '99 JP | derbyoc  | — (merged) | — | `0x0F9680` | **56** | 16B EUC-JP (name at +4) |
 
-Counts (confirmed by reading every record + checking the trailing index):
-- Rev C: **84 sires + 84 dams = 168** breeding stock.
-- Rev D: **89 sires + 89 dams = 178** (EX edition extends the pool).
+Counts (Corrected 2026-09-28; the old "84+84 = 168" and "89+89 = 178" came from the Breeder Studio
+JSON, not the ROM, per the adversarial re-read in verify-breeding-system-verification.md):
+- Rev C: **167** records in one contiguous block (index 1..167, then garbage). 84 sires, then dams.
+- Rev D: **177** records (EX edition extends the pool). Whether records 85-89 are sires or dams is
+  DISPUTED (the site's catalog lists them as sires).
 - derbyo2k: **167** mater records, sequential idx 1..167.
 - derbyoc: **167** mater records, sequential idx 1..167, stride 56.
 
-The EN sire array uses `idx 1..84` and the dam array continues `idx 85..168` (read from the `+56`
-field): they are one logical 168-entry pool stored in two physical blocks. JP collapses that into one
-167-entry array (one entry fewer; the EN pool has 168 slots but ~1 is a placeholder/joke entry such as
-Rev D dam #1 "Pierogi Prince", ac=0, externals `[1,1,15,15,15,1]`).
+The index runs on without restarting (read from the `+56` field); the "dam base" is just the offset of
+record 85. JP holds the same 167-horse pool in one array. Rev D record 85 is "Pierogi Prince", ac=0,
+externals `[1,1,15,15,15,1]`, a placeholder/joke entry.
 
 ---
 
@@ -71,7 +72,7 @@ Anchored at the **name** offset (`O = base + 60*k`). All multi-byte values littl
 | `+0x2C` (+44) | 4 bytes | **composite (Packed_u32_5)** | packed bitfield, see §5 | 1.0 byte-verified / meaning partial |
 | `+0x30` (+48) | 6 | **Externals** start, corner, oob, competing, tenacious, spurt | each 0-15 (1-16 band) | 1.0 verified |
 | `+0x36` (+54) | 2 | pad | `00 00` | 0.95 verified |
-| `+0x38` (+56) | u16 | **record index** | 1-based; sires 1-84, dams 85-168 | 1.0 verified |
+| `+0x38` (+56) | u16 | **record index** | 1-based; Rev C sires 1-84, dams 85-167 (corrected 2026-09-28 from 85-168) | 1.0 verified |
 | `+0x3A` (+58) | 2 | pad | `00 00` | 0.9 verified |
 
 Worked example — Rev C SIRE #1 `Maple Syrup` @ `0x10BF1C`:
@@ -83,7 +84,9 @@ name      = "Maple Syrup"
 +56 index = 1
 ```
 Matched exactly to Breeder Studio JSON (`ver:revC, english:"Maple Syrup", st:39,sp:19,sh:34,ac:240,
-start:15,corner:3,oob:6,comp:10,ten:4,spurt:12`). 84/84 sires and 84/84 dams round-trip.
+start:15,corner:3,oob:6,comp:10,ten:4,spurt:12`). 84/84 sires and 84/84 dams round-trip. (Corrected
+2026-09-28: the JSON is in a different order from the ROM, so it matches by NAME, not by index; 161 of
+167 ROM names match. See verify-breeding-system-verification.md.)
 
 ### Reconciling the two offset conventions (the handoff's open item)
 - The handoff says "externals at name-12, ac at name+36." The "name-12" reading is the SAME 6 external
@@ -194,7 +197,9 @@ combining the doc with the byte evidence, is:
 - `b0` = growth/grade or leg-bias category (2-bit), `b1` = coat/appearance + flags,
   `b2` = personality (8-range), `b3` = packed hidden-affinity / distance flags.
 All of `b0/b1/b3` are MEANING-TBD; only the byte positions are certain. This is the biggest remaining
-open item for this subsystem.
+open item for this subsystem. (Update 2026-09-28: card-seed-trait-readers.md §2 later decoded these
+four bytes as coat modifier, coat base, run-style seed and personality, the starter horses' genes; the
+guesses above predate it.)
 
 (Note: the Source-of-Truth doc's "Table B @0x10D500, 74 records, name-last" is a DIFFERENT view of the
 same data region — a packed-attribute mirror — and its Packed_u32_5 byte map (b0 CoatColorIdx, b1
@@ -202,54 +207,42 @@ CoatModifier, b2 Personality, b3 Attr23) is the cleanest external hint we have f
 
 ---
 
-## 6. Foal inheritance rule
+## 6. Foal inheritance rule (DECODED; corrected 2026-09-28)
 
-### 6.1 Community-modelled rule (from `DOC Breeding and Racing Strategy.txt`, `breedFoal()`)
-This is the only explicit inheritance algorithm in our assets. It is a reconstruction/heuristic, NOT
-extracted from ROM code, but it is consistent with observed foals and is what the suite uses:
+The ROM foal routine is decoded byte-exact (decode-foal_average.md). What it does:
+- **Internals** (stamina, speed, sharp): floor((sire + dam) / 2); minus 5 if the result is over 45,
+  plus 5 if under 10; plus the pedigree bonus; capped at 45. For a player's horse the parent values
+  are its CURRENT (raced-up) internals (site port; 3 of 3 cabinet births reproduced).
+- **Pedigree bonus:** count the externals where sire AND dam are both 12+ raw (◎) or both under 4 (✕).
+  4-5 matches: stamina +1, speed +2, sharp +2. 6 matches: stamina +3, speed +2, sharp +3. Sire and dam
+  count equally; no grandparent is read.
+- **Birth band:** about 1 birth in 32 (Band 1) adds 5 to all three TRUE internals while the card prints
+  lower; another 1 in 32 (Band 2) raises only the printed numbers.
+- **External bands:** floor((sire + dam) / 2) on each of the six. No roll. Fixed for life.
+- **Current externals of the fresh foal:** 2 x band + a 0-3 roll + an offset (Start -1, others +1).
+- **Sex:** coin flip.
 
-```
-dominant = random()>0.5 ? sire : dam        // chosen but NOT used in the math (display only)
-st = floor((sire.st + dam.st)/2)
-sp = floor((sire.sp + dam.sp)/2)
-sh = floor((sire.sh + dam.sh)/2)
-ac = floor((sire.ac + dam.ac)/2 + (random()-0.5)*36)   // parent avg ± up to 18
-for each external e in {start,corner,oob,competing,tenacious,spurt}:
-    base = floor((sire[e]+dam[e])/2)
-    e = clamp(base + floor((random()-0.5)*4), 1, 16)   // parent avg ± ~2
+(Corrected 2026-09-28: this section used to print the community simulator's `breedFoal()` model from
+`DOC Breeding and Racing Strategy.txt` as the working rule: externals rolling ± 2, "Stamina/Speed
+Bloodline" +2 bonuses, a "Dirt Dynasty" +20 and ac ± 18. None of that is in the ROM routine. The model
+was removed; do not quote its bonus rules.)
 
-// bloodline bonuses
-if sire.st>=45 && dam.st>=40: st += 2     // "Stamina Bloodline"
-if sire.sp>=45 && dam.sp>=40: sp += 2     // "Speed Bloodline"
-if sire.ac>220 && dam.ac>220: ac += 20    // "Dirt Dynasty"
+## 6.2 Running style (corrected 2026-09-28)
+Style = where Start ranks among Start, OOB, Competing, Tenacious and Spurt (Corner ignored). Count how
+many of the other four are strictly greater than Start: 0 = Front-runner, 1 = Start dash, 2 = Last
+spurt, 3 or 4 = Stretch-runner. All five exactly equal = Almighty. It follows the horse's CURRENT
+externals, so it can change during a career. Breeding-stock records do not store a style.
+(Corrected 2026-09-28: the community `deriveRunningStyle()` printed here swapped Last spurt and
+Stretch-runner and called any spread of 3 or less Almighty, and a line said leg type =
+`floor(externals/51)`. All three were wrong.)
 
-// clamps
-st = clamp(st,10,60); sp = clamp(sp,10,65); sh = clamp(sh,10,60); ac = clamp(ac,0,255)
-
-sex   = random()>0.5 ? M : F
-style = deriveRunningStyle(ext)   // from externals, see 6.2
-```
-
-So the model is: **internals = strict parent average (truncated)**, **ac = parent average with moderate
-noise + dynasty bonus**, **externals = parent average with small noise, clamped 1-16**, **a few
-threshold bloodline bonuses**. No weighting by which parent is "dominant," no affinity term from the
-name+44 composite (the community sim does not use it).
-
-### 6.2 Running-style derivation (from externals; `deriveRunningStyle()`)
-Given externals start/oob/competing/tenacious/spurt:
-- range = max-min over [start,oob,competing,tenacious,spurt]; if range ≤ 3 → **AL** (All-round)
-- else count `greater` = #vals > start: 0 → **FR** (Front), 1 → **SD** (Stalker), ≥3 → **LS**
-  (Closer/late-surge), else → **SR** (Mid).
-This matches the FINDINGS note that JP card leg-type = `floor(externals[...]/51)` style derivation —
-leg type is computed from externals, not stored as its own field on breeding stock.
-
-### 6.3 Caveats / what is NOT yet confirmed
-- The real ROM breeding routine (the code that reads two parent records and writes a foal's starting
-  hidden stats) has not been located/disassembled. The averaging model above is a faithful
-  reconstruction, not a proven 1:1 of the game.
-- The name+44 composite almost certainly feeds the real inheritance (affinity / line bonuses), so the
-  true game likely has a richer rule than pure averaging. Mapping b0/b1/b3 (§5) is the path to the exact
-  rule.
+## 6.3 What is still open (corrected 2026-09-28)
+- The Rev D foal routine has not been diffed against Rev C (all decodes are on Rev C).
+- How dirt aptitude (`ac`) passes to the foal is not fully traced; the site uses the plain
+  floor-average of the parents.
+- (Corrected 2026-09-28: this used to say the ROM routine had never been located and that the name+44
+  composite probably adds affinity or line bonuses. The routine is decoded, and name+44 holds coat,
+  run-style seed and personality, see §5.)
 
 ---
 
@@ -270,8 +263,10 @@ leg type is computed from externals, not stored as its own field on breeding sto
 - Confirmed field semantics by matching decoded `st/sp/sh/ac/externals` to `DOC_Breeder_Studio_data.json`
   (681 horses) — exact for every spot-checked horse.
 - Confirmed ac=dirt via correlation of name+36 against 344 breeder comment strings.
-- Confirmed record counts/index space by reading the `+56` index of every record.
+- Confirmed record counts/index space by reading the `+56` index of every record. (Corrected
+  2026-09-28: the re-read found 167/177, not 168/178; see §1.)
 - Inheritance rule read from the live `breedFoal()` JS in `DOC Breeding and Racing Strategy.txt`.
+  (Superseded 2026-09-28 by the ROM decode; §6 now gives the decoded rule.)
 - Field-meaning hints (personality 8-range, Packed_u32_5 byte map) read from
   `DOCWE_Master_Source_of_Truth_v1.0.md`; flagged as doc-derived and cross-checked against bytes.
 
@@ -279,15 +274,16 @@ leg type is computed from externals, not stored as its own field on breeding sto
 
 ## 9. Open questions
 1. Decode name+44 composite bytes b0/b1/b3 (growth/grade? distance aptitude? hidden affinity flags?).
-   This is the gate to the exact inheritance rule.
+   ANSWERED 2026-09-28: coat modifier, coat base, run-style seed, personality (card-seed-trait-readers.md).
 2. Settle ac definitively: is name+36 dirt-aptitude, personality, or both? Method: capture a breeding-
    stock horse's in-game course-aptitude + personality screen and match to its name+36 and name+44.b2.
 3. Locate the actual ROM breeding routine (SH-4 code) to replace the averaging heuristic with the real
-   algorithm — confirm whether affinity (name+44) contributes and whether "dominant parent" actually
-   weights stats.
+   algorithm. ANSWERED 2026-09-28: decoded byte-exact (decode-foal_average.md, summarised in §6). No
+   "dominant parent" weighting exists; sire and dam count equally.
 4. derbyoc2 (DOC II) mater table not located here (handoff did not include its ic22 in the 4); add when
    available.
 5. Reconcile EN 168-slot pool vs JP 167 list: identify the dropped/placeholder slot precisely.
+   (Update 2026-09-28: the Rev C ROM itself holds 167 valid records; the 168th came from the JSON.)
 
 ## 10. Tool ideas this unlocks
 - **JP mater dropdown + foal predictor in the Stable Management System**: sire/dam picker driven by

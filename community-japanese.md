@@ -42,14 +42,18 @@ Hill, 中山 = Northern Park, 京都 = Central City, セガ = SEGA. Four of the 
   six externals are stored as value-minus-one. The "60" everyone remembers is a practical
   ceiling the period build targets top out at, not a code cap.
 
-- **The 16-Step Theory — COMMUNITY CLAIM (good working model, not a separately confirmed
-  field).** The most influential idea in the whole Japanese corpus (Y's Lab). Behind each
+- **The 16-Step Theory (COMMUNITY CLAIM; the card confirms the hidden value exists).** The
+  most influential idea in the whole Japanese corpus (Y's Lab). Behind each
   on-screen mark sits a hidden value with four levels: ◎ (二重丸) = 13-16 = 3 points, ○ (丸) =
   9-12 = 2, △ (三角) = 5-8 = 1, ✕ (バツ) = 1-4 = 0. So an all-○ horse scores 12 points and a
-  perfect horse 18. Our RE has **not** found a separate hidden 4-bit field; the community's
-  "16-step value" is most likely the 0-63 external byte divided by four (the block count),
-  which makes their inheritance arithmetic and the ROM's the same operation. Treat "16 steps"
-  as a good model of a real thing, not a confirmed separate field. Two traps when reading the
+  perfect horse 18. The card does store that hidden value: each external has a separate
+  breeding band, 0-15 on the card (shown 1-16), fixed at birth as the floor average of the
+  parents' bands, and the four marks are its four ranges (see us-card and
+  foal-externals-and-rolls). It is NOT the current 0-63 external divided by four; the current
+  externals are a different field that moves with play, and dividing one by four does not
+  give a horse's mark. The points score itself is the community's tally, not a stored value.
+  (Corrected 2026-09-28: this said our RE had not found a separate field and that the
+  16-step value was "most likely the 0-63 external byte divided by four".) Two traps when reading the
   period sources: (1) Y's Lab's 1-16 is deliberately off by one (he says "strictly 0 to 15");
   subtract 1 before comparing to a raw byte. (2) "Points" means two different things — the
   ◎=3/○=2/△=1/✕=0 score (max 18) and the "internal score" 内部点数 (sum of the six 1-16 values,
@@ -82,17 +86,25 @@ exactly our decode (floor average, then a pedigree bonus of +1 to +3, then a rar
 
 Consequences the community built a whole scene on:
 - **Every fractional pairing leaks half a point**, so careless breeding makes a line decay.
-- **Parents' *current* stats are averaged, not their birth stats (CONFIRMED)** — so racing and
-  training a horse up before retiring it genuinely improves what it passes on. This is the
-  mechanical basis of 代重ね (daigasane, generational stacking), the strategy the entire
-  Japanese scene was built around.
+- **Parents' *current* stats are averaged, not their birth stats** (CONFIRMED for the three
+  internals only). So racing a horse up before retiring it genuinely improves the internals it
+  passes on. This is the mechanical basis of 代重ね (daigasane, generational stacking), the
+  strategy the entire Japanese scene was built around. (Corrected 2026-09-28: the tag covered
+  all "stats". The externals and ◎○△✕ marks a foal inherits come from the parents' birth bands,
+  which never change, so racing a parent does not improve those.)
 - **The ceiling trap (COMMUNITY CLAIM, follows from the arithmetic):** a 13-grade parent
   (◎, values 13-16) can't be improved because 13 averaged with the best available ○ (12) still
   floors to 12. Breeding to CPU horse スケアクロウ (Scarecrow) "again and again never produces a ◎".
 
-What carries to the foal: six externals (yes, floor average — CONFIRMED); three internals (yes,
-floor average then clamped — CONFIRMED); sex (no, a coin flip — CONFIRMED); race record,
-earnings, G1 titles, coat, silks, markings (no, separate card fields — CONFIRMED). Dirt/heavy
+## What carries to the foal (the Japanese community's list, checked against the decode)
+
+What carries to the foal: six externals (yes, floor average of the parents' fixed birth bands,
+CONFIRMED; corrected 2026-09-28 to name the bands); three internals (yes, floor average of the
+parents' current internals, then clamped, CONFIRMED); sex (no, a coin flip, CONFIRMED); race record,
+earnings, G1 titles, silks, markings (no, separate card fields, CONFIRMED); coat (partly:
+measured on cabinet-born foals, a foal shares a coat family with one parent about two-thirds of
+the time, and the exact rule is not decoded; corrected 2026-09-28, coat was listed as not
+carried, CONFIRMED). Dirt/heavy
 aptitude carries but not by simple averaging (DISPUTED in detail, see below).
 
 ## Dirt and heavy-going aptitude (DISPUTED — the messiest area in the corpus)
@@ -146,10 +158,12 @@ foals, yet the ROM decode says the flat number is not what is inherited — unre
   should travel with this: from race 20 on, a code quirk means only about 6% of races move
   anything at all, heavily damping the ladder's practical impact.)
 
-## Food (CONFIRMED direction, COMMUNITY CLAIM specifics)
+## Food (direction DISPUTED, COMMUNITY CLAIM specifics)
 
-**Food moves the externals; it does not touch Speed, Stamina or Sharp — CONFIRMED live on a
-cabinet.** This settles a period argument: it matches the Japanese food tables (which have no
+**Food moves the externals; it does not touch Speed, Stamina or Sharp.** DISPUTED, not settled
+(Corrected 2026-09-28: this was tagged "CONFIRMED live on a cabinet"; it rests on one live test,
+and the ROM food-table reading labels the first three columns Speed, Stamina and Sharp. Open
+until a controlled test, see items-feeding section 3.) The claim matches the Japanese food tables (which have no
 internals column) and the 2ch consensus by 2001 ("the meters rise, but no 裏パラ are added"), and
 it *contradicts* a June 2000 post crediting certain foods with raising breeding ability — that
 June 2000 claim is wrong. The specific 44-entry DOC 2000 food table (競馬エクウス) is COMMUNITY
@@ -160,10 +174,11 @@ several foods move exactly one external (carrot → Start, fodder → Corner, ca
 which makes a horse's food *dislikes* a control mechanism, not a drawback — you cannot stop a
 horse that eats everything from drifting off level. **Beer (生中 / 黒生, IDs 43/44) is a CONFIRMED
 oddity:** real feedable foods whose entire stat payload is all zeros — the only foods in the
-game that do nothing at all except play a reaction animation. The Japanese sources that credited
+game that do nothing at all except play a reaction animation. (Whether a cabinet ever offers
+beer is unconfirmed; added 2026-09-28.) The Japanese sources that credited
 beer with raising stats/aptitude were DISPUTED at source and are wrong.
 
-## Running style (CONFIRMED — the flagship agreement)
+## Running style (rank rule: the flagship agreement; the Almighty detail is DISPUTED)
 
 Running style is **not a stored property**; it is re-derived from the stats before every race,
 from a single comparison: **among the five externals excluding Corner, where does Start rank?**
@@ -174,12 +189,15 @@ from a single comparison: **among the five externals excluding Corner, where doe
 | 2nd | 先行 | Stalker |
 | 3rd | 差し | Closer |
 | 4th or 5th | 追い込み | Deep closer |
-| all six equal (Corner included) | 自在 | Almighty |
+| all six equal (Corner included), per this page; DISPUTED, see below | 自在 | Almighty |
 
-Corner is excluded from the ranking but included in the all-equal test — an odd rule nobody
-would invent twice by accident. ばあにん☆ published exactly this in June 2000; we derived the
-same rule from the ROM 26 years later without knowing his page existed. Two details his page
-also carries that our decode has: Start wins ties, and a horse with Start at MAX is always a
+In ばあにん☆'s June 2000 rule, Corner is excluded from the ranking but included in the
+all-equal test. The rank rule matches Sega's English FAQ and the arcade site. The Almighty test
+does not: Sega's FAQ and the site say Almighty is the five non-Corner externals being equal,
+with Corner free to differ, so the Corner-included version is DISPUTED. (Corrected 2026-09-28:
+this said we derived the same rule from the ROM. The ROM's style routine has been located but
+not transcribed, so neither Almighty version is ROM-confirmed yet.) His page also carries two
+details the site rule shares: Start wins ties, and a horse with Start at MAX is always a
 front-runner unless it is Almighty. Players used this deliberately — because a failed training
 drops known stats by a known amount, you can push a horse back to the style you wanted (advice
 from 2ch: "stop about 3 dots short of your target so one carrot can still flip the leg type").
@@ -198,15 +216,24 @@ catch up. The board used Big Banana as the instrument without ever knowing the u
 out stronger than its inheritance implied. The community had two incompatible theories: (A) a
 per-bloodline variance band with a high roll = atari; (B) a hidden multiplier (normally
 1.00-1.25, atari 1.50-1.75, ceiling 2.55 — that 2.55 = 255/100 is suspicious). **CONFIRMED
-resolution:** the foal build rolls a random byte after averaging and hits two narrow ~3% windows
-— a DOWN band (one internal -12, or all three -5) and an UP band (one internal +12, or all three
-+5), with ~94% getting the clean floor average. So roughly 3% of foals are jackpots and 3% are
-duds; the rest is pure arithmetic. There is no per-bloodline band and no persistent multiplier —
-your "ruined" foal was usually the dud roll, not your pairing. But there **is** a real,
-CONFIRMED bloodline bonus and it rewards *matching*: the game scores how consistent the parent
-and second-line external rows are, and a well-matched pair earns a small internals bonus, then
-internals are hard-capped at 45. The community sensed a "favourable pairing" effect — it is
-real, and it is specifically about matching external profiles (breed like to like).
+resolution** (Corrected 2026-09-28: an earlier version read the two bands the wrong way round):
+the foal build rolls a random byte after averaging and hits two narrow ~3% windows, and both
+change the PRINTED birth stats. Band 1 prints one stat 12 lower (or all three 5 lower) while
+all three TRUE internals gain 5, so the horse is better than its card. Band 2 prints one stat
+12 higher (or all three 5 higher, only on stats under 40) and leaves the true internals alone,
+so that "god roll" is cosmetic. About 94% of foals get the clean floor average and their card
+tells the truth. There is no per-bloodline band and no persistent multiplier, and a
+"ruined"-looking printed foal can be the best one (see bloodline-seals).
+
+## The real pedigree bonus (what the Japanese community sensed as "favourable pairing")
+
+There **is** a real, CONFIRMED bloodline bonus and it rewards *matching*: the game compares the
+sire's and the dam's external bands, counts the externals where both parents are ◎ or both
+are ✕, and 4 or more matches earn a small internals bonus; internals are then hard-capped at
+45. (Corrected 2026-09-28: this said the game compares "the parent and second-line external
+rows"; the second row is the sire's own externals, so only the two parents count.) The
+community sensed a "favourable pairing" effect, it is real, and it is specifically about
+matching external profiles (breed like to like).
 
 - **"Total-54 theory" (COMMUNITY CLAIM, only partly true):** Y's Lab held every breeding-stock
   horse sums to 54 across its six values (revised to 56 after Ver.2). Tested against his own

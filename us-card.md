@@ -54,7 +54,7 @@ US/WE cards in this corpus are all `SEGABEF0`. (Confidence 1.0.)
 | logical | file off | field | type / range | verified | example |
 |---|---|---|---|---|---|
 | a1[2..5] | 0x43,0x42,0x41,0x40 | **UID** (4-byte horse id) | u32, copied identically to a2[2..5] & a3[2..5] | YES — all 3 tracks equal on every card | Scarecrow = `21 9E 1C 69` |
-| a1[6] | 0x3F | **Personality** | u8 0-255 → 8 bands | YES | Scarecrow=0 (Rough), BabyBoy=164 (Sensitive) |
+| a1[6] | 0x3F | **Personality** | u8 0-255 → 5 classes (corrected 2026-09-28 from "8 bands") | YES | Scarecrow=0 (Rough), BabyBoy=164 (Honest) |
 | a1[7] | 0x3E | **Running-style seed** | u8 0-255, ÷51 → 0-4 style | YES (value present, wide spread) | 0,1,32,86,213,255 seen |
 | a1[8] | 0x3D | **Coat base** | u8 (63 = special-coat trigger) | YES | 77=Bay, 129=Black, 63=special |
 | a1[9] | 0x3C | **Coat modifier** (special id when a1[8]=63) | u8 | YES | Gulf: a1[8]=63,a1[9]=112 → Org Panda |
@@ -69,15 +69,17 @@ String read = `getString(a,start,end)` walking DOWN from start to end+1, keeping
 Name=`a1[69..51]`, Sire=`a1[49..31]`, Dam=`a1[29..11]`. (Card-Creator uses 18-char windows; the
 boundary bytes a1[30]/a1[50] act as separators.)
 
-### Personality bands (a1[6]) — 8-type ROM truth vs 5-type tool
-ROM-derived (use this): `0-47 Rough · 48-63 Imposing · 64-111 Calm · 112-127 Firm · 128-175
-Sensitive · 176-191 Moody · 192-239 Gentle · 240-255 Proud`. The Card-Creator collapses these to
-5 jockey letters (R/I/C/H/S) via `getPersonalityCode` and writes only the 5 anchor values
-`{R:0,I:48,C:64,H:80,S:208}` — that is a LOSSY editor simplification, not the real scale. Flag for
-any rebuild: store the raw 0-255 byte, don't round to 5 anchors. (Confidence: bands ROM-derived,
-high; tool-lossiness confirmed in source.)
+## 3a. Personality (a1[6]): five classes (Corrected 2026-09-28)
+The game's personality classifier reads the byte's HIGH NIBBLE and returns one of five classes
+(card-seed-trait-readers.md §2): `0-47 Rough · 48-63 Imposing · 64-79 Coward · 80-111 Honest ·
+112-127 Imposing · 128-143 Coward · 144-175 Honest · 176-191 Imposing · 192-207 Coward · 208-255
+Sloppy`. This is exactly the Card-Creator's `getPersonalityCode`. Its 5 anchor values
+`{R:0,I:48,C:64,H:80,S:208}` each land in the matching class, but writing only anchors loses the rest
+of the byte, which foals inherit bit by bit. Flag for any rebuild: store the raw 0-255 byte.
+(Corrected 2026-09-28: this section called an 8-type scale (Calm, Firm, Sensitive, Moody, Gentle,
+Proud) the ROM truth. None of those names occurs in the ROM.)
 
-### Coat (a1[8]/a1[9]) — VERIFIED tables
+## 3b. Coat (a1[8]/a1[9]), VERIFIED tables
 - Special (a1[8]=63): a1[9] 0=Okapi,16=Cow,48=Panda,64=Platinum,80=White,112=Org Panda,
   192=Zebra,208=Cow_2,240=Tiger. (Gulf_of_America: 63/112 → Org Panda, confirmed.)
 - Normal: Bay `77-79/141-143/205-207`, Black `65-67/129-131/193-195`,
@@ -85,7 +87,7 @@ high; tool-lossiness confirmed in source.)
   Chestnut `64/68/72/76/128/132/136/140/192/196/200/204`, else Gray. The low+high mirrors (×2/×3
   of the base) are real game variants the renderer treats as the same named color.
 
-### Running style (a1[7]) — corrected understanding
+## 3c. Running style (a1[7]), corrected understanding
 Old docs: `style = floor(a1[7]/51)` → 5 styles (Front-runner / Start-dash / Last-spurt /
 Stretch-runner / Almighty). VERIFIED the byte exists and spans 0-255, but maxed/edited cards hit
 255 (`÷51 = 5`, out of range), so the byte is a **stored seed**, not the authoritative display value.
@@ -108,19 +110,19 @@ display. (Confidence high.)
 | a2[18],a2[19] | 0x78,0x77 | **Last race** result + track index | u8×2 | partial (Doc-derived; nonzero on raced horses) | Caitin 11/255 |
 | a2[20],a2[21] | 0x76,0x75 | **Current race** result + track index | u8×2 | partial | |
 | a2[22] | 0x74 | **Rest / fatigue timer** | u8 (0=rested) | partial | |
-| a2[23] | 0x4B→0x?? (0x... see note) | **Retire internal SHARP** | u8 0-45 | YES | Scarecrow ret=45 |
-| a2[24] | — | **Retire internal SPEED** | u8 0-45 | YES | |
-| a2[25] | — | **Retire internal STAMINA** | u8 0-45 | YES | |
+| a2[23] | 0x4B→0x?? (0x... see note) | **Printed birth SHARP** (old name: retire internal) | u8, 0-45 normally, up to 51; frozen at birth | YES | Scarecrow ret=45 |
+| a2[24] |, | **Printed birth SPEED** (old name: retire internal) | u8, as above | YES | |
+| a2[25] |, | **Printed birth STAMINA** (old name: retire internal) | u8, as above | YES | |
 | a2[26] | 0x73 | **Hood** | u8 0-63 | YES | Scarecrow=21 |
 | a2[27] | 0x6F | **owner/stable assoc (TBD)** | u8 | partial — =44 on 3 "Trump-stable" cards, 0 elsewhere | Gulf/Phil/Xi=44 |
-| a2[28..33] | 0x6E..0x69 | **Retirement externals** Spurt,Tenac,Comp,OOB,Corner,Start (value-1, display 1-16) | u8 0-15 | YES | |
+| a2[28..33] | 0x6E..0x69 | **Birth bands** (old name: retirement externals) Spurt,Tenac,Comp,OOB,Corner,Start (value-1, display 1-16); floor-average of the parents' bands, fixed at birth | u8 0-15 | YES | |
 | a2[34] | 0x68 | **Wins duplicate** | = a2[49] | YES | Scarecrow 5=5 |
 | a2[35] | 0x67 | **Total races** | u8 0-64 | YES | Scarecrow=6 |
 | a2[36] | 0x66 | **Trust** | u8 (0-100+) | partial — small values 0-3 on fresh cards | |
-| a2[37] | 0x65 | **Hearts** | display = (val+1)/4 | YES | Scarecrow 55→14 |
+| a2[37] | 0x65 | **Hearts** (the bond / relationship meter; not a stamina value) | display = (val+1)/4, up to 16 hearts | YES | Scarecrow 55→14 |
 | a2[38..43] | 0x64..0x5F | **Current externals** Spurt,Tenac,Comp,OOB,Corner,Start (value-1, display 1-64) | u8 0-63 | YES | |
-| a2[44] | 0x5E | **Condition / fitness** | u8 (fluctuates 15-124) | partial | mostly 1 on fresh |
-| a2[45] | 0x5D | **Experience** (only increases) | u8 | partial — tracks trust on fresh sample | |
+| a2[44] | 0x5E | **Condition / fitness** | u8 (fluctuates 15-124) | partial; DISPUTED 2026-09-28: card-seed-trait-readers.md decodes this byte as a 2-bit hash stamped at birth with no game reader found; the 15-124 note needs a fleet census | mostly 1 on fresh |
+| a2[45] | 0x5D | **Experience** (only increases) | u8 | partial, tracks trust on fresh sample; label superseded 2026-09-28: a 2-bit birth hash with no reader found (§11, card-seed-trait-readers.md) | |
 | a2[46] | 0x5C | **Out** (4th+) | u8 | YES | |
 | a2[47] | 0x5B | **Show** (3rd) | u8 | YES | |
 | a2[48] | 0x5A | **Place** (2nd) | u8 | YES | |
@@ -144,12 +146,20 @@ compute the rest with that formula. a2[69]=0x45, a2[1]=0x89.)
 > Earnings cap (editor): $262,500,000, multiple of $1,000 → internal max 262500. Max internal that
 > fits 3 bytes is far higher; the editor caps for UI sanity.
 
-### External stat order (memorize)
-Both current and retirement externals are stored in the order **Spurt, Tenacious, Competing,
+(Corrected 2026-09-28: a2[23-25] were labelled "retire internals, 0-45" and a2[28-33] "retirement
+externals". Retiring sets neither block. a2[28-33] are the birth bands, fixed at birth. a2[23-25] are
+the PRINTED birth stats: they equal the true birth internals unless a birth band fired (Band 2 can
+print up to 51). Foals are bred from the parents' CURRENT internals a2[61/65/69], not from a2[23-25].
+See decode-foal_average.md, CONSUMER WARNING.)
+
+## 4a. External stat order: current externals vs birth bands (memorize)
+Both current externals and birth bands are stored in the order **Spurt, Tenacious, Competing,
 OutOfBox, Corner, Start** as logical index *increases*, i.e. Start is the HIGHEST index of its block:
 - Current: Start=a2[43], Corner=a2[42], OOB=a2[41], Competing=a2[40], Tenacious=a2[39], Spurt=a2[38].
-- Retirement: Start=a2[33], Corner=a2[32], OOB=a2[31], Competing=a2[30], Tenacious=a2[29], Spurt=a2[28].
-Display = card+1 (current range 1-64, retirement bands 1-16: ✕1-4 △5-8 ○9-12 ◎13-16). VERIFIED.
+- Birth bands: Start=a2[33], Corner=a2[32], OOB=a2[31], Competing=a2[30], Tenacious=a2[29], Spurt=a2[28].
+Display = card+1 (current range 1-64, birth bands 1-16: ✕1-4 △5-8 ○9-12 ◎13-16). VERIFIED. The two
+blocks are separate values: the bands never change through play, the current externals do.
+(Corrected 2026-09-28: "retirement externals / retirement bands" renamed birth bands.)
 
 ### G1 titles bitfield (a2[55],a2[56],a2[57]) — VERIFIED map
 18 races spread non-contiguously across 3 bytes (`G1_RACES` in Card-Creator):
@@ -211,8 +221,9 @@ on-card redundancy. (Confidence high — confirmed in `encodeTrack`/`decodeTrack
   history) to read result/track-index encoding (`field=(val/6)+1, pos=(val%6)+1`, with a >95 branch).
 - **a2[36] trust vs a2[44] condition vs a2[45] experience:** labels are Doc-derived; on fresh cards
   these are tiny (0-3) and a2[45] tracks a2[36]. Confirm against a developed horse + in-game screen.
-- **a1[7] runstyle seed:** confirm whether the game ever reads it post-creation or fully derives leg
-  type from externals (current evidence: derived).
+- **a1[7] runstyle seed:** ANSWERED 2026-09-28: no game code reads it after creation; it is inherited
+  bit by bit with personality, and leg type is derived from the current externals
+  (card-seed-trait-readers.md).
 - Big 0x00 regions in tracks 2/3 are genuinely unused by WE (not leak — clean cards are all-zero).
 
 ---
@@ -244,7 +255,8 @@ The 207-byte **container is identical across all 4 versions** (Flycast `TRACK_SI
    (a2[27], a2[18-22], a2[36/44/45]) against known fields to finish the decode. Needs: a corpus of
    *developed* (raced) cards — currently most on disk are fresh.
 4. **Personality-fidelity fix for the editor.** Replace the lossy 5-anchor personality with the raw
-   0-255 byte + the 8-band ROM labels, and replace the ÷51 runstyle display with `legTypeFromExt`.
+   0-255 byte + the 5 ROM classes (corrected 2026-09-28 from "8-band ROM labels"), and replace the ÷51
+   runstyle display with `legTypeFromExt`.
    Needs: nothing new (both are in this doc).
 
 ---
@@ -270,12 +282,15 @@ Probe harness from §10.3 finally ran: every byte of every card in the arcade DB
   test: gain/race identical 1.26-1.32 across all four values, 242 horses with 4+ race history).
   Candidate semantics: feeding/temperament class (Career-Log "food a horse hates" lore), precocity
   shape (front-loaded vs late — untested), or an AI/behavior class. **The Lab always writes 2; the
-  game rolls non-2 on ~8% of births.**
+  game rolls non-2 on ~8% of births.** (Update 2026-09-28: card-seed-trait-readers.md later decoded
+  it as a 2-bit hash of name and silk bytes stamped at birth, with no game reader found.)
 - **a1[7] (file 62) runstyle seed: the Lab always writes 0; ~30% of game-born cards are nonzero**
   (128 distinct values seen). Not a uniform roll (70% zero among game-born) — path- or
   version-dependent. If this seed feeds race behavior, Lab foals all share the zero class —
   POSSIBLE mechanism for CF-28 ("lab anomalies ignore the whip"). Needs a targeted RE pass on
-  what reads a1[7] at race time.
+  what reads a1[7] at race time. (ANSWERED 2026-07-18, card-seed-trait-readers.md: no race, whip or
+  AI code reads a1[7]; it is inherited from both parents, so Lab lines stay at 0. It cannot cause
+  CF-28.)
 - **UID bytes are STRUCTURED in-game, not random**: byte 2-of-4 (file 65/134/203) is zero on ~93%
   of cards with only 8 distinct values ever — in-game serials look like a counter+field layout,
   only the editor randomizes all 4. (Compatible with v7 serial-lock; nothing to change.)

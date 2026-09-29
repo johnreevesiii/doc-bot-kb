@@ -38,7 +38,9 @@ Hard dependencies that block the formula specifically:
 
 ### Race formula (the blocker)
 - Exact arithmetic combining `external[phase]`, Speed cap, Sharp accel, and the §4 coefficients into
-  per-tick velocity. (product / weighted-sum / piecewise — all three are live hypotheses.)
+  per-tick velocity. (product / weighted-sum / piecewise, all three are live hypotheses.) (Note
+  2026-09-28: the "one external per race phase" model behind `external[phase]` comes from early notes
+  and old guides and is UNVERIFIED; do not teach it as fact.)
 - The 9-key-vs-12-value index mapping in the distance→multiplier table @0x10F210. Why 9 distances but
   12 multipliers? Which multiplier binds to which distance, and what are the extra 3 for (sub-1700m
   sprints? a superset curve?).
@@ -48,7 +50,7 @@ Hard dependencies that block the formula specifically:
 - Whip math: timing-window width, sharp-scaled boost magnitude, trust/energy cost. 33 whip messages in
   ROM but zero numbers recovered.
 - Condition / Trust / Hearts → race-multiplier magnitudes (card T2[44]/[36]/[37]). Labels are also
-  shaky (see §2 us-card).
+  shaky (see §2 us-card). (Note 2026-09-28: whether any of these affects a race at all is UNVERIFIED.)
 
 ### Hidden/unlabeled stat-record fields (feed the formula or appearance)
 - **HIDDEN-A (+1)**: 0/1/2 class/grade-aux flag — meaning unknown. (architecture confirms +1 is a real
@@ -59,13 +61,14 @@ Hard dependencies that block the formula specifically:
   highest-value unknown because it is the leading candidate for a per-horse distance/surface aptitude
   composite (race-formula §3). Could also be a pointer/index into a portrait/voice/AI/pedigree table.
 
-### Breeding inheritance (the second-hardest unknown)
-- The real SH-4 breeding routine has **never been disassembled.** The entire foal-inheritance model in
-  breeding-system.md is the *community simulator's* parent-averaging heuristic, which provably ignores
-  the name+44 composite — so the real ROM rule is almost certainly richer and is currently unknown.
-- name+44 composite bytes b0/b1/b3 (growth? grade? distance aptitude? hidden line/affinity flags?) —
-  the gate to the exact inheritance rule, undecoded.
-- name+45..47 3-byte composite (derived-attrs) — separate, also undecoded.
+### Breeding inheritance (ANSWERED since this ledger was written; corrected 2026-09-28)
+- ANSWERED: the SH-4 foal routine is decoded byte-exact (decode-foal_average.md). Bands = floor-average
+  of the parents' bands, no roll; internals = floor-average with a ±5 soft clamp, a sire-vs-dam
+  pedigree bonus and a 45 cap, then a rare +5 band. breeding-system.md §6 now states the decoded rule;
+  the community simulator's model (± 2 externals, bloodline bonuses) was removed as superseded.
+- ANSWERED: the name+44..47 composite is coat modifier, coat base, run-style seed and personality
+  (card-seed-trait-readers.md §2). (It was listed here as undecoded b0/b1/b3 plus a separate
+  name+45..47 block; they are the same four bytes.)
 - name+36 "ac" byte: dirt-aptitude vs personality vs both is an **unresolved conflict** between two docs
   (breeding-system says dirt aptitude by comment correlation; an earlier source-of-truth doc said
   personality). Empirical correlation only, never confirmed against an in-game screen.
@@ -155,7 +158,10 @@ These are ordered by blast radius. The first few are HEADLINE corrections that i
 
 7. **[us-card — MEDIUM IMPACT, label confidence] trust=a2[36] / condition=a2[44] / experience=a2[45]
    labels are unconfirmed** — on fresh cards a2[45] tracks a2[36], muddying them. These feed the
-   condition_mod term of the race formula (§5 h()), so the labels matter to the formula too. Also a2[27]
+   condition_mod term of the race formula (§5 h()), so the labels matter to the formula too. (Update
+   2026-09-28: card-seed-trait-readers.md decodes a2[45] and a2[44] as 2-bit hashes stamped at birth
+   with no game reader found, which conflicts with the 15-124 values us-card.md noted for a2[44]:
+   DISPUTED. That any of them feeds a race term is UNVERIFIED.) Also a2[27]
    (0x6F) stable-id, a2[18–22] race/rest fields are low-confidence pending a *raced-horse* card. Plus a
    hex-cell typo (a2[26] hood at 0x70 not 0x73) — cosmetic but propagated into appearance too.
 
@@ -166,7 +172,9 @@ These are ordered by blast radius. The first few are HEADLINE corrections that i
 
 9. **[derived-attrs / horse-stats — LOW IMPACT, confidence calibration] The floor(byte7/51) running-style
    mapping and the +1/+21/+24 enum meanings are inference, not byte-proven disassembly.** The docs flag
-   this, but the confidence on these should be read as "strong inference" not "proven." The idEcho "mod
+   this, but the confidence on these should be read as "strong inference" not "proven." (Update
+   2026-09-28: floor(byte7/51) is REFUTED: no game code reads card byte 7, and the style shown follows
+   the current externals (card-seed-trait-readers.md). +21 is ANSWERED: the CPU horse's stored style.) The idEcho "mod
    256" framing is imprecise (it's a 1-byte id echo that wraps to 0 at record 244, not literal mod 256).
 
 10. **[game-text — LOW IMPACT, mostly cosmetic] Several offset/count fixes** (JPSPEC textRegion is
@@ -242,7 +250,8 @@ formula; 5–8 unblock formula *inputs*; 9+ are breadth.
   them; edit header +0x08 and observe which race section the cabinet boots to (resume-counter test).
 
 **8. Disassemble the breeding routine + decode name+44 / name+45..47 composites. [the second formula —
-   inheritance]**
+   inheritance]** DONE (update 2026-09-28): decode-foal_average.md and card-seed-trait-readers.md. Only
+   the name+36 `ac` question below is still open.
 - Static: find the SH-4 routine that reads the mater table and writes foal stats; recover whether the
   name+44 composite and a "dominant parent" actually weight foal stats (vs the community averaging
   heuristic).

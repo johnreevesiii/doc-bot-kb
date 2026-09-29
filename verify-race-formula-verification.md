@@ -8,6 +8,9 @@ Helper scripts: `C:/Users/johnr/AppData/Local/Temp/v_*.py`.
 naming, the distance→multiplier table and its cross-version locations, the FPU coefficient pool
 values, the stat-role ranges/correlations, all cross-version notes) are byte-accurate. Two
 descriptive claims are wrong/overstated and are corrected below; neither changes the model.
+(Corrected 2026-09-28: for the 6-phase model this pass confirmed only the six stat NAME strings. The
+phase structure and the stat roles were never tested against bytes and are UNVERIFIED; do not cite
+this file as proof that a race runs in six phases.)
 
 ---
 
@@ -20,13 +23,18 @@ descriptive claims are wrong/overstated and are corrected below; neither changes
 - 12 multipliers: `1.3913 1.2308 1.0323 1.0625 0.8889 0.8649 0.8421 0.8205 0.8000 0.7273 0.6667 0.6400` — exact.
 - All three ROMs are 4,194,304 bytes (matches horse-stats.md).
 
-### Phase-name strings (§1) — CONFIRMED VERBATIM
+### Stat-name strings (§1): names CONFIRMED VERBATIM, phase structure NOT verified
 - `v_misc.py`: ASCII at **0x0ED5B4** = `START . CORNER . OUT OF THE BOX . COMPETING . TENACIOUS . SPURT`,
   immediately followed by race result strings ("Glory and admiration", "%s has so many victories").
-  The 6 externals are named 1:1 after the 6 race phases. This is the cornerstone of the model — solid.
+  (Corrected 2026-09-28: this line used to say the 6 externals are named 1:1 after 6 race phases and
+  call that "the cornerstone of the model, solid". The bytes confirm the six stat names only; this
+  block is the retirement-screen text (see game-text.md). That a race runs in six phases, one per
+  external, is UNVERIFIED and must not be taught as fact.)
   (Pinpoints: CORNER@0xED5BC, COMPETING@0xED5D4, TENACIOUS@0xED5E0.)
 
-### Stat roles / scaling (§1, §3, §8) — CONFIRMED EXACTLY
+### Stat ranges / scaling (§1, §3, §8): CONFIRMED EXACTLY (ranges and correlations only)
+(Corrected 2026-09-28: this heading said "Stat roles". The checks below confirm ranges, totals and
+correlations over the CPU roster; they do not test what any stat does in a race.)
 Re-derived from the verified horse-stat table (WE-C @0x108E03/32B; '99 @0x0F6902/28B):
 - WE-C externals (+9..+14) per-column: 11-63 / 14-59 / 4-63 / 8-63 / 3-62 / 4-63 → matches "~3-63".
 - WE-C internals: Stamina(+29) **0-60**, Speed(+30) **0-63**, Sharp(+31) **0-60** → exact.

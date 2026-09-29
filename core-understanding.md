@@ -85,7 +85,7 @@ DOC has **two completely separate horse tables with two different external-stat 
 | A | **Racing stat table** | 244 | **0–63** (6-bit) | 0–63 | **CPU opponents** (proven static, see §3) |
 | B | **Sire/Dam breeding table** | 168 (WE-C)/178 (WE-D) split; 167/177 indexed in ROM | **1–16** band | ~10–60 | breeding stock |
 
-- Scale relationship: racing externals ≈ **4× breeding band** (63/16≈3.94). A horse retiring to stud bins its 0–63 stats into 1–16 bands. The aptitude symbols ✕△○◎ are exactly the four quartiles of the 1–16 band (`symFor`: ≥13→◎, ≥9→○, ≥5→△, ≥1→✕, 0→·).
+- Scale relationship: racing externals ≈ **4× breeding band** (63/16≈3.94) in range only. (Corrected 2026-09-28: this line used to say a horse retiring to stud bins its 0-63 stats into 1-16 bands. It does not. A foal's bands are the floor-average of its parents' bands, fixed at birth, and never change through racing, training or retiring; a fresh foal's current externals start at about 2 x band plus a 0-3 roll. See foal-externals-and-rolls.md.) The aptitude symbols ✕△○◎ are exactly the four quartiles of the 1-16 band (`symFor`: ≥13→◎, ≥9→○, ≥5→△, ≥1→✕, 0→·).
 - Internals share the 0–63 scale on both tables (no rescale).
 - Player-horse live stats are on the **card** (full 0–63 externals) — neither table is the player's horse.
 
@@ -121,7 +121,7 @@ DOC has **two completely separate horse tables with two different external-stat 
 | +5 | 05 | **DIRT aptitude** | 0–255 | surface affinity; matches DB Dirt 244/244 | 1.0 |
 | +6,+7 | 06,07 | pad | 0 | const | 1.0 |
 | +8 | 08 | **GRADE** | 0–3 | 0=Ungraded 1=G3 2=G2 3=G1; 244/244 vs DB | 1.0 |
-| +9 | 09 | ext **Start** | ~11–63 | per-phase ability | 1.0 |
+| +9 | 09 | ext **Start** | ~11-63 | external (the old "per-phase ability" label is UNVERIFIED, corrected 2026-09-28) | 1.0 |
 | +10 | 0A | ext **Corner** | ~14–59 | | 1.0 |
 | +11 | 0B | ext **OOB** (out-of-box) | ~4–63 | | 1.0 |
 | +12 | 0C | ext **Competing** | ~8–63 | | 1.0 |
@@ -132,13 +132,13 @@ DOC has **two completely separate horse tables with two different external-stat 
 | +17..+20 | 11–14 | pad | 0 | const | 1.0 |
 | +21 | 15 | **RUNNING STYLE** | 0,1,2,3,7 | 0=Front-runner 1=Start dash 2=Last spurt 3=Stretch-runner 7=Almighty; **244/244 deterministic** (STORED, contradicting "leg type is derived" — true for CPU horses). | 1.0 |
 | +22 | 16 | **COAT color** | enum | 0=Default 192=Chestnut 193=Black 199=Brown 202=Bay 204=Dark Gray 207=Light Gray 222=Special; 244/244 vs DB | 1.0 |
-| +23 | 17 | **PERSONALITY (banded) / HIDDEN-X low** | 0–255 | banded 0-47 Rough/48-63 Imposing/64-111 Calm/112-127 Firm/128-175 Sensitive/176-191 Moody/192-239 Gentle/240-255 Proud (matches DB by band 244/244); also the low byte of a 16-bit value with +24 | 0.9 |
+| +23 | 17 | **PERSONALITY (banded) / HIDDEN-X low** | 0-255 | banded 0-47 Rough/48-63 Imposing/64-111 Calm/112-127 Firm/128-175 Sensitive/176-191 Moody/192-239 Gentle/240-255 Proud (matches DB by band 244/244); also the low byte of a 16-bit value with +24. (Corrected 2026-09-28: these eight names are the outside database's labels, not ROM text; the game has five personalities, see §4.2.) | 0.9 |
 | +24 | 18 | **HIDDEN-X high / personality-aux** | clustered | high-byte clusters 0xA0(186),0x30(30),0xC0(9),0xF0(7),0x00(12); o2k rebalanced it → real attribute. Candidate: 16-bit temperament word `[+23][+24]` and/or distance/surface aptitude composite. | 0.5 |
 | +25 | 19 | **id echo** | 0–243 | [CORRECTED] a 1-byte id echo = (record index) low byte; for the 244th record it holds 0 (off-by-one wrap), NOT a literal "mod 256" rule. Third id copy. | 1.0 |
 | +26..+28 | 1A–1C | pad | 0 | const | 1.0 |
-| +29 | 1D | int **Stamina** | 0–60 | energy pool; matches DB | 1.0 |
-| +30 | 1E | int **Speed** | 0–63 | top-speed ceiling | 1.0 |
-| +31 | 1F | int **Sharp** | 0–60 | acceleration/responsiveness | 1.0 |
+| +29 | 1D | int **Stamina** | 0-60 | matches DB (old role label "energy pool" is UNVERIFIED) | 1.0 |
+| +30 | 1E | int **Speed** | 0-63 | (old role label "top-speed ceiling" is UNVERIFIED) | 1.0 |
+| +31 | 1F | int **Sharp** | 0-60 | (old role label "acceleration/responsiveness" is UNVERIFIED; corrected 2026-09-28, the field is exact, the roles are not decoded) | 1.0 |
 
 **Worked example — WE-C horse #1 "Gold Queen" (32-byte raw):** [CORRECTED — the canonical record is 32 bytes; a prior dump showed only 31]
 ```
@@ -159,19 +159,19 @@ HIDDEN-A (+1), HIDDEN-B (+16), and 16-bit HIDDEN-X (+23/+24 — partly the perso
 ## 4. Derived attributes (running style, personality, aptitude symbols, growth type)
 
 ### 4.1 Running style (5 styles): `Front-runner, Start dash, Last spurt, Stretch-runner, Almighty`
-- **Player card:** STORED at Track1 byte 7 (a1[7]), 0–255, mapped `floor(byte7/51)` → styles 0–4. This is the game-authoritative seed. [Subtlety] WE actually derives the *displayed* leg type at runtime from the externals (`legTypeFromExt`: rank of Start among {Start,OOB,Comp,Tenac,Spurt}, Corner excluded; all-equal→Almighty). Edited/maxed cards push byte 7 to 255 (÷51=5, out of range) → treat byte 7 as a **stored seed to preserve on edit, not trusted for display**.
-- The Card-Creator's "Start-rank among externals" rule is a **display heuristic only** — the editor never writes a1[7], so on editor-made cards byte 7 is leftover and the two models diverge (verified: Caitin byte7=1→ROM Front-runner vs tool Start dash; Gulf byte7=255→ROM Almighty vs tool Last spurt). Likely original intent: the externals-rank rule is how the game assigns the *initial* style at birth, then bakes it into byte 7 (which can drift via training — proven by the "Leg-Type Change Messages" block @0x12755C).
-- **CPU table:** STORED at +21 (244/244, §3). The 5 "Almighty" CPU horses are exactly those with all six externals = 31 (sentinel all-rounder).
+- **Player horse (corrected 2026-09-28):** the style shown is computed from the horse's CURRENT externals: Start's rank among Start, OOB, Competing, Tenacious and Spurt (Corner ignored). 1st Front-runner, 2nd Start dash, 3rd Last spurt, 4th or 5th Stretch-runner; Almighty only when those five are equal. Because it follows the current externals it can change during a career (the game says "Your horse's racing style has changed.", block @0x12755C).
+- **Track1 byte 7 (a1[7]) is NOT the style.** (Corrected 2026-09-28: this used to call byte 7 "the game-authoritative seed" mapped `floor(byte7/51)` to a style, with a birth-then-drift theory.) Byte 7 is inheritance payload only: it is bit-mixed into foals together with the personality byte, its only decoder has zero callers, and no race code reads it (card-seed-trait-readers.md). Editing it does not change the style.
+- **CPU table:** STORED at +21 (244/244, §3), set per horse, not computed from the externals. (Corrected 2026-09-28: this used to say the "Almighty" CPU horses are those with all six externals = 31. The three World Edition Almighty CPU horses have unequal externals, and the all-31 CPU horses are not Almighty.)
 
-### 4.2 Personality (8 ROM bands / 5 in-game "Check" labels)
+### 4.2 Personality: five classes (corrected 2026-09-28; heading was "8 ROM bands / 5 in-game Check labels")
 - **Stored only on the player card** at Track1 byte 6 (a1[6]), 0–255; and **banded** on the CPU table at +23 (244/244). NOT on the sire/dam table directly (but see §5.4 composite).
-- 8-band ROM truth (authoritative): 0-47 Rough · 48-63 Imposing · 64-111 Calm · 112-127 Firm · 128-175 Sensitive · 176-191 Moody · 192-239 Gentle · 240-255 Proud. [CORRECTION-NOTE] the exact cut points are ROM-derived and cannot be re-confirmed from card bytes alone.
-- In-game "Check" English labels: Imposing/Honest/Rough/Coward/Sloppy (+ Too soft/Strict edges) @ WE-C 0x0E84A4. JP romaji labels (Doudou/Sunao/Arai/Okubyou/Zubora) @0x107DFC and a duplicate cluster [CORRECTED] **@0x0EB614** (the anchor 0x0EB61C was ~1 record late).
+- **Five personalities: Imposing, Honest, Rough, Coward, Sloppy.** The game sorts the byte into five classes by its high nibble (card-seed-trait-readers.md). (Corrected 2026-09-28: this line used to call an eight-band list, with Calm, Firm, Sensitive, Moody, Gentle and Proud, "ROM truth (authoritative)". Those six names do not occur in the ROM; the list is an outside database's labels.)
+- In-game English labels: Imposing/Honest/Rough/Coward/Sloppy @ WE-C 0x0E84A4. The "Too soft" and "Strict" strings stored after them are menu answer labels, NOT personalities (corrected 2026-09-28). JP romaji labels (Doudou/Sunao/Arai/Okubyou/Zubora) @0x107DFC and a duplicate cluster [CORRECTED] **@0x0EB614** (the anchor 0x0EB61C was ~1 record late).
 - The Card-Creator collapses 0–255 to **5 lossy anchors {R:0,I:48,C:64,H:80,S:208}** — a faithful rebuild must store the raw byte.
-- Personality drives the interaction-effect multiplier table (38 IEEE-754 floats @0x0E7D00; Hug/Praise/Scold/Flatter scaled ×2.0..−2.0).
+- Personality drives the post-race interaction multiplier table, a 6x5 float table (corrected 2026-09-28: the older "38 floats @0x0E7D00, Hug/Praise/Scold/Flatter scaled" note is superseded, see personality-interaction.md). Which reply button is which column is UNVERIFIED, so give no per-button advice.
 
 ### 4.3 Aptitude symbols ✕△○◎ — derived, not stored
-Pure quartiles of the 1–16 breeding external via `symFor` (≥13◎/≥9○/≥5△/≥1✕/0·); applies to racing externals after ÷4 binning. No other trigger.
+Pure quartiles of the 1-16 breeding external via `symFor` (≥13◎/≥9○/≥5△/≥1✕/0·). No other trigger. (Corrected 2026-09-28: this used to say the symbols apply to racing externals after ÷4 binning. They do not: the symbols grade the birth bands, which never change; current externals are a separate 0-63 value.)
 
 ### 4.4 Growth / internal "type"
 `Speed type / Stamina type / Sharp type` strings @0x0EE270 (WE-C) are the **internal-stat-bias labels** (this block is the retirement/registration UI, continuing into `Stud reg./Dam reg./Sire/Dam`). No distinct stored "growth-curve" byte found in either table; a horse's dominant internal = its "type" (conf med-high, absence inferred from full-column scans).
@@ -220,17 +220,8 @@ Two analyses: (A) **course/dirt aptitude** 0–255 — favored, with clean corre
 ### 5.4 The composite (name+44, Packed_u32_5) — partial
 4 bytes, byte-stable per horse: `b0`∈{0,1,2,3} (2-bit category) · `b1` clustered 0xC0–0xEF · `b2` high-entropy (Source-of-Truth doc's PersonalityByte) · `b3` multiples of 0x10/0x30/0xA0/0xC0/0xF0 (nibble-packed flags). Best model: packed inheritance/affinity + appearance + personality composite consumed by the breeding routine. b0/b1/b3 meanings are TBD — **this is the gate to the exact inheritance rule**. [CORRECTED] the composite is **NOT byte-identical EN↔JP** (only JP↔JP is stable): e.g. White Norther JP [1,234,0,48] vs its EN stat-twin Judge Angelucci [1,204,171,52]. There is also a separate still-unknown 3-byte block at name+45..47 (first nibble clusters 0xC–0xE).
 
-### 5.5 Foal inheritance (community model — NOT yet ROM-confirmed)
-The only explicit algorithm available (`breedFoal()` JS), consistent with observed foals but a reconstruction:
-```
-st/sp/sh = floor(parent average)
-ac       = floor(parent avg + (rand-0.5)*36)        // ±18 noise
-each external = clamp(floor(parent avg) + floor((rand-0.5)*4), 1, 16)   // ±2
-bloodline bonuses: sire.st≥45&dam.st≥40 → st+2; sire.sp≥45&dam.sp≥40 → sp+2; sire.ac>220&dam.ac>220 → ac+20
-clamps: st 10-60, sp 10-65, sh 10-60, ac 0-255
-sex = 50/50; style = deriveRunningStyle(externals)
-```
-The chosen "dominant parent" does **not** weight the math (display only), and the model ignores the name+44 composite — so the real ROM rule is almost certainly richer (affinity/line bonuses). The actual SH-4 breeding routine has not been disassembled.
+## 5.5 Foal inheritance (SUPERSEDED community model removed 2026-09-28)
+An earlier community reconstruction here (the `breedFoal()` JS model: externals = parent average ±2, internals clamped 10-60/65, and "bloodline bonuses" such as sire.st≥45 & dam.st≥40 → +2) was removed on 2026-09-28; it is superseded by the byte-exact decode of the ROM foal routine. The current rule is in decode-foal_average.md and foal-externals-and-rolls.md: each foal band is the floor-average of the parents' bands with no roll, fixed at birth; internals are the floor-average of the parents' current internals, over 45 loses 5 (under 10 gains 5), plus the pedigree bonus, capped at 45; about 1 birth in 32 adds a hidden +5.
 
 ### 5.6 Cross-version name mapping [CORRECTED]
 Reconcile EN↔JP **by NAME, not index** — the JSON is ~alphabetical while the ROM is game order (e.g. ROM rec84="Pentire" vs JSON revC id84="Zephyr Hills"; Rev D ROM rec1="Maple Syrup" vs JSON revD id1="Banana Boy"). By name: 161/167 match (6 are spelling/space variants); 156/161 of those match st/sp/sh/ac exactly.
@@ -308,11 +299,11 @@ Single packed array of **44-byte food records**, terminated by an all-zero (idx=
 | +40 | u32 LE | **Food index/ID** | 1..39 real; trailing dupes reuse 39/1; terminator 0. **NOT unique** — writing an out-of-range index (44/45) crashes at boot (init builds a ~39-entry lookup array). |
 
 ### 7.3 Effect columns
-Cols 0/1/2 = **Speed / Stamina / Sharp** (anchored by the on-screen "Speed/Stamina/Sharp/Friendship" label block @0x12874C), conf 0.85. Col 3 most plausibly = **Friendship**; cols 4–6 are hidden/internal growth stats with **no confirmed UI name** (conf ~0.55). [CORRECTED] the "Spirit" @0x110274 and "Power" @0x10BDFA strings are NOT feed-stat labels (Power is the horse name "Power Drift"; Spirit is in an award/menu list) — do not bind columns to them. Per-column value range 0..7; "large" variants roughly double the base. KOREAN GINSENG = +2 to all six of cols 0–5; LARGE = +4 all.
+Cols 0/1/2 = **Speed / Stamina / Sharp** (anchored by the on-screen "Speed/Stamina/Sharp/Friendship" label block @0x12874C), conf 0.85. (DISPUTED, corrected 2026-09-28: whether these columns raise the internals Speed/Stamina/Sharp or the externals is not settled, see items-feeding.md. The per-food numbers themselves are exact.) Col 3 most plausibly = **Friendship**; cols 4-6 are hidden/internal growth stats with **no confirmed UI name** (conf ~0.55). [CORRECTED] the "Spirit" @0x110274 and "Power" @0x10BDFA strings are NOT feed-stat labels (Power is the horse name "Power Drift"; Spirit is in an award/menu list), do not bind columns to them. Per-column value range 0..7; "large" variants roughly double the base. KOREAN GINSENG = +2 to all six of cols 0-5; LARGE = +4 all.
 
 ### 7.4 Per-version differences
 - **oc '99 has only 41 foods, NO banana, NO beer** — beer & banana were ADDED in DOC 2000. (Corrects any note implying '99 had beer.)
-- o2k ships both beers (生中 DRAFT, 黒生中 BLACK DRAFT) with **all-zero effect** (disabled placeholder).
+- o2k ships both beers (生中 DRAFT, 黒生中 BLACK DRAFT) with **all-zero effect** (zero stat payload; corrected 2026-09-28: "disabled placeholder" is disputed, food-beer.md found no beer-specific disable and live reaction code).
 - WE-C/WE-D carry the identical 45-food table.
 - Genuine per-version tuning: CUBE SUGAR, GREEN SALAD, LARGE ? MUSHROOM effect values differ between '99 and 2000/WE.
 
@@ -379,8 +370,8 @@ The leaderboard stores only name + money + 2 flag bytes (no card ID / stat block
 | logical | file off | field | notes |
 |---|---|---|---|
 | a1[2..5] | 0x40–0x43 | **UID** (4-byte horse id) | triplicated identically across all 3 tracks; per-horse key |
-| a1[6] | 0x3F | **Personality** 0–255 → 8 bands (§4.2) | tool collapses to 5 lossy anchors |
-| a1[7] | 0x3E | **Running-style seed** 0–255, ÷51 | stored seed; display derived from externals (§4.1) |
+| a1[6] | 0x3F | **Personality** 0-255 → five classes (§4.2) | tool collapses to 5 lossy anchors (corrected 2026-09-28: was "8 bands"; the 8-band list is not ROM text) |
+| a1[7] | 0x3E | **Running-style seed** 0-255 | inheritance payload only; no race code reads it; the style is computed from current externals (§4.1). (Corrected 2026-09-28: the ÷51 style mapping is wrong.) |
 | a1[8] | 0x3D | **Coat base** (63 = special trigger) | |
 | a1[9] | 0x3C | **Coat modifier** (special sub-id when a1[8]=63) | |
 | a1[11..29] | 0x2C–0x3A | **Dam name** (18 ASCII, reversed) | |
@@ -400,16 +391,16 @@ The leaderboard stores only name + money + 2 flag bytes (no card ID / stat block
 | a2[20],a2[21] | 0x76,0x75 | Current race result + track index (partial) |
 | a2[22] | 0x74 | Rest/fatigue timer (partial) |
 | a2[23] | **0x73** | Retire internal SHARP (=45 on Scarecrow) [CORRECTED — 0x73, not 0x4B] |
-| a2[24],a2[25] | 0x72,0x71 | Retire internal SPEED, STAMINA |
+| a2[24],a2[25] | 0x72,0x71 | Retire internal SPEED, STAMINA. (Corrected 2026-09-28: a2[23..25] are the printed BIRTH stats, frozen at birth; "retire" is a misleading name, see decode-foal_growth.md.) |
 | a2[26] | **0x70** | **Hood** (0–63) [CORRECTED — 0x70, not 0x73] |
 | a2[27] | 0x6F | owner/stable assoc (TBD; =44 on one stable's 3 cards, 0 elsewhere) |
-| a2[28..33] | 0x69–0x6E | Retirement externals (Spurt,Tenac,Comp,OOB,Corner,Start; value-1, 1–16 bands) |
+| a2[28..33] | 0x69-0x6E | Birth bands, the breeding symbols (Spurt,Tenac,Comp,OOB,Corner,Start; value-1, 1-16 bands). (Corrected 2026-09-28: older notes call these "retirement externals", which is misleading: they are set at birth and never change.) |
 | a2[34] | 0x68 | Wins duplicate (= a2[49]) |
 | a2[35] | 0x67 | Total races (0–64) |
 | a2[36] | 0x66 | Trust (partial) |
 | a2[37] | 0x65 | Hearts (display = (val+1)/4) |
 | a2[38..43] | 0x5F–0x64 | Current externals (Spurt,Tenac,Comp,OOB,Corner,Start; value-1, 1–64) |
-| a2[44] | 0x5E | Condition/fitness (partial) |
+| a2[44] | 0x5E | Condition/fitness (partial). (Label unconfirmed, 2026-09-28: card-seed-trait-readers.md shows it is stamped at birth as a 2-bit hash, and no gameplay reader was found.) |
 | a2[45] | 0x5D | Experience (partial) |
 | a2[46..49] | 0x5A–0x5C,0x59 | Out (4th+), Show (3rd), Place (2nd), Won |
 | a2[51..53] | 0x55–0x57 | Earnings: dollars = (a2[51]·65536 + a2[52]·256 + a2[53])·1000 |
@@ -422,7 +413,7 @@ External order (memorize): both current and retirement externals are stored **Sp
 a3[2..5]=0xCA–0xCD UID(dup); a3[50]/a3[51]=0x9D/0x9C format markers `10`/`30`; a3[53]=0x9A breed count (offspring=val/2); a3[57]=0x96 retired flag; a3[61]=0x92 **Dirt ability** (0–255); a3[62..69]=0x8A–0x91 `SEGABEF0` marker. Clean WE cards have genuinely all-zero unused regions in tracks 2/3.
 
 ### 9.4 Low-confidence / next targets
-a2[27] (owner/stable id?), a2[18–22] (race-history encoding — needs a developed-horse card), a2[36]/a2[44]/a2[45] (trust/condition/experience labels track each other on fresh cards), whether a1[7] is ever read post-creation.
+a2[27] (owner/stable id?), a2[18-22] (race-history encoding, needs a developed-horse card), a2[36]/a2[44]/a2[45] (trust/condition/experience labels track each other on fresh cards), whether a1[7] is ever read post-creation (answered: only by the breeding bit-mix; no race code reads it, card-seed-trait-readers.md).
 
 ---
 
@@ -482,24 +473,24 @@ Edit path solved (a renamed card loaded into full gameplay). **CREATE not solved
 
 ## 12. Race performance model (the hard one)
 
-**Status: partial / empirical + located. NOT byte-decodable** — the stat→speed function is SH-4 FPU code, not a clean table. What is proven: stat *roles*, the *6-phase machine*, style-as-behavior, and the *located coefficient pools* (including one confirmed data table).
+**Status: partial / empirical + located. NOT byte-decodable**: the stat→speed function is SH-4 FPU code, not a clean table. What is proven: the six external stat names, that running style is not a power tier, and the *located coefficient pools* (including one confirmed data table). (Corrected 2026-09-28: this used to list stat *roles*, the *6-phase machine* and style-as-behavior as proven. They are UNVERIFIED models, see 12.1 and 12.2.)
 
-### 12.1 The 6-phase machine (verified)
-`START → CORNER → OUT OF THE BOX → COMPETING → TENACIOUS → SPURT`. The six externals are 1:1 per-phase abilities (the phase-relevant external dominates speed in its phase). [CORRECTED] the ROM string is "OUT OF THE BOX" (often abbreviated OOB). Externals are roughly balanced (~220 total regardless of style → per-phase weights, not a single power score).
+### 12.1 The "6-phase machine" (UNVERIFIED; corrected 2026-09-28, was labelled "verified")
+Early notes modelled a race as six phases, `START → CORNER → OUT OF THE BOX → COMPETING → TENACIOUS → SPURT`, with each external dominating speed in "its" phase. Only the six NAMES are confirmed (ROM strings; they are the retirement-screen stat labels, see game-text.md). The phase model has not been verified: do not tell players which external matters in which part of the race. What each external does in a race is not pinned down yet. [CORRECTED] the ROM string is "OUT OF THE BOX" (often abbreviated OOB). The six externals of the 244 CPU racers average about 220 in total, flat across styles: that shows style is not a power tier, and it is a CPU-roster statistic, not a rule for player horses (a fresh foal's externals start far lower, about 2 x band each).
 
-### 12.2 Stat roles (verified by statistics over 244 records)
-- **Externals** = per-phase weights (local).
-- **Internals** = global capacities: Stamina = energy pool / how long high speed holds; Speed = top-speed ceiling; Sharp = acceleration + whip responsiveness.
-- corr(ext_total, int_total) ≈ 0.20 (WE-C) / 0.56 ('99) → independent axes.
-- **Running style = behavior tag** (which phase to commit energy to), NOT a power tier.
+### 12.2 Stat roles (UNVERIFIED; corrected 2026-09-28, was "verified by statistics over 244 records")
+The statistics over the 244 CPU records verified ranges and correlations only, not roles.
+- Old model, UNVERIFIED: externals = per-phase weights; internals = global capacities (Stamina = energy pool, Speed = top-speed ceiling, Sharp = acceleration + whip responsiveness). What each internal does in a race is not decoded individually.
+- corr(ext_total, int_total) ≈ 0.20 (WE-C) / 0.56 ('99) → independent axes. (Verified.)
+- Running style is NOT a power tier (verified). "Behavior tag: which phase to commit energy to" is part of the unverified phase model.
 
 ### 12.3 Located coefficient data
 - **DISTANCE → MULTIPLIER table (the single clearest race-math data recovered):** WE-C @0x10F210, WE-D @0x110A70, o2k @0x11439C (byte-identical across the three; **absent in '99**, which has a different track set). 9 distances (m): 1700,1800,2000,2100,2200,2400,2500,3000,3200. 12 multipliers: 1.391, 1.231, 1.032, 1.062, 0.889, 0.865, 0.842, 0.821, 0.800, 0.727, 0.667, 0.640. [CORRECTED] the curve is **per-distance non-monotonic** (index 2→3 ascends 1.0323→1.0625), not strictly descending — strengthening the "9-key lookup set indexing a 12-value factor table" reading. conf 0.9 distance-related / 0.6 exact use.
 - **~7 embedded FPU float32 coefficient pools** inside the code region (0x46168, 0x53928 falloff/drain curve, twin 0x7C258/0x7C3C8 = two style branches, 0x828BC, 0x102760 per-style/personality matrix, 0xE7CA8, 0x102C00 per-position offsets). [CORRECTED] the code-adjacency proof: the bytes immediately before each pool are *more float32*, not 0xF0xx opcodes; the real evidence is high regional FP-instruction-word density near the pools (33/27/20% in ±256B) vs 2% at the isolated distance table. [CORRECTED] the 0x102760 pool head is `1.0×6, 0.9, 0.6, 1.0, 0.9, 0.9, 0.92` (not the "0.4 0.52 0.6 -0.6" row). conf 0.85 these are race pools / 0.4 each semantic label.
-- **Track geometry table @0x0C8500** (72-byte float records, coords ±3000, lengths 1000–3000) = track spline geometry defining where phase boundaries fall — an *input*, disambiguated as NOT the stat→speed formula.
+- **Track geometry table @0x0C8500** (72-byte float records, coords ±3000, lengths 1000-3000) = track spline geometry (segments and corners; "phase boundaries" in the old notes, and the phase model is UNVERIFIED), an *input*, disambiguated as NOT the stat→speed formula.
 
-### 12.4 Working empirical model (best current understanding)
-Per tick: `phase = phase_for(geometry, distance)`; `phase_ability = external[phase]`; `base_pace = distance_mult(distance)`; `surface_factor = f(dirt 0–255, track surface)`; `target = SpeedCap(internal_speed)`; `accel = g(internal_sharp, phase_ability)`; energy drains (curve @0x53928?) gated by Stamina; condition/trust/hearts multiply (card T2[44]/[36]/[37]); style biases which phase energy is committed (pools @0x7C258/0x102760); whip timing-window boosts accel via Sharp at trust/energy cost; small per-tick RNG. The `f/g/h/clamp` arithmetic is unproven — needs SH-4 disasm or a MAME race-trace (the highest-ROI path; the located pools confirm the constants).
+### 12.4 Working empirical model (UNVERIFIED throughout; corrected 2026-09-28)
+Nothing here is a decoded formula: the phase lines come from the unverified phase model, and the condition/trust/hearts and whip terms are guesses with no decoded race reader. Do not present this to players as how races work. Per tick: `phase = phase_for(geometry, distance)`; `phase_ability = external[phase]`; `base_pace = distance_mult(distance)`; `surface_factor = f(dirt 0-255, track surface)`; `target = SpeedCap(internal_speed)`; `accel = g(internal_sharp, phase_ability)`; energy drains (curve @0x53928?) gated by Stamina; condition/trust/hearts multiply (card T2[44]/[36]/[37]); style biases which phase energy is committed (pools @0x7C258/0x102760); whip timing-window boosts accel via Sharp at trust/energy cost; small per-tick RNG. The `f/g/h/clamp` arithmetic is unproven, needs SH-4 disasm or a MAME race-trace (the highest-ROI path; the located pools confirm the constants).
 
 ---
 
@@ -530,7 +521,9 @@ Cross-reference: the JP name tables (o2k ~0x10C000+, oc ~0xF8000+) overlap the r
 | distance→mult table | (absent) | 0x11439C | 0x10F210 | 0x110A70 |
 | stat table identity | partial overlap (92/244 = WE-C) | 222/244 = WE-C (22 differ) | == WE-D | == WE-C |
 
-Roster changes: WE-C→WE-D = 16 racing renames + 26 sires + all 84 dams renamed (Export licensing). DOC'99→DOC2000 = 64 racing renames. The breeding rosters differ in **order** (game order vs alphabetized JSON) but largely the same set (reconcile by name).
+## 14b. Roster changes between versions
+
+Roster changes (corrected 2026-09-28; this used to say "26 sires + all 84 dams renamed (Export licensing)" and "64 racing renames"): WE-C→WE-D = 16 race-roster names changed (14 real names swapped for fictional ones plus 2 spelling fixes; stats identical). In the breeding catalog, 26 of 84 sire slots and every dam slot hold a different name, but matched by identity only 2 sires and about 34 dams were renamed, 24 sires were dropped, about 30 new EX horses were added, and 58 sires and 49 dams kept their names (open until John confirms; see roster-name-changes.md). Never say "all 84 dams were renamed". No Sega source gives the reason for the renames (the "licensing" reason was unsourced). DOC'99→DOC2000 = 64 of 244 race-roster slots hold different horses: replacements with different stats, not renames. The breeding rosters differ in **order** (game order vs alphabetized JSON) but largely the same set (reconcile by name).
 
 ---
 
@@ -541,15 +534,15 @@ Roster changes: WE-C→WE-D = 16 racing renames + 26 sires + all 84 dams renamed
 - **Sire/dam breeding record** — full field layout (name, st/sp/sh, ac, composite, 6 externals, index) verified against the 681-horse JSON; pool structure (one contiguous block, continuous index) corrected.
 - **US/WE card** — every load-bearing byte across 3 tracks: UID, identity/genetics, career/status, G1 bitfield, earnings, silks/hood/sex, breeding/markers; no on-card checksum.
 - **JP card** — kana table, field layout, lead-ID + per-write trailer characterized; the on-card-vs-cabinet question resolved (identity-only, stats not on card or in nvram).
-- **Food table** — 44-byte record, 7 effect columns (cols 0–2 = Speed/Stamina/Sharp), per-version food counts and tuning, the beer experiment exactly characterized.
+- **Food table**: 44-byte record, 7 effect columns (which stats cols 0-2 raise is DISPUTED, corrected 2026-09-28), food counts, the beer experiment.
 - **Tracks/G1** — these are display string tables; all offsets/counts per version; full EN↔JP venue localization.
 - **Coat/silks/hood/sex appearance** — both card and CPU systems, with the latent getColorName bug; CPU coat at record-start +22 (32-byte) / +19 (28-byte), equivalently DOC-ROM-Studio recBase+13.
 - **Cabinet nvram** — EEPROM identity, SRAM money leaderboard + 57-entry track-record table, master/satellite replication, region layout (with corrected offsets/deltas).
 - **Version diff & architecture** — header markers, memory map, the corrected stat-table identity (WE-C==WE-D only; o2k 22/244 differ), pointer/index tables, 4 MB layout.
 
 ## What is PARTIAL
-- **Race performance formula** — roles + 6-phase machine + confirmed distance table + located FPU pools, but the closed-form stat→speed arithmetic needs SH-4 disasm or a MAME memory-trace.
-- **Breeding inheritance rule** — community averaging model only; the real ROM routine and the name+44 composite's role are undecoded.
+- **Race performance formula**: confirmed distance table + located FPU pools, but the closed-form stat→speed arithmetic needs SH-4 disasm or a MAME memory-trace. (Corrected 2026-09-28: this used to list "roles + 6-phase machine" as known; both are UNVERIFIED models.)
+- **Breeding inheritance rule**: (corrected 2026-09-28) the foal routine's averages, clamps, pedigree bonus and birth roll are now decoded byte-exact (decode-foal_average.md, foal-externals-and-rolls.md), and the name+44 composite is the coat/seed/personality genome (card-seed-trait-readers.md); the old "community averaging model only" line is superseded.
 - **Hidden racing-record fields** — HIDDEN-A (+1), HIDDEN-B (+16), 16-bit HIDDEN-X (+23/+24); proven real (o2k rebalanced them) but semantics narrowed, not labeled.
 - **Binary race-schedule table** — grade/surface/distance/prize/month and G1→course binding live in an undecoded binary block (candidate o2k 0x0CAD7B+).
 - **JP card CREATE recipe** — lead-ID scheme + trailer algorithm for a never-seen horse unsolved (edit path works).
@@ -559,4 +552,4 @@ Roster changes: WE-C→WE-D = 16 racing renames + 26 sires + all 84 dams renamed
 **The 244-record racing stat table.** Every byte is classified and every confirmed field matches the per-version horse database 244/244 across all four ROMs, with the CPU-opponent framing independently proven by the beer-edit ROM diff. It is the bedrock the card decode, appearance, derived-attrs, and race-model work all build on.
 
 ## Single shakiest area
-**The race performance model.** It is the only subsystem that is fundamentally not byte-decodable: the stat→speed function is SH-4 FPU code. We have stat roles, the phase machine, one confirmed data table, and located (but not semantically pinned) coefficient pools — but the actual arithmetic is unproven and requires disassembly or a live emulator trace to close.
+**The race performance model.** It is the only subsystem that is fundamentally not byte-decodable: the stat→speed function is SH-4 FPU code. We have one confirmed data table and located (but not semantically pinned) coefficient pools, but the actual arithmetic is unproven and requires disassembly or a live emulator trace to close. (Corrected 2026-09-28: this used to say "we have stat roles, the phase machine"; both are UNVERIFIED models.)

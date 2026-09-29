@@ -5,10 +5,11 @@ into per-tick speed/position and a finishing order.
 
 Status: **partial / empirical + located.** The full stat-to-speed function is **FPU code in the SH-4
 program ROM, not a clean data table**, so it is NOT byte-decodable the way the horse-stat table was.
-What IS now nailed down (byte-verified): the meaning of the six "external" stats as **per-phase**
-abilities, the three "internal" stats as **global capacities**, the role of running style as a
-**behavior tag (not a power tier)**, and — newly discovered this session — the **race-physics literal
+What IS byte-verified: the six external stat NAMES, the stat ranges, that running style is **not a
+power tier** (external totals are flat by style on the CPU roster), and the **race-physics literal
 pools embedded in the code** (including a confirmed, version-stable **distance→multiplier table**).
+(Corrected 2026-09-28: this used to list "the six externals as per-phase abilities" and "the
+internals as global capacities" as byte-verified. Both are UNVERIFIED models from early notes; see §1.)
 A complete closed-form formula requires SH-4 disassembly or MAME memory-trace; tractability assessed in §7.
 
 > Framing: the player horse's live stats are read from card/cabinet; the 244-record table
@@ -17,41 +18,38 @@ A complete closed-form formula requires SH-4 disassembly or MAME memory-trace; t
 
 ---
 
-## 1. The 6 phases ↔ the 6 external stats (the core insight, verified)
+## 1. The six external stats and the old "6 phases" model (UNVERIFIED)
 
-DOC races are explicitly modeled as a sequence of **6 phases**, and the six external stats are named
-1:1 after them. This is confirmed by the in-ROM stat-name strings (CLAUDE.md @0x0ED5B4) and by the
-phase list in the AI "Master Architecture"/MAME briefing:
+**UNVERIFIED (corrected 2026-09-28; this section used to be labelled "verified").** Early notes and an
+AI "Master Architecture"/MAME briefing modelled a DOC race as six phases named after the six
+externals (START → CORNER → OUT OF THE BOX → COMPETING → TENACIOUS → SPURT), with each external
+dominating speed in "its" phase. Only the six NAMES are confirmed: they are ROM strings, the stat
+labels on the retirement screen (CLAUDE.md @0x0ED5B4). The phase model itself has not been verified.
+Do not tell players which external matters in which part of the race, and do not give training,
+style or distance advice built on it. What each external does in a race is not pinned down yet.
 
-```
-START  →  CORNER  →  OUT_OF_BOX  →  COMPETING  →  TENACIOUS  →  SPURT
-gate      first      breaking      mid-race       late push    final
-break     turn       from pack     positioning                 sprint
-```
+The six externals and their CPU-record offsets (32-byte format): **Start** +9, **Corner** +10,
+**OOB** (OUT OF THE BOX) +11, **Competing** +12, **Tenacious** +13, **Spurt** +14. (An earlier table
+here gave each external a race phase and a role, such as "Corner = speed held through turns". It was
+removed on 2026-09-28 because it is unverified.)
 
-| phase | external stat (rec offset, 32B fmt) | what it governs |
-|---|---|---|
-| gate break | **Start** (+9) | jump speed out of the gate / early accel |
-| first corner | **Corner** (+10) | speed held through turns |
-| break from pack | **OOB** out-of-box (+11) | repositioning out of the early bunch |
-| mid-race | **Competing** (+12) | sustained cruising / jockeying mid-race |
-| late push | **Tenacious** (+13) | holding/fighting in the late-middle |
-| final sprint | **Spurt** (+14) | closing kick to the wire |
+Measured on the 244 CPU racers only: each external spans about 3 to 63 and the six sum to about 220 on
+average, flat across running styles (§8). That shows style is not a power tier; it does not prove a
+phase machine, and it is a CPU-roster statistic, not a rule for player horses. (Corrected 2026-09-28:
+this used to be offered as "verified" evidence for per-phase weights.)
 
-So the engine is a **phase machine**: as the horse crosses each phase boundary on the track, the
-phase-relevant external stat becomes the dominant input to its speed. **Verified**: the externals are
-roughly balanced across the roster (each ~3–63, total ~220 regardless of running style — §3), which is
-exactly what you'd expect if they are *per-phase weights* rather than a single power score.
-
-### The 3 internal stats = global capacities (verified scaling)
-| internal (rec offset 32B) | range (244 horses) | role (model) |
+## 1b. The 3 internal stats (ranges verified; roles UNVERIFIED)
+| internal (rec offset 32B) | range (244 horses) | role (old model, UNVERIFIED) |
 |---|---|---|
 | **Stamina** (+29) | 0–60 | size of the energy pool that drains over the race; gates how long high speed is sustainable |
 | **Speed** (+30) | 0–63 | top-speed ceiling the phase math scales toward |
 | **Sharp** (sharpness, +31) | 0–60 | acceleration/responsiveness — how fast the horse reaches its phase speed, and whip responsiveness |
 
-Internals are global (apply all race), externals are local (apply in their phase). corr(ext_total,
-int_total) ≈ 0.20 on WE-C and ≈ 0.56 on '99 — weak/moderate, i.e. they are **independent axes**, not
+(Corrected 2026-09-28: the ranges are verified over the 244 CPU racers, but the roles are an
+UNVERIFIED model. What Speed, Stamina and Sharp each do in a race is not decoded individually, so do
+not state these roles as fact.) The old model said internals are global (apply all race) and
+externals local (apply in their phase); that is part of the same unverified model. corr(ext_total,
+int_total) ≈ 0.20 on WE-C and ≈ 0.56 on '99: weak/moderate, i.e. they are **independent axes**, not
 redundant. (Computed over all 244 records; script in §8.)
 
 ---
@@ -60,25 +58,26 @@ redundant. (Computed over all 244 records; script in §8.)
 
 Style (`horse-stats` rec +21: 0 Front / 1 Start-dash / 2 Last-spurt / 3 Stretch / 7 Almighty) does
 **not** change the horse's total ability — avg external-total by style is flat (~218–227 across all five
-styles; see §8 output). Its job is to bias **which phase the horse spends its energy in / commits to**:
+styles; see §8 output). CPU styles are stored per horse at +21. A player horse's style is computed
+from its CURRENT externals: Start's rank among Start, OOB, Competing, Tenacious and Spurt (Corner
+ignored), so it can change during a career.
 
-- **Front-runner (0):** commits speed early, tries to lead from gate — leans on Start/Corner, must not
-  empty Stamina before Spurt.
-- **Start-dash (1):** explosive gate burst (Start-weighted), then settle.
-- **Last-spurt (2):** conserves, dumps energy in the Spurt phase (Spurt/Sharp-weighted closing kick).
-- **Stretch-runner (3):** accelerates through the final stretch (Tenacious→Spurt).
-- **Almighty (7, WE only):** versatile; the engine picks the best phase to commit by situation.
+What each style does inside the race engine is NOT decoded. (Corrected 2026-09-28: a list here said
+which phase each style "commits energy to", for example "Last-spurt = Spurt/Sharp-weighted closing
+kick". It came from the unverified six-phase model in §1 and was removed; do not teach per-style
+race behavior or per-style stat priorities as fact.)
 
-This matches the duplicated style-coefficient pools found in code (§4: the `0x7C258`/`0x7C3C8` twin
-clusters and the repeated 4-wide rows at `0x102760`), which read like per-style coefficient rows.
+The duplicated coefficient pools in code (§4: the `0x7C258`/`0x7C3C8` twin clusters and the rows at
+`0x102760`) read like per-style coefficient rows, but that label is 0.4 confidence.
 
 ---
 
 ## 3. Stat scaling that feeds the engine (verified)
 
-- **Externals stored 0–63, displayed 1–16.** Card external display = `card_value + 1` (CLAUDE.md card
-  spec, T2[38..43]); the CPU table stores the raw engine value 0–63. (Display banding X/A/O/@ is a
-  separate breeder-UI mapping; see `horse-stats.md`.)
+- **Current externals stored 0 to 63, displayed 1 to 64.** Card external display = `card_value + 1`
+  (CLAUDE.md card spec, T2[38..43]); the CPU table stores the raw engine value 0 to 63. The breeding
+  bands (the ✕△○◎ symbols) are a separate field stored 0 to 15, displayed 1 to 16, and fixed at birth.
+  (Corrected 2026-09-28: this line used to say externals are "displayed 1-16", mixing up the two.)
 - **Internals 0–63**, used raw.
 - **Dirt aptitude** (rec +5 / card T3[61]) **0–255**: surface-match multiplier. On a dirt track a horse
   with high Dirt keeps its speed; low Dirt is penalized. (Turf is the inverse / default.) This is the
@@ -126,15 +125,22 @@ pools (code-adjacency + magnitude + version stability); **0.4** on each individu
 ### 4.3 Track geometry table (NOT the stat formula — disambiguated)
 - **@0x0C8500**, 72-byte records of f32 triplets `(x, ?, length)` with coords in ±3000 and lengths
   1000–3000. This is **track spline/shape geometry** (where corners are, segment lengths), i.e. it tells
-  the phase machine *where* phase boundaries fall on each course. It is an *input to* the race (defines
-  the phases per track) but is **not** the stat→speed math. Decoded enough to rule it out as the formula.
+  the race where each course's segments and corners fall (the early notes called these "phase
+  boundaries"; the phase model is UNVERIFIED, see §1, corrected 2026-09-28). It is an *input to* the
+  race but is **not** the stat→speed math. Decoded enough to rule it out as the formula.
   CLAUDE.md's "96×72 track parameter table" = this geometry, confirmed by bytes (§8).
 
 ---
 
 ## 5. Working model (empirical synthesis — the honest "best current understanding")
 
-Per simulated tick, for each horse, the engine is consistent with:
+**UNVERIFIED model (corrected 2026-09-28).** Nothing below is a decoded formula. The phase lines
+(`phase_for`, `external[phase]`) come from the unverified six-phase model in §1. The condition /
+trust / hearts term and the whip line are guesses: no race reader of those card bytes has been
+decoded (card-seed-trait-readers.md found no gameplay reader for the card's condition byte). Do not
+present this model to players as how races work.
+
+Per simulated tick, for each horse, the early notes proposed:
 
 ```
 phase            = phase_for(track_geometry@0x0C8500, current_distance)   // 6-phase machine
@@ -154,13 +160,13 @@ position        += v(tick); finishing order = arrival at finish distance
 + small RNG variance per tick (race-to-race noise)
 ```
 
-- **Which stat matters per phase:** the external named after that phase (Start@gate … Spurt@finish);
-  Sharp governs accel into every phase; Speed sets the ceiling; Stamina sets how many phases you can hold.
-- **Distance weighting:** table @0x10F210 (confirmed).
+- **Which stat matters per phase:** UNVERIFIED. The old model named one external per phase and gave
+  Sharp, Speed and Stamina fixed roles; none of that is decoded (corrected 2026-09-28).
+- **Distance weighting:** table @0x10F210 (confirmed to exist; exact use 0.6).
 - **Dirt/surface weighting:** Dirt aptitude 0–255 vs track surface (direction confirmed; curve = code).
-- **Condition/trust/hearts:** multiplicative mood/fitness modifiers from the card (T2[44]/[36]/[37]).
-- **Leg-type interaction:** style biases WHICH phase the horse commits energy to (§2), via the per-style
-  coefficient pools — it reshapes the energy/speed allocation across the 6 phases, not the totals.
+- **Condition/trust/hearts:** UNVERIFIED guess that these card bytes multiply race speed; no decoded
+  race reader (corrected 2026-09-28).
+- **Leg-type interaction:** UNVERIFIED. What style does in the engine is not decoded (§2).
 
 Everything in `f()/g()/h()/clamp` is parameterized by the §4 pools but the exact arithmetic is unproven.
 
@@ -203,9 +209,10 @@ FPU code; only its coefficient pools are data (now located). To get the closed-f
    times/positions vs stats per distance/surface. Yields a *behavioral* model good enough for a
    recreation/odds tool, never the exact ROM arithmetic. Valid, lower-fidelity.
 
-**A partial/empirical model (this doc) is a legitimate stopping point**: phases↔stats, internals'
-roles, style-as-behavior, the confirmed distance table, and the located coefficient pools are enough to
-build a *plausible* race sim and an odds/strength estimator today.
+**A partial/empirical model (this doc) is a legitimate stopping point**: the confirmed distance table
+and the located coefficient pools are enough to build a *plausible* race sim and an odds/strength
+estimator today. (Corrected 2026-09-28: this list also named phases↔stats, internals' roles and
+style-as-behavior, which are UNVERIFIED models, see §1 and §2.)
 
 ---
 
@@ -223,8 +230,9 @@ build a *plausible* race sim and an odds/strength estimator today.
   (±3000 / 1000–3000), i.e. spline geometry, not stat math.
 - **Stat roles/scaling**: `rf_stats.py` — per-column external ranges (each ~3–63), internal ranges
   (0–63), ext-total ~220 flat across all 5 styles (style≠power), corr(ext,int)=0.20 (WE-C)/0.56 ('99).
-- Phase↔stat naming cross-checked against ROM stat-name strings (CLAUDE.md @0x0ED5B4) and the AI
-  Master-Architecture phase list.
+- Stat naming cross-checked against ROM stat-name strings (CLAUDE.md @0x0ED5B4) and the AI
+  Master-Architecture phase list. This confirms the six NAMES only; the phase↔stat mapping is
+  UNVERIFIED (corrected 2026-09-28).
 
 ---
 
@@ -245,6 +253,8 @@ build a *plausible* race sim and an odds/strength estimator today.
 ---
 
 ## 10. Tool ideas this unlocks
+(Note 2026-09-28: ideas below that use the six-phase model, "which phases it's strong in" or phase
+weights inherit its UNVERIFIED status, see §1. They are not player advice.)
 - **Empirical race simulator (v0):** 6-phase machine using decoded stats + confirmed distance table +
   surface/dirt + style-as-behavior. Good enough for an odds/"who wins" predictor and a recreation
   prototype, even before the exact formula. Ground-truth/tune via MAME race captures.

@@ -47,7 +47,7 @@ Two ways the ROM reaches its tables, and the second is why some mechanics were h
 | **CPU roster** | 244 racing horses | 32-byte (Rev C/D/2000) or 28-byte ('99) records; field map in `areas/horse-stats.md` |
 | **Name table** | horse names | stride 18, ASCII (EN) / EUC-JP (JP), `name[n]` aligns to `stat[n]` |
 | **Breeding pool** | 167/177 sire+dam "mater" records | 60-byte (EN) / 56-byte ('99); one contiguous block, reconcile by NAME not index |
-| **Food table** | 45/41 foods | 44-byte records: name + 7 effect columns (Speed/Stamina/Sharp confirmed) + class/rarity flags |
+| **Food table** | 45/41 foods | 44-byte records: name + 7 effect columns + class/rarity flags. (Corrected 2026-09-28: this used to say "Speed/Stamina/Sharp confirmed"; which stats the first three columns raise, internals or externals, is DISPUTED, see items-feeding.md.) |
 | **String blocks** | dialogue/menu/names | NUL-packed; EN uses `0x0A` as a line separator; JP is EUC-JP |
 | **Race tables** | distance→pace multiplier (12 keys @ `0x10F204`), dirt 4-band curve, condition gates, FPU coeff pools | mix of literal-pool and computed access |
 | **Personality interaction** | post-race bond multipliers | 6×5 float table @ `0x0E7D20`, computed access (reader @ `0x0C027F80`) |

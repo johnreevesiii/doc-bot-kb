@@ -34,10 +34,10 @@ older document, this file and arcade-live-rules win.
   feed outage and a query cap) meant charts sometimes showed only a slice of recent races. Both
   fixed with self-healing.
 - **OG Jackpot was treated as a TIER (retired 2026-09-17):** it used to be its own rung, scored in the
-  Breeder's Cup and drawn as a purple or indigo disc. It is now a **tag** — a small "OG" chip worn
-  beside a Triple Anomaly's seal saying which shape that horse's card prints — and it outranks nothing.
-  Nothing grades into it any more. See **bloodline-seals.md**. The Cup itself is OFF while its scoring
-  is re-cut.
+  Breeder's Cup and drawn as a purple or indigo disc. It is now a **tag** (a small "OG" chip worn
+  beside a Triple Anomaly's seal saying which shape that horse's card prints) and it outranks nothing.
+  Nothing grades into it any more. See **bloodline-seals.md**. (The Breeder's Cup itself is LIVE again
+  since 2026-09-27; see breeders-cup.md.)
 - **The 20-breed Lab stud limit (lived 07-24 to 07-26):** removed. Lines culled under it are
   restorable via the Glue Factory's ♻ Restore.
 - **"Saved twice and it never saved" (mid-July, house cabinets):** stale seat-card reads on save;
@@ -51,10 +51,15 @@ older document, this file and arcade-live-rules win.
 ## Corrections to old community beliefs (data-backed)
 - **Externals are stored 0-63, not 1-64.** The "64 cap" came from the Super Juicer spreadsheet's
   display convention (+1 on read, -1 on write). Any math done on 1-64 is off by one.
-- **The growth plateau is ~20 races, not 25-30.** Measured from 4,722 save pairs; near-zero gain at
-  20-24 races and zero after 25.
-- **Internals don't win races; externals and riding do.** Anomaly-fishing produces big internals and
-  poor race results if the externals are weak.
+- **The growth plateau is ~20 races, not 25-30.** Measured from 4,722 save pairs; near-zero internal
+  gain at 20-24 races and about zero on average after 25. (This curve is for the internals: speed,
+  stamina, sharp.)
+- **Breeding symbols are fixed at birth, not set at retirement** (corrected 2026-09-28). A horse's
+  bands are the rounded-down average of its parents' bands and never change through racing,
+  training, feeding or retiring. The bot and this knowledge base used to say otherwise; that was wrong.
+- **"Internals don't win races; externals and riding do"** is a widely held belief, but it is NOT
+  verified. Do not state it as fact. (Corrected 2026-09-28: this line used to present it as a
+  data-backed correction.)
 - **The 2003 handbook's zone scripts don't measurably improve finishing.** In head-to-head races the
   only component that correlates with finishing better is a steady whip rhythm through the final
   stretch. Zone discipline and rocket openers show no effect.

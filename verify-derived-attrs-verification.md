@@ -24,9 +24,10 @@ derbyo2k `162f047ffcf5fcf6`, derbyoc `188bee02f1532838`. All 4 ROMs = 4,194,304 
 - Breeding tables: drbyocwc sire 0x10BF1C / dam 0x10D2CC, stride 60. **Byte-exact confirmed:**
   Maple Syrup st=39/sp=19/sh=34/ac=240/ext=[15,3,6,10,4,12] idx=1 b45-47=`e011f0`; Heart Lake,
   Judge Angelucci, Song Sung Blue, Trust Me, Wild Sun(ac=255) all match JSON. Dam table first idx=85
-  → confirms sire 1-84 / dam 85-168 split. Ext at +48..+53 observed 3..15 (1-16 band scale). ✔
+  → confirms sire 1-84 / dam 85-168 split. (Corrected 2026-09-28: Rev C holds 167 valid records, so
+  the dams run 85-167; see verify-breeding-system-verification.md.) Ext at +48..+53 observed 3..15 (1-16 band scale). ✔
 
-## §2 Running style (CONFIRMED labels; ÷51 = INFERENCE)
+## §2 Running style (CONFIRMED labels; ÷51 REFUTED, corrected 2026-09-28)
 - 5-style EN cluster at exactly drbyocwc 0x128ED0 / derbyocw 0x12B128:
   `Front-runner / Start dash / Last spurt / Stretch-runner / Almighty`. "Almighty" at 0x128F08 /
   0x12B160. ✔ JP ROMs: zero hits for any EN style word (EUC-JP localization confirmed).
@@ -36,23 +37,34 @@ derbyo2k `162f047ffcf5fcf6`, derbyoc `188bee02f1532838`. All 4 ROMs = 4,194,304 
 - **`floor(byte7/51)` is a derivation, not byte-proven.** 255/5≈51 buckets cleanly and the doc
   itself marks this HIGH-confidence-by-inference (5-style table + project CLAUDE.md), not disassembly.
   Fair as stated; the actual SH-4 opcode reading byte 7 was not located. Treat as strong hypothesis.
+  (Corrected 2026-09-28: REFUTED. A later static decode, card-seed-trait-readers.md, found no game
+  code that reads byte 7; it is an inherited seed. The style shown is Start's rank among the five
+  non-Corner current externals, which the Card-Creator's `legTypeFromExt()` already implements.)
 - §2c all-equal-31 sentinel: **CONFIRMED byte-exact** — the only 5 records with all six externals
-  equal are ids 8,41,83,174,182, all =31. ✔
+  equal are ids 8,41,83,174,182, all =31. ✔ (Corrected 2026-09-28: these five records are NOT the
+  Almighty horses. CPU style is stored at record +21, where those five hold Stretch-runner, Start dash
+  or Last spurt; the three stored Almighty CPU horses have unequal externals. Rechecked in the Rev C ROM.)
 
 ## §3 Personality (CONFIRMED)
-- EN labels @0x0E84A4: `Imposing, Honest, Rough, Coward, Sloppy, Too soft, Strict` (7) ✔
+- EN labels @0x0E84A4: `Imposing, Honest, Rough, Coward, Sloppy, Too soft, Strict` (7) ✔ (The strings
+  exist, but only the first five are personalities; "Too soft" and "Strict" sit among menu answer
+  labels and the game's classifier has five classes. Clarified 2026-09-28.)
 - Romaji @0x107DFC: `Doudou, Sunao, Arai, Okubyou, Zubora` ✔. Duplicate cluster: "DouDou" sits at
   0x0EB614 (just before the doc's 0x0EB61C), then Sunao/Arai/Okubyou/Zuboro/_HAPPY_... ✔ (doc's
   0x0EB61C anchor is one record late but the cluster is real).
 - `PERSONALITY_MAP={R:0,I:48,C:64,H:80,S:208}` (L451) and `getPersonalityCode` bands match doc's
   5-bucket model exactly. ✔ a1[6] read L667 / write L807. ✔
 - Interaction floats @0x0E7D00: real IEEE-754 LE (0.8, 1.0, 0.8, 0.1, 0.1, 0.0, 0.2, 1.0, 1.2, 1.5,
-  0.8, 2.0...) — consistent with "×2.0..−2.0 multiplier table." ✔
+  0.8, 2.0...), consistent with "×2.0..−2.0 multiplier table." ✔ (Superseded 2026-09-28: when the
+  reader was disassembled the real table turned out to be 6 rows x 5 columns starting later in this
+  region; the floats above include unrelated preamble. Which reply is which column is inferred at low
+  confidence; see personality-interaction.md.)
 
 ## §4 Aptitude symbols (CONFIRMED)
 `symFor(v)` (ROM-Studio L248): v>=13→◎, v>=9→○, v>=5→△, v>=1→✕, else · — matches doc's quartile
 logic exactly. ✔ `ac` at name+36 confirmed = JSON. name+45..47 3-byte block confirmed varying
 (`e011f0`,`ccff3c`,`ccab34`...) with first-nibble C-E clustering — still PARTIALLY UNKNOWN as doc says.
+(Update 2026-09-28: later decoded as coat base, run-style seed and personality; card-seed-trait-readers.md §2.)
 
 ## §5 Growth type (CONFIRMED)
 @0x0EE270: `Speed type / Stamina type / Sharp type / Stud reg. / Dam reg. / Sire / Dam`. ✔ The
@@ -62,4 +74,5 @@ correction that this is the retirement string block (NOT a leg-type table) is va
 No false offsets found. Two pedantic notes: (a) per-column external floors differ (start col min 11
 on WE, not 3); (b) the 0x0EB61C romaji-dup anchor is ~1 record late (cluster begins 0x0EB614 "DouDou").
 The ÷51 running-style mapping and several enum *meanings* (+1 class, +21, +24) remain reasonable
-inference, correctly flagged as open in §9. Everything load-bearing reproduces from the bytes.
+inference, correctly flagged as open in §9. (Update 2026-09-28: ÷51 is refuted and +21 is the CPU
+horse's stored running style; see §2 above.) Everything load-bearing reproduces from the bytes.

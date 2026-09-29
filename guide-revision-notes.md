@@ -56,26 +56,41 @@ guide never had) · **VERIFY** (guide claims a mechanic we haven't pinned — RE
 - **CONFIRMED — externals = floor((sire+dam)/2).** Guide L580–585 states it exactly ("El Condor
   Pasa 9 + Ferranti's Folly 15 → 12") and our foal-build RE confirms it byte-exact. Keep it; add a
   "(confirmed from the ROM)" note.
-- **CORRECT — "at birth the computer multiplies each stat by 2 and throws a random +/- factor in"**
-  (L599–602). That is the old averaging myth. Real foal build (FUN_0C052B0C, byte-verified):
-  floor-average of each stat, a ±5 soft-clamp at the 45/10 edges, a pedigree bloodline bonus, then
-  a decoded banded-LCG noise (two 8-wide gates ~3.1% each: one pulls internals down ~12, one pushes
-  up ~12). Not a uniform "+/-". That banded noise is the real reason same-parent foals differ.
+- **CONFIRMED: "at birth the computer multiplies each stat by 2 and throws a random +/- factor in"**
+  (L599-602). The guide says this about the RACING externals, and it is right: the foal build
+  (FUN_0C052B0C, byte-verified) sets each current external to 2 x band + a 0-3 roll + an offset
+  (Start -1, the others +1), which is why same-parent foals start with different racing externals.
+  The breeding band itself is the plain floor-average and never rolls (foal-externals-and-rolls.md).
+  (Corrected 2026-09-28: this item called the guide's line "the old averaging myth" and described the
+  internals noise backwards, "one gate pulls internals down ~12, one pushes up ~12". The real noise:
+  Band 1 (~3.1%) lifts all three TRUE internals by 5 while the card prints lower; Band 2 (~3.1%)
+  raises only the printed numbers. See decode-foal_average.md.)
 - **CORRECT/CAP — internals cap at 45, not 60/65.** The jackpot ceiling. Explains why maxed lines
   plateau and why "Well Balanced" foals appear once a line tops out (Beginners "well balanced"
-  passage; Advanced jackpot section pp.9–11).
+  passage; Advanced jackpot section pp.9-11). (Clarified 2026-09-28: this is the BIRTH cap, 45, or 50
+  with Band 1. A horse's current internals still grow with racing afterwards; see decode-foal_growth.md.)
+
+## 2b. Breeding mechanics, continued (dirt, favorable pairs)
 - **SHARPEN — "dirt/off-track set by lineage; Thunder Boy is the #1 dirt sire, his line is higher"**
   (L568–571). Right that aptitude is inherited; wrong mechanism. Dirt/aptitude is **per-bit,
   RNG-gated inheritance of the name+44 composite MASK from BOTH parents** (sire odd-bits | dam
   even-bits, neighbor jitter), not a sire "dynasty" multiplier. The raw `ac` dirt byte itself is
   NOT inherited. So a strong-dirt sire raises the odds via its mask bits, but it is not a guaranteed
-  pass-down, and the dam's bits matter equally.
+  pass-down, and the dam's bits matter equally. (DISPUTED 2026-09-28: a later decode,
+  card-seed-trait-readers.md, reads the name+44 composite as coat, run-style seed and personality,
+  not a dirt mask, and the site breeds dirt as the plain floor-average of the parents. How the ROM
+  passes dirt on is not settled; do not teach this item as fact.)
 - **ADD (HIDDEN RULE) — favorable / unfavorable pairs.** The game rewards parent CONSISTENCY: per
-  external, if BOTH parents are ≥12 (or BOTH <4), it counts; cnt 4–5 → internals +1/+2/+2,
-  cnt 6 → +3/+2/+3 (then cap 45). Guides never knew this — it is the real lever behind "good pairs."
+  external, if BOTH parents (sire and dam, counted equally) are ≥12 (or BOTH <4), it counts; cnt
+  4-5 → stamina +1, speed +2, sharp +2; cnt 6 → stamina +3, speed +2, sharp +3 (then cap 45). Guides
+  never knew this, it is the real lever behind "good pairs." (Labels added 2026-09-28.)
+
+## 2c. Breeding mechanics, continued (jackpot odds, over-breeding)
 - **ADD — jackpot odds are now computable.** "Jackpot = blessed by a random factor" (Beginners FAQ
-  L352; Advanced pp.9–13) is now byte-exact: the up-band is ~3.1% per stat, stacked with the
-  pedigree bonus on a maxed line. We can give real numbers instead of folklore.
+  L352; Advanced pp.9-13) is now byte-exact: the band that lifts true internals (Band 1) fires on 8
+  of 256 births (~3.1%, about 1 in 32) and lifts all three stats at once; a 50 needs a stat already at
+  the 45 cap. We can give real numbers instead of folklore. (Corrected 2026-09-28: said "~3.1% per
+  stat, stacked with the pedigree bonus".)
 - **VERIFY — over-breeding degrades externals after ~10–15 breeds** (L592–596). We track a breed
   count (card a3[53]/2) but have NOT confirmed a degradation mechanic. Flag as an RE target before
   repeating the claim.

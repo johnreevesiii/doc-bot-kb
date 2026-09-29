@@ -68,8 +68,8 @@ Record layout extracted from the parser body (0x0C0226AE..0x0C022876 and continu
 | +97 | 94 | condition (a2[44]) |
 | +98..103 | 95..100 | current externals Start,Corner,OOB,Comp,Tenac,Spurt |
 | +104..107 | 101..104 | hearts, trust, total races, wins-dup |
-| +108..113 | 105..110 | retirement externals Start..Spurt |
-| +116..118 | 113..115 | retirement internals stamina/speed/sharp |
+| +108..113 | 105..110 | birth bands Start..Spurt (old name: retirement externals; fixed at birth) |
+| +116..118 | 113..115 | printed birth internals stamina/speed/sharp (old name: retirement internals) |
 | +119..123 | 116, 89..92 | rest timer; won/place/show/out |
 | +128..131 | 117..120 | current+last race pairs (census bytes b117..b120) |
 
@@ -108,8 +108,11 @@ using bitfield insert/extract helpers 0x0C0C1F70/0x0C0C1FA8; it has no a2[45] eq
    0x0C21A5A8 sits right after; 0x0C061250 clears all three at registration). The cross:
    - internals: floor-average + bloodline bonus. Bloodline points counted per external
      (both parents >= 12 or both <= 3, comparisons at 0x0C072BEE..0x0C072CD6); 4-5 points:
-     sta+1, spd/shp+2; 6 points: +2/+3/+3; clamp 45 (`mov #45,r4; cmp/gt` 0x0C072D22..).
-   - retirement externals: per-slot floor-average into record+108..113.
+     sta+1, spd+2, shp+2; 6 points: sta+3, spd+2, shp+3; clamp 45 (`mov #45,r4; cmp/gt`
+     0x0C072D22..). (Corrected 2026-09-28: the 6-point line read "+2/+3/+3", which looked like
+     stamina +2; the stamina gain is +3.)
+   - birth bands (old name: retirement externals): per-slot floor-average into record+108..113,
+     fixed for life.
    - sex: RNG & 1 -> record+90.
    - **seed|personality word: genetic BIT-MIX, function 0x0C07333E.** Inputs r4/r5 = sire/dam
      word at buffer w+50 (= catalog record +0x2E..0x2F). Algorithm, byte-exact:
@@ -166,8 +169,10 @@ the byte to race behavior.** If Lab horses really do feel different, the mechani
 actual code path is **personality (a1[6])**: it drives the 0..4 reaction-class flags
 (0x0C0734EC) used across care/feeding/presentation, and the Lab writes only the 5 lossy
 anchor values {0,48,64,80,208} instead of the full 0..255 range (us-card section 3 already
-flags the anchor lossiness). Anchors 0/48/64/80/208 map to classes 2/0/3/1/3, so Lab horses
-cluster into fewer reaction classes than game-born ones.
+flags the anchor lossiness). Anchors 0/48/64/80/208 map to classes 2/0/3/1/4, one anchor per
+class, so Lab horses do reach all five reaction classes; what they lack is the variety of the full
+byte. (Corrected 2026-09-28: said 208 maps to class 3 and that Lab horses cluster into fewer
+classes. The class table gives nibble 13 (208) class 4, Sloppy; rechecked in the Rev C ROM.)
 
 ---
 
@@ -231,7 +236,8 @@ this codebase uses the r0-indexed idiom the scans cover, the risk is low.
 - **Catalog composite (+0x2C) decoded** (see 2.2): (coat_mod, coat_base, seed, personality).
   Closes an open question in sh4-race-formula/decode/breeding_routine.md.
 - **Bloodline bonus formula located statically** (0x0C072BEE..0x0C072D3E): external-based
-  points, thresholds >=12 / <=3, bonuses +1/+2/+2 and +2/+3/+3, internal clamp 45.
+  points, thresholds >=12 / <=3, bonuses stamina/speed/sharp +1/+2/+2 and +3/+2/+3, internal
+  clamp 45. (Corrected 2026-09-28: the second triple was printed +2/+3/+3.)
 - **Old-format codec** (0x0C021EC8/0x0C02227C) shows WE can read/write DOC2000-style
   bit-packed kana cards (marker SEGABEX0 accepted): version-up path.
 - The 0x0C061250 record-clear writes sentinel 0xFFFF into +86/+88 and 255/11 pairs into

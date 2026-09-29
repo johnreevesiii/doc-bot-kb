@@ -11,8 +11,8 @@ Date: 2026-06-03. Tooling: `C:/Users/johnr/AppData/Local/Temp/brd*.py`.
 ## VERDICT: mostly-solid (field map is correct; the counts, the "two separate arrays" model, and the JSON-index alignment are WRONG)
 
 The 60-byte record field map, the JP layouts, the stride/base offsets, the `ac` range, the pad/reserved
-bytes, the breedFoal()/deriveRunningStyle() transcription, and the ac↔dirt correlation are all CONFIRMED
-against bytes. Three structural claims are wrong or overstated and need correction.
+bytes, the breedFoal()/deriveRunningStyle() transcription (of a community tool, not the game rule;
+clarified 2026-09-28), and the ac↔dirt correlation are all CONFIRMED against bytes. Three structural claims are wrong or overstated and need correction.
 
 ---
 
@@ -66,16 +66,20 @@ Maple Syrup 240, Bubble Boy 252, City Commandant 0, Black Lily 35, Miami Beach 4
 The correlation is real and reproducible. Meaning of `ac`=dirt is well-supported (the doc's 0.65 on
 meaning is fair given it is still an inference, not a ROM-code proof).
 
-### Inheritance + running-style algorithm — CONFIRMED as faithful transcription
-breedFoal() in the Strategy file matches §6.1 exactly: st/sp/sh = floor(parent avg); ac = floor(avg +
-(rand-0.5)*36); externals = clamp(avg + floor((rand-0.5)*4), 1, 16); bonuses Stamina (sire.st>=45 &&
-dam.st>=40 → +2), Speed (sire.sp>=45 && dam.sp>=40 → +2), Dirt Dynasty (both ac>220 → +20); clamps
-st10-60/sp10-65/sh10-60/ac0-255; dominant chosen but unused. deriveRunningStyle() matches §6.2 exactly
-(range<=3→AL; greater==0→FR; ==1→SD; >=3→LS; else SR). Correctly flagged community heuristic, not ROM.
+## Inheritance + running-style algorithm: faithful transcription of a COMMUNITY tool (not the game)
+The community simulator's breedFoal() and deriveRunningStyle() in the Strategy file were copied into
+breeding-system.md faithfully. "Confirmed" here meant only that the copy matched the tool.
+(Corrected 2026-09-28: the model's rules were printed here in full and were being read as game facts.
+The ROM foal routine has since been decoded (decode-foal_average.md): external bands do NOT roll ± 2,
+there are no "Stamina/Speed Bloodline" or "Dirt Dynasty" bonuses, and the tool's style rule swapped
+Last spurt and Stretch-runner and treated any spread of 3 or less as Almighty. The rule details were
+removed; breeding-system.md §6 now gives the decoded rule.)
 
-### Pierogi Prince placeholder — CONFIRMED
+## Pierogi Prince placeholder, CONFIRMED (sire/dam split DISPUTED)
 Rev D record #85 (first "dam", idx 85) = "Pierogi Prince", ac=0, ext=[1,1,15,15,15,1]. Exactly as the
-doc describes. (It is a joke/placeholder dam at the sire/dam split point.)
+doc describes. (It is a joke/placeholder dam at the sire/dam split point.) (DISPUTED 2026-09-28: the
+site's breeding catalog lists Rev D records 85-89, Pierogi Prince included, as SIRES, which would put
+the first Rev D dam at record 90. The record bytes are not in dispute; the sire/dam split is.)
 
 ---
 
@@ -129,15 +133,18 @@ vs Trot Thunder `[2,206,58,50]`).
 
 ## UNVERIFIABLE / UNCHANGED (left as the doc has them)
 - composite (name+44) byte-meanings b0/b1/b2/b3 — only byte positions certain; meaning still TBD. Doc is
-  appropriately hedged. Not independently advanced here.
+  appropriately hedged. Not independently advanced here. (Update 2026-09-28: later decoded as coat
+  modifier, coat base, run-style seed, personality; card-seed-trait-readers.md §2.)
 - ac vs personality (Interpretation B) — doc-derived from DOCWE Source-of-Truth; the dirt reading is the
   empirically supported one. Agree with doc's resolution.
 - The actual ROM SH-4 breeding routine — not located; averaging model is a heuristic. Agree.
+  (Superseded 2026-09-28: the routine was later located and decoded byte-exact, decode-foal_average.md.)
 
 ---
 
 ## NET
 - Field map / offsets / strides / ranges / pad bytes: **SOLID, byte-verified, all 4 versions.**
-- breedFoal/deriveRunningStyle transcription and ac↔dirt correlation: **SOLID, reproduced.**
+- breedFoal/deriveRunningStyle transcription and ac↔dirt correlation: **SOLID, reproduced.** (The
+  transcription only; the community model itself is superseded by the ROM decode, corrected 2026-09-28.)
 - Record counts (167/177 not 168/178), "two separate arrays" (it's one), and JSON-index alignment
   (same set, different order, match by name): **need correction in breeding-system.md.**

@@ -56,12 +56,14 @@ Four **adjacent** bytes on track 0, all cosmetic-looking, one of which is **not*
 | 0x3C | a1[9] | Coat **modifier** | yes | cosmetic (coat variant, only when base=63) |
 | 0x3D | a1[8] | Coat **base** | yes | cosmetic (coat color) |
 | 0x3E | a1[7] | **Run-style seed** | yes | **creation seed only** — does NOT reliably set the displayed running style; leg-type is derived from the externals at race time. Editing it for "running style" is a known false lever. |
-| **0x3F** | **a1[6]** | **PERSONALITY (0–255)** | yes | **drives the post-race bond multiplier** (see Hidden Rules): the *right* response per personality builds the bond ×2.0, the *wrong* one **lowers** it. Change this and the horse reacts differently to you forever. |
+| **0x3F** | **a1[6]** | **PERSONALITY (0-255)** | yes | **sets the horse's personality**, one of five classes (Rough, Imposing, Coward, Honest, Sloppy). A personality-dependent table scales post-race replies and some combinations lower the bond, but which reply is which is NOT decoded, so there is no verified "right response". Change this and you change the horse's personality. (Corrected 2026-09-28: said the right response builds the bond ×2.0; that per-reply reading is unverified.) |
 
-> **Correction:** personality is a single **0–255** byte at **0x3F**. Many tools expose it as a
-> 5-choice picker (R/I/C/H/S) that writes only `{0,48,64,80,208}` — a **lossy** simplification of the
-> real 8-band scale. Editing "running style" at 0x3E or a coat byte and landing on 0x3F (or using a
-> tool that mislabeled this cluster) is how a personality gets changed by accident.
+> **Correction:** personality is a single **0-255** byte at **0x3F**. The game sorts it into five
+> classes by its high nibble. Many tools expose it as a 5-choice picker (R/I/C/H/S) that writes only
+> `{0,48,64,80,208}`, a **lossy** simplification of the full byte, which foals inherit bit by bit.
+> (Corrected 2026-09-28: said "the real 8-band scale"; the ROM has five classes.) Editing "running
+> style" at 0x3E or a coat byte and landing on 0x3F (or using a tool that mislabeled this cluster) is
+> how a personality gets changed by accident.
 
 ---
 
@@ -69,8 +71,8 @@ Four **adjacent** bytes on track 0, all cosmetic-looking, one of which is **not*
 
 | field | OLD / community understanding | CORRECTED (byte-verified) | why it matters |
 |---|---|---|---|
-| **Hood** | "0x73" | **0x70** (a2[26]) | **0x73 is retirement SHARP**, a real stat. Editing "hood" at 0x73 off an old map silently nerfs/boosts a stat. |
-| **Personality** | 5 buckets {R,I,C,H,S} | raw **0–255**, 8 bands @0x3F | the 5-bucket write is lossy and collapses real variety; band breakpoints affect bonding |
+| **Hood** | "0x73" | **0x70** (a2[26]) | **0x73 is the printed birth SHARP** (old name: retirement sharp), a real stat byte. Editing "hood" at 0x73 off an old map silently changes it. |
+| **Personality** | 5 buckets {R,I,C,H,S} | raw **0-255** @0x3F, sorted by the game into 5 classes | the 5-anchor write loses the full byte, which foals inherit bit by bit (Corrected 2026-09-28: said "8 bands" and "band breakpoints affect bonding", both unverified) |
 | **Run-style (a1[7] @0x3E)** | "the running style" | **creation seed only**; display leg-type = derived from externals | editing it to change style usually does nothing visible |
 | **Track storage** | raw forward offsets | **reversed per track** (`t*69+(69−k)`) | the master cause of shifted maps |
 | **Checksum** | "don't edit, it'll corrupt" | **no whole-card checksum** | cards are freely editable; bad edits don't get caught |
@@ -90,16 +92,21 @@ Four **adjacent** bytes on track 0, all cosmetic-looking, one of which is **not*
 | 0x28–0x3A | **Dam name** | 18 ASCII | pedigree | exact |
 | 0x3C–0x3D | **Coat** (mod/base) | 2 | cosmetic | exact |
 | 0x3E | **Run-style seed** | 1 | creation seed only (see above) | exact |
-| **0x3F** | **Personality** | 1 (0–255) | **post-race bonding multiplier** | exact (effect formula exact; response-names inferred) |
+| **0x3F** | **Personality** | 1 (0-255) | personality class (5); a personality-dependent reply table exists | offset exact; per-reply effect UNVERIFIED (which reply is which is inferred at low confidence; corrected 2026-09-28 from "effect formula exact") |
 | 0x40–0x43 | **UID / horse id** | 4 (mirrored on all 3 tracks) | identity / lineage links | exact |
 | 0x45–0x4D | **Internals** stamina/speed/sharp | 3 (cap 60) | core racing stats; **externals matter more for base ability** | exact |
 | 0x51–0x53 | **G1 titles** | 3 (bitfield) | career titles | exact |
 | 0x55–0x57 | **Earnings** | 3 | prize money total | exact |
-| 0x59–0x67 | **Race record** total/won/place/show/out (+hearts @0x65) | 5 (+1) | career stats; hearts = stamina hearts | exact |
+| 0x59-0x67 | **Race record** total/won/place/show/out (+hearts @0x65) | 5 (+1) | career stats; hearts = the bond / relationship meter, up to 16 hearts, not a stamina value (corrected 2026-09-28 from "stamina hearts") | exact |
 | 0x5F–0x64 | **Externals (current)** start/corner/oob/competing/tenacious/spurt | 6 (stored display−1) | **the dominant driver of race ability**; also derive the displayed leg type | exact |
-| 0x69–0x6E | **Retirement externals** | 6 | breeding-stock value | exact |
+
+## Full corrected field map, part 2 (file 0x69 onward: birth bands, hood, printed birth stats)
+
+| file offset | field | bytes | gameplay effect | conf |
+|---|---|---|---|---|
+| 0x69-0x6E | **Birth bands** (old name: retirement externals) | 6 (0-15, shown 1-16) | the ✕△○◎ breeding value a horse passes on; floor-average of its parents' bands, fixed at birth, never changed by racing, training or retiring (corrected 2026-09-28) | exact |
 | **0x70** | **Hood** | 1 (0–63) | cosmetic (NOT 0x73) | exact |
-| 0x71–0x73 | **Retirement internals** stamina/speed/sharp | 3 (cap 45) | breeding-stock value (**0x73 = ret. sharp, not hood**) | exact |
+| 0x71-0x73 | **Printed birth internals** stamina/speed/sharp (old name: retirement internals) | 3 (0-51; frozen at birth) | what the card printed at birth; equal to the true birth internals unless a birth band fired. NOT what a foal inherits: foals average the parents' CURRENT internals (0x45-0x4D). Corrected 2026-09-28 from "cap 45, breeding-stock value" (**0x73 = printed sharp, not hood**) | exact |
 | 0x7A | **Sex** | 1 (0 M / 1 F / 2 Gelding) | breeding role | exact |
 | 0x7B–0x7D | **Silk** pattern/color1/color2 | 3 | cosmetic (color1=0x7C, color2=0x7D) | exact |
 | 0x8A–0x91 | **`SEGABEF0` marker** | 8 ASCII | card-type signature (US/WE) | exact |
@@ -114,7 +121,7 @@ Four **adjacent** bytes on track 0, all cosmetic-looking, one of which is **not*
    the reversal for you. Don't trust a raw-offset edit from an older tool.
 2. **Treat 0x3C–0x3F as a single careful zone.** If you only meant to change a coat, you're one byte
    from personality.
-3. **Hood is 0x70.** If your old workflow said 0x73, you've been editing retirement sharp.
+3. **Hood is 0x70.** If your old workflow said 0x73, you've been editing the printed birth sharp.
 4. There's no checksum to "protect" you — verify your edit by decoding the card back (round-trip).
 
 *Provenance:* `doc_card.py` (codec, byte-exact round-trip), `_core/areas/us-card.md` +

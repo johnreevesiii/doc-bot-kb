@@ -1,35 +1,26 @@
 # Personality ↔ Post-Race Interaction table (RE pass, Jun 2026)
 
 Scope: the table that scales the **post-race interaction** effect by the horse's **personality**.
-Drives how much "bonding" (trust/condition) each response gives. ROM: `epr-22336c.ic22` (Rev C),
-file offsets.
+Drives how much "bonding" each response gives (which card value the bond lands on, hearts, trust or
+condition, is not established). ROM: `epr-22336c.ic22` (Rev C), file offsets.
 
-## The table — DECODED (boundaries + values byte-exact; structure high-confidence)
-- **Location:** `0x0E7CF0 .. 0x0E7D94` = **42 IEEE-754 floats** (the older note "38 @0x0E7D00" missed
-  the first row). Bounded: `0x0E7CE0..EC` = 0.3/0/0/0 (other data) before; all-zero after `0x0E7D94`.
-- **Shape: 7 rows × 6 columns** (42 = 7×6). **Rows = the 7 in-game "Check" personalities**, in the
-  ROM string order at `0x0E84A4`: **Imposing, Honest, Rough, Coward, Sloppy, Too soft, Strict**
-  (7 labels ⇒ 7 rows; high confidence). **Columns = 6 post-race responses** (the emotional actions
-  from the interaction menu at `0x0E83D0`: Praise / Flatter / Hug / Comfort / Sooth / Scold-class).
-- **Values = effect multipliers** (×2.0 great … 0 nothing … −2.0 backfire), matching the prior note
-  "Hug/Praise/Scold/Flatter scaled ×2.0..−2.0 by personality".
+**Read this first (corrected 2026-09-28):**
+- DOC has **five** personalities: **Imposing, Honest, Rough, Coward, Sloppy**. The game's
+  personality classifier has only five outputs. "Too soft" and "Strict" are NOT personalities: they
+  are menu answer labels stored right after the five names.
+- **Which reply button is which column of the table is UNVERIFIED** (confidence 0.4, never traced).
+  The reply menu has 14 verbs (Psyche up, Praise, Flatter, Hug, Ignore, Leave, Blandish, Scold,
+  Sooth, Apologize, Astonish, Comfort, Wake up, Sooth) against 5 columns.
+- The game's own post-race lines say the race matters too ("Because of the way %s finished, your
+  praise is falling on deaf ears."; "Your horse may be scolded for a bad race.").
+- So **do not give per-button advice** (for example "use Comfort on a Rough horse") and do not quote
+  a multiplier for a named button or a named personality from this file.
 
-### The 7×6 matrix (row = personality, col = response 1..6)
-```
- Imposing   1.0  1.0  1.0  1.0  0.8  1.0
- Honest     0.8  0.1  0.1  0.0  0.2  1.0
- Rough      1.2  1.5  0.8  2.0  1.0  1.5
- Coward     1.5  1.2  2.0  1.2  1.0  2.0
- Sloppy     0.5  2.0  0.5 -1.5 -1.0 -0.5
- Too soft   2.0  2.0  2.0  2.0  1.0  2.0
- Strict     1.0 -2.0 -1.2 -1.0 -0.5  2.0
-```
-**Row coherence = strong domain validation** (why we trust the 7×6 read):
-- **Too soft** → everything is positive/high (a soft horse loves any attention).
-- **Strict** → coddling responses are negative (−2.0/−1.2/−1.0/−0.5); only col0 and **col6 (+2.0)**
-  help ⇒ col6 is the firm/"Scold"-class response (discipline works on a strict horse).
-- **Honest** → near-zero across the board (indifferent to interaction).
-- **Sloppy** → cols 4–6 backfire (−1.5/−1.0/−0.5).
+## Earlier 7x6 reading (retracted)
+An earlier table here (a 7x6 read starting at 0x0E7CF0, with rows named after seven "Check" labels
+including "Too soft" and "Strict", plus a "row coherence" defence) was retracted on 2026-06-06 and
+removed on 2026-09-28: it absorbed 12 unrelated floats and treated two menu labels as personalities.
+The current decode is below.
 
 ## CORRECTION (Jun 6 2026) — reader disassembled; the table is 6×5, not 7×6
 Found the reader at **`0x0C027F80`** (sh4dis); literal pool at file 0x28048+ holds the table base
@@ -50,36 +41,46 @@ absorbed 12 unrelated preamble floats at 0x0E7CF0). Byte-exact values:
  row4   2.0  2.0  1.0  2.0  1.0
  row5  -2.0 -1.2 -1.0 -0.5  2.0
 ```
-**Mechanic (byte-exact):** `bond_gain = M*(100 - bond)` — M is how strongly a (personality-state,
-response) pair pulls the bond toward 100; **negative M lowers it**. Rows = 3 personality tiers
-(the 7 Check labels collapse: tier0={Imposing}, tier1={Honest,Rough,Coward,Sloppy}, tier2={Too soft,
-Strict}) × a runtime flag (*(R5+0x44)); cols = 5 responses. **Still open:** what writes the
-personality value *(R5+0x1C) (card-byte → tier classifier) and the flag *(R5+0x44); the exact 5
-response identities/order (col index source *(R5+0x14)). conf: table+formula 0.9; tier grouping 0.7;
-response names 0.4.
+## What the 6x5 table means, and what is not known
+**Mechanic (byte-exact):** `bond_gain = M*(100 - bond)`: M is how strongly a (personality-state,
+response) pair pulls the bond toward 100; **negative M lowers it**. Rows = 3 personality tiers × a
+runtime flag (*(R5+0x44), unidentified), so the same reply can help in one flag state and hurt in the
+other; cols = 5 responses. (Corrected 2026-09-28: the tier grouping here used to list seven "Check"
+labels. The inferred grouping, 0.7, puts Imposing in tier 0 and Honest, Rough, Coward, Sloppy in tier
+1; it also put "Too soft" and "Strict" in tier 2, but those are not personalities, so what tier 2
+holds is unknown.)
+**Still open:** what writes the personality value *(R5+0x1C) and the flag *(R5+0x44), and which reply
+button feeds which column (col index *(R5+0x14)). **Column-to-button mapping: UNVERIFIED (0.4). Give
+no per-button advice.** conf: table+formula 0.9; tier grouping 0.7; response names 0.4.
 
 ## What is NOT byte-proven (the open items)
-- **No direct pointer** to the table exists in the ROM (searched runtime `0x0C107CF0`/`0x0C107D00`
-  and file-base variants — zero hits). It's reached by computed/PC-relative (`mova`) addressing, the
-  same wall as the FPU/race tables. So the **exact column→response-name mapping and orientation are
-  INFERRED** (0.4), not traced. The *values* and the *personality-row axis* are solid (0.85/0.9).
-- **byte 6 → which of the 7 rows**: card personality is a 0–255 byte (8-band model: Rough/Imposing/
-  Calm/Firm/Sensitive/Moody/Gentle/Proud) but the table rows are the 7 "Check" labels. The exact
-  byte→row index is the game's runtime classification (not pinned here); the advisor maps via the
-  Card-Creator 5-bucket → nearest Check label (approximate).
-- **trust vs condition target**: the multiplier scales an interaction effect that lands on the card's
-  trust (`a2[36]`) / condition (`a2[44]`) fields (low-confidence labels, OPEN_QUESTIONS #7); condition
-  feeds the race-formula condition term. The exact delta = multiplier × (base interaction step) is not
-  isolated.
+- **Column names.** The reader's literal pool does hold the table base (see the correction above), so
+  the table itself is located. What is NOT traced is which reply button feeds which column: the
+  **column-to-button mapping is INFERRED at 0.4**, and the menu's 14 verbs cannot be matched one to
+  one with 5 columns. (Corrected 2026-09-28: this bullet used to say no pointer to the table exists
+  and that a 7-row personality axis was solid.)
+- **Personality → row.** The card personality byte (0-255) is sorted by the game into **five
+  classes** (Imposing, Honest, Rough, Coward, Sloppy) by its high nibble (see
+  card-seed-trait-readers.md). The 8-band names Calm/Firm/Sensitive/Moody/Gentle/Proud come from an
+  outside database and do not occur in the ROM. How the five classes map to the 3 row tiers is not
+  pinned (0.7). (Corrected 2026-09-28.)
+- **Target.** The formula writes *(R5+0x68) of a work struct that is not identified. Earlier notes
+  guessed it lands on the card's trust (`a2[36]`) or condition (`a2[44]`) field and that condition
+  feeds the race formula: both UNVERIFIED (card-seed-trait-readers.md found no gameplay reader for the
+  condition byte). Whether the bond is the hearts meter is not established, and the exact delta per
+  reply is not isolated. (Corrected 2026-09-28.)
 
 ## To close it (needs a trace or in-game observation)
-1. Disasm the reader: find the `mova` that loads `0x0C107CF0`-ish (in the interaction/result subsystem
-   near the `0x0E83D0` menu strings) → get the index math (personality row, response col order).
-2. In-game: on one horse of known personality, pick each response and watch the trust/condition bar →
-   confirms the column→action mapping + the base step (multiplier → actual points).
+1. Disasm the reader: done 2026-06-06 (reader at `0x0C027F80`, see the correction). Still to trace:
+   the writers of the column index *(R5+0x14), the personality value *(R5+0x1C) and the flag
+   *(R5+0x44).
+2. In-game: on one horse of known personality, repeat the same post-race situation, pick each
+   response and read the hearts before and after (note the race result too) → confirms the
+   column→action mapping + the base step (multiplier → actual points).
 
 ## Provenance
-Table values + boundaries: direct ROM read (this pass). Personality labels/bands: derived-attrs.md
-§3 (byte 6, 8-band + 5-bucket + 7 Check labels, string-verified). Interaction menu: game-text.md
-block `Interaction Menu & Result Text` @0x0E83D0 (393 strings). Confidence: values 1.0, 7-row
-personality axis 0.9, 6-col responses 0.7, exact column names 0.4, byte→row map 0.5.
+Table values + boundaries: direct ROM read. Personality classes: the ROM classifier in
+card-seed-trait-readers.md (five classes); the 8-band list in derived-attrs.md is not ROM text.
+Interaction menu: game-text.md block `Interaction Menu & Result Text` @0x0E83D0 (393 strings).
+Confidence (6x5 read): values and formula 0.9, tier grouping 0.7, exact column names 0.4,
+byte→row map 0.5. (Corrected 2026-09-28: this line used to rate the retracted 7x6 read.)

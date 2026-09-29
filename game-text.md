@@ -72,7 +72,7 @@ Counts are live string counts from `parseBlock(a,b)`. **Total = 1705 strings.** 
 | 18 | Track Condition (Pre-Race) | 0x10EA05 | 0x10EAB2 | 10 | "TRACK CONDITION GOOD" |
 | 19 | Track Condition | 0x10EB3D | 0x10EB62 | 4 | "GOOD"/" GOOD TO SOFT"/" SOFT" |
 | 20 | Pre-Race Lead / Style Text | 0x10EAB3 | 0x10EB3C | 9 | "FAVORITE"/"FRONT-RUNNER"/"START DASH" |
-| 21 | Leg-Type Labels (Retirement) | 0x0EE270 | 0x0EE297 | 3 | "Speed type"/"Stamina type"/"Sharp type" |
+| 21 | Leg-Type Labels (Retirement) | 0x0EE270 | 0x0EE297 | 3 | "Speed type"/"Stamina type"/"Sharp type" (note 2026-09-28: despite the block name, these are internal-stat "type" labels, not running styles) |
 | 22 | Retirement Screen Text | 0x0ED5B4 | 0x0EE0A6 | 93 | "START"/"CORNER"/"OUT OF THE BOX" |
 | 23 | Retirement Info (SIRE/DAM) | 0x0EBEF8 | 0x0EBFF0 | 10 | "SIRE:%s"/"DAM :%s"/"Life time race results : Won %d out of %d races" |
 | 24 | Race Board Text | 0x0C898C | 0x0C8A64 | 15 | "NEXT RACE IS %0dR %s"/"WINNER" |

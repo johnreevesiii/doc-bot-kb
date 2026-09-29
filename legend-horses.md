@@ -11,9 +11,15 @@ epr-22284a work.
 Investigated 2026-07-06 (static, from John's "SP Horse Program!!" spreadsheet decode).
 
 ## What it is
-A hidden roster of **11 famous real JRA racehorses** (the late-'90s legends) built
-into the ROM as ready-made "special" horses, each with authentic stats, aptitudes,
-and real sire/dam pedigree. They are the marquee legend horses of DOC 2000.
+A hidden table of **11 records: 10 famous real JRA racehorses** (the late-'90s
+legends) plus one flat 50/50/50 entry, "Tonight Two", believed to be a test horse.
+They are built into the DOC 2000 ROM as ready-made "special" horses, each with stats,
+aptitudes, and (for the real ones) real sire/dam pedigree. The table is not in World
+Edition. In the original game these records are not in the breeding catalog, and
+their in-game use is unconfirmed; on this site the 10 real legends can be bred in the
+Breeding Lab (see "Incorporated into the breeding lab"). (Corrected 2026-09-28: this
+said "11 famous real JRA racehorses" and did not separate the original game from the
+site.)
 
 ## Table location + record layout
 - Table (stat records): file **0x153FAC** stats / **0x153F94** record start, RAM 0x0C163F94.
@@ -65,7 +71,10 @@ Confirmed against racing history:
 - Air Groove = Tony Bin x Dyna Carle (トニービン, ダイナカール)
 - Silence Suzuka = Sunday Silence x Wakia (サンデーサイレンス, ワキア)
 - Narita Brian = Brian's Time x Pacificus (ブライアンズタイム, パシフィカス)
-- El Condor Pasa = ... x Pacificus (パシフィカス)
+- El Condor Pasa: pedigree string not pinned (Corrected 2026-09-28: this line said
+  "... x Pacificus", but Pacificus is Narita Brian's dam, above. The site's catalog
+  lists El Condor Pasa as Kingmambo x Saddlers Gal, taken from racing records.
+  Which ROM pedigree strings belong to El Condor Pasa is OPEN.)
 Also present: Symboli Rudolf, Mejiro Ryan, Grand Opera, Soccer Boy, Opera House,
 Sakura Yutaka O, Bansei..., Sister Mill, Rail du Tan, Vega, Golden Sash, etc.
 Sunday Silence appears 4x (he sired several of these). The exact SP-record ->
@@ -86,9 +95,10 @@ sire/dam wiring (which offset table links them) is not yet pinned. OPEN.
   seeded from this program.
 
 ## Verdict / open threads
-Confirmed: the SP Horse Program is the built-in legend-horse roster (11 real
-champions + 1 test horse) with authentic stats, 6 aptitude bands, and real
-pedigrees. Data side fully decoded.
+Confirmed: the SP Horse Program is the built-in legend-horse roster (11 records:
+10 real champions + 1 test horse) with authentic stats, 6 aptitude bands, and real
+pedigrees. Data side fully decoded. (Corrected 2026-09-28: this said "11 real
+champions + 1 test horse", which would be 12.)
 
 ## Incorporated into the breeding lab (2026-07-06)
 All 10 real legends (excluding the "Tonight Two" test horse) added to
@@ -103,7 +113,12 @@ no sire/dam render yet).
 ## What are they used for? (research 2026-07-06)
 Static evidence, converging read: **built-in legend/rival horses** -- most likely
 the field of the game's Special Races and/or the seed roster of a "famous horses"
-gallery. Not player breeding stock (they are absent from the main breeding pool).
+gallery. UNVERIFIED: no live trace has confirmed which mode uses the table, so do not
+state the race-field use as fact. In the original game they are not player breeding
+stock (the legend records are absent from the game's breeding catalog). On this site
+they are: the 10 real legends are breedable in the Breeding Lab (section above).
+(Corrected 2026-09-28: this said "Not player breeding stock" without saying it
+applies to the original game only.)
 Supporting ROM findings:
 - **名馬 (famous horses) system**: a hall-of-fame/legacy path exists. Retirement/
   ceremony text at 0x0F0960-0x0F0AC0 ("%s号の生涯は... 血統、育成、鍛錬によって...
@@ -120,6 +135,8 @@ Supporting ROM findings:
   documented DOC pattern). Definitive answer needs a live Flycast trace: breakpoint the
   SP table read (post-relocation) or catch the DMA/copy of the 0x153xxx blob, and see
   which screen/mode consumes it (special-race field vs 名馬 gallery vs attract demo).
+
+## Legend horses: open questions (need a live trace)
 
 Open (need live Flycast, per the workspace stop rule -- the deployment code is
 reached indirectly, no static literal loads the array base):

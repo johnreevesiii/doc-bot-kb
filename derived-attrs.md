@@ -33,7 +33,9 @@ is the single biggest source of confusion in prior docs.
 
 ### 1b. Sire/Dam breeding tables (84 + 84) — the breeding stock — externals 1-16
 - Name tables: drbyocwc sire `0x10BF1C` / dam `0x10D2CC`; derbyocw sire `0x10D264` / dam `0x10E614`.
-  Stride **60**, 84 records each.
+  Stride **60**, 84 records each. (Corrected 2026-09-28: the adversarial re-read in
+  verify-breeding-system-verification.md found ONE contiguous table of 167 valid records on Rev C and
+  177 on Rev D; the "dam" address is just record 85. Where the Rev D sire/dam split falls is DISPUTED.)
 - **Corrected field map (vs seed "externals at name-12"): the breeding externals are at name+48..+53**,
   one byte each, on the **1-16 band scale** (observed 0-15):
   `+48 start, +49 corner, +50 oob, +51 comp, +52 tenac, +53 spurt`.
@@ -47,17 +49,30 @@ is the single biggest source of confusion in prior docs.
 - The breeder JSON `id` 1-84 = sires (sex M), 85-168 = dams (sex F); 168 entries per version
   (revA=derbyoc, revB, revC=drbyocwc, revD=derbyocw). The JSON is alphabetized; the ROM tables are not.
 
-### 1c. Scale relationship (CONFIRMED by ranges; ÷4 mapping HIGH confidence)
-- Racing externals 0-63, breeding bands 1-16. 63/16 ≈ 3.94, so **racing ≈ 4× breeding band**
-  (band b ⇒ racing ~4b-1..4b). This is the same relation the aptitude symbols use (§4).
+## 1c. Breeding bands vs current externals: two separate values (Corrected 2026-09-28)
+- Current (racing) externals are stored 0-63 (shown 1-64). Breeding bands are stored 0-15 (shown
+  1-16) and carry the ✕ △ ○ ◎ symbols. Every horse has BOTH, as two separate values.
+- A foal's band on each external is the rounded-down average of its sire's and dam's bands, fixed at
+  birth (decode-foal_average.md §B). Racing, training, feeding and retiring never change it. Measured:
+  on 1,323 horses with save history (418 retired on record) the band bytes never changed through play.
+- A fresh foal's current external = 2 x band + a 0-3 roll + an offset (Start -1, the others +1)
+  (foal-externals-and-rolls.md). After birth the current value moves with play; the band does not.
 - Internals share the same 0-63 scale on both tables (no rescale needed).
-- The 1-16 retirement/breeding externals are therefore a **coarse 4:1 quantization** of the fine 0-63
-  racing externals. A horse retiring to stud gets its 0-63 stats binned into 1-16 bands for the
-  next-generation breeding table.
+- (Corrected 2026-09-28: this section used to say racing ≈ 4 x band, that the bands are a 4:1
+  quantization of the racing externals, and that a horse retiring to stud gets its 0-63 stats binned
+  into 1-16 bands. That was an inference from the ratio of the two ranges, never a decode, and it is
+  wrong. Never divide a current external by 4 to get a breeding symbol.)
 
 ---
 
-## 2. Leg type / running style (RESOLVED — two competing models reconciled)
+## 2. Leg type / running style (Corrected 2026-09-28)
+
+A player horse's style = where **Start ranks among the five non-Corner CURRENT externals** (Start,
+OOB, Competing, Tenacious, Spurt): 1st Front-runner, 2nd Start dash, 3rd Last spurt, 4th or 5th
+Stretch-runner; all five exactly equal = Almighty (Corner may differ). A tie with Start counts in
+Start's favour. This is the site's rule and matches Sega's FAQ. Because it follows the CURRENT
+externals it can change during a career; the game prints "Your horse's racing style has changed."
+(game-text.md). CPU opponents are different: their style is STORED per horse (§2c).
 
 There are **5 running styles**, label table (English) in order:
 `Front-runner, Start dash, Last spurt, Stretch-runner, Almighty`.
@@ -66,40 +81,23 @@ There are **5 running styles**, label table (English) in order:
   labels (English "Front-runner"/"Almighty" absent — searched, zero hits).
 - Matches the Card-Creator `LEG_TYPES[0..4]` array exactly.
 
-### 2a. The authoritative game rule: STORED on the card at T1 byte 7, `floor(byte7 / 51)`
-- The game reads a dedicated **byte 7 of card track 1** (0-255) and maps it via **÷51** to the 5
-  styles: 0-50→Front-runner, 51-101→Start dash, 102-152→Last spurt, 153-203→Stretch-runner,
-  204-255→Almighty. VERIFIED: ÷51 produces clean 5-way bucketing on the boundary values.
-- This is the source of truth for what the running engine uses. CONFIDENCE HIGH (ROM 5-style table +
-  card byte + the project CLAUDE.md "Running Style: Style = floor(byte7/51)").
+### 2a. Card byte 7 is NOT the running style (Corrected 2026-09-28)
+- Card T1 byte 7 (a1[7]) is a "run-style seed": it is inherited bit by bit from both parents together
+  with personality, and no race, whip, AI or display code reads it (card-seed-trait-readers.md). The
+  Card-Creator never writes it, and on real cards it does not match the style the game shows.
+- (Corrected 2026-09-28: this section used to call `floor(byte7 / 51)` the authoritative game rule and
+  the Start-rank rule a display heuristic. That was an inference, refuted by the 2026-07-18 static
+  decode. The table of cards that compared the two models was removed with it.)
 
-### 2b. The Card-Creator tool's "Start-rank among externals" rule = a DISPLAY HEURISTIC, not the ROM rule
-- `legTypeFromExt()` in DOC-Card-Creator.html derives a style from where **Start** ranks among the
-  externals *excluding Corner* (all-equal ⇒ Almighty; Start highest ⇒ Front-runner; 2nd ⇒ Start dash;
-  3rd ⇒ Last spurt; 4th/5th ⇒ Stretch-runner).
-- IMPORTANT FINDING: the editor **never writes a1[7]** (grep: no `a1[7] =` assignment). It only writes
-  externals (a2[38..43]) and then *re-derives* a leg-type label from those externals for the quick-view.
-  So on **editor-made cards, byte 7 is leftover/garbage** and the two models disagree.
-- DECISIVE EVIDENCE (real cards, decoded live):
-  | card | T1[7] | ÷51 (ROM) | ext-derived (tool) |
-  |---|---|---|---|
-  | Caitin Clark | 1 | Front-runner | Start dash |
-  | DD | 213 | Almighty | Stretch-runner |
-  | Gulf of America | 255 | Almighty | Last spurt |
-  | Scarecrow II | 0 | Front-runner | Stretch-runner |
-  | Test Tube Flycast (game-raced) | 86 | Start dash | Front-runner |
-  They diverge on most cards ⇒ the two are genuinely different. The ROM uses byte7/51; the tool's
-  externals rule is an approximation it shows because it doesn't track/author byte 7.
-- LIKELY ORIGINAL INTENT: the *seed's* "start-stat rank among externals" rule is plausibly how the game
-  **assigns the initial running style at birth** (from the foal's starting externals), which then gets
-  baked into byte 7 and can drift via training. Not yet disassembled — see Open Questions.
-
-### 2c. Leg type is NOT stored in the racing (CPU) table
-- VERIFIED: scanning all 32/28 record columns of the 244-record table, **no column matches the
-  externals-derived leg type** for >90% of rows. The 5 "Almighty" CPU horses are exactly the 5 records
-  whose six externals are all equal to **31** (ids 8,41,83,174,182 in drbyocwc) — a sentinel/all-rounder
-  value. CPU running style is therefore computed on the fly from externals, while player horses carry the
-  stored byte-7 value.
+### 2c. CPU horses STORE their style (Corrected 2026-09-28)
+- The 244-record racing table stores each CPU horse's style at record **+21** (0 Front-runner,
+  1 Start dash, 2 Last spurt, 3 Stretch-runner, 7 Almighty; 244/244, see core-understanding.md). CPU
+  styles are hand-authored: records with identical externals carry different styles.
+- The five records whose six externals all equal 31 (ids 8, 41, 83, 174, 182 in drbyocwc) exist, but
+  they are stored as Stretch-runner, Start dash or Last spurt, not Almighty. The three stored Almighty
+  CPU horses have unequal externals. (Corrected 2026-09-28: this section used to say CPU style is
+  computed from externals and that the five all-31 horses are the Almighty ones. Rechecked in the
+  Rev C ROM.)
 
 ---
 
@@ -114,23 +112,28 @@ There are **5 running styles**, label table (English) in order:
 
 ### 3b. Two label sets in the ROM (both VERIFIED by string extraction)
 - **English "Check"/assessment labels** at drbyocwc `0x0E84A4`:
-  `Imposing, Honest, Rough, Coward, Sloppy, Too soft, Strict` (7 labels).
+  `Imposing, Honest, Rough, Coward, Sloppy, Too soft, Strict` (7 labels). (Corrected 2026-09-28: these
+  sit in a pool of menu answer labels beside Check, Hire, Buy, Yes and No. Only the first five are
+  personalities. "Too soft" and "Strict" have no Japanese counterpart and the game's classifier cannot
+  output them; they are most likely answers to "How'd you train your horse?", not horse personalities.)
 - **Japanese romaji personality labels** at `0x107DFC`:
   `Doudou, Sunao, Arai, Okubyou, Zubora` (5) — and a duplicate cluster at `0x0EB61C`
   (`DouDou, Sunao, Arai, Okubyou, Zuboro`).
 
-### 3c. Two byte-range interpretations (reconciled)
-- **Card-Creator 5-bucket model** (`getPersonalityCode`, what the tool authors/shows):
+### 3c. Five personalities: the byte-range rule (Corrected 2026-09-28)
+- **The game's rule = the Card-Creator 5-bucket model** (`getPersonalityCode`):
   R(Rough) ≤47; I(Imposing) the gaps; C(Coward) 64-79 / 128-143 / 192-207; H(Honest) 80-111 / 144-175;
   S(Sloppy) ≥208. Editor write map `PERSONALITY_MAP = {R:0, I:48, C:64, H:80, S:208}`.
-- **8-band ROM model** (mechanics deep-dive, `÷32`-ish bands over 0-255):
-  Rough 0-47 (Arai), Imposing 48-63, Calm/Sunao 64-111, Firm/Strict 112-127, Sensitive/Okubyou 128-175,
-  Moody 176-191, Gentle/Doudou 192-239, Proud 240-255.
-- RECONCILIATION: both read the **same card byte 6**. The 8-band model is the finer ROM truth; the 5
-  English labels are what the in-game "Check" command surfaces (Rough/Imposing/Coward/Honest/Sloppy +
-  Too soft/Strict edge labels). The tool's 5-bucket function is a lossy presentation of the same byte.
-- Personality drives the interaction-effect multiplier table at ROM `0x0E7D00` (38 IEEE-754 floats;
-  Hug/Praise/Scold/Flatter scaled ×2.0..−2.0 by personality) — documented, not re-verified this pass.
+- The ROM's own personality classifier reads the HIGH NIBBLE of card byte 6 and returns one of five
+  classes; its table reproduces exactly these ranges (card-seed-trait-readers.md §2). The five anchors
+  land in five different classes. DOC has five personalities.
+- (Corrected 2026-09-28: an "8-band ROM model" (Rough, Imposing, Calm, Firm, Sensitive, Moody, Gentle,
+  Proud) was printed here as the finer ROM truth. None of Calm, Firm, Sensitive, Moody, Gentle or Proud
+  occurs in the ROM; those labels came from an outside database. Removed.)
+- A personality-dependent table scales post-race replies, and some combinations lower the bond.
+  Which reply is which column is inferred at low confidence; see personality-interaction.md and do
+  not quote per-reply multipliers. (Corrected 2026-09-28: the "38 floats at 0x0E7D00, Hug/Praise/
+  Scold/Flatter scaled x2.0..-2.0" reading was retracted when the reader was disassembled.)
 
 ---
 
@@ -146,8 +149,9 @@ There are **5 running styles**, label table (English) in order:
 - So the X/A/O/@ "ability/aptitude bands" are just the four quartiles of the 1-16 breeding scale, one
   symbol per external (start/corner/oob/comp/tenac/spurt). The trigger is purely the external's band;
   nothing else gates the symbol. CONFIDENCE HIGH.
-- Because racing externals ≈ 4× breeding bands (§1c), the same quartile logic applied to a 0-63 racing
-  external (÷4 then band) yields the same symbol — consistent system across both rosters.
+- (Corrected 2026-09-28: a line here said dividing a 0-63 racing external by 4 gives the same symbol.
+  It does not. The symbols grade the stored birth band only, a separate value fixed at birth (§1c).
+  Never derive a breeding symbol from a current external.)
 
 ### 4a. `ac` composite (name+36) and the name+45..47 bytes
 - `ac` (name+36, 0-255) is the breeder JSON's headline "aptitude composite". VERIFIED equal to JSON.
@@ -157,7 +161,9 @@ There are **5 running styles**, label table (English) in order:
   `CC FF 3C`). First nibble clusters at 0xC-0xE across sires ⇒ likely a coat/trait + breeding-comment /
   inheritance-weight composite (the deep-dive mentions "inheritance weights V0-V3 + coat/trait + comment
   index"). PARTIALLY UNKNOWN — see Open Questions. (This is distinct from `ac`; the seed's "4-byte
-  composite at name+36" conflated `ac` with this region.)
+  composite at name+36" conflated `ac` with this region.) (Update 2026-09-28: card-seed-trait-readers.md
+  §2 decodes the four bytes at name+44..47 as coat modifier, coat base, run-style seed and personality,
+  the starter horses' genes.)
 
 ---
 
@@ -173,8 +179,9 @@ There are **5 running styles**, label table (English) in order:
   system found. A horse's dominant internal = its "type." CONFIDENCE MEDIUM-HIGH (absence-of-field is
   inferred from full-column variance scans showing no other plausible enum).
 - The 0x0EE270 block continues with `Stud reg. / Dam reg. / Sire / Dam` — the retirement/registration
-  UI labels, confirming this is the **retirement screen** string block (where 0-63 stats are shown as
-  1-16 bands and the horse is registered to stud/dam).
+  UI labels, confirming this is the **retirement screen** string block (where the horse's stored 1-16
+  birth bands are shown and it is registered to stud/dam). (Corrected 2026-09-28: said the 0-63 stats
+  are shown as 1-16 bands here; the screen shows the birth bands, it does not convert current values.)
 
 ---
 
@@ -197,7 +204,7 @@ min/max/uniq over all 244 records + cross-ref to name table @0x10AD50/18 and bre
 | +15 | (zero) | 0 | high | |
 | +16 | **sex** | 0-2 | high | 200 M(0) / 37 F(1) / 7 gelding(2) |
 | +17..+20 | (zero) | 0 | high | padding |
-| +21 | minor enum | 0-7 | med | 1×98 2×69 3×44 0×30 7×3 — candidate jockey/silk or distance pref; UNCONFIRMED |
+| +21 | **running style (stored)** | 0-3, 7 | high | 0 Front-runner, 1 Start dash, 2 Last spurt, 3 Stretch-runner, 7 Almighty (1×98 2×69 3×44 0×30 7×3). Corrected 2026-09-28: was "minor enum, candidate jockey/silk"; see core-understanding.md |
 | +22 | **coat color** | 0/192-222 | high | 207,204,202,222,199,192,193 (matches COAT enum) |
 | +23 | sub-coat / pattern | 0-255 | med | 81 uniq; pairs with +22 (special-coat modifier) |
 | +24 | composite | 0-250 | med | dominated by 0xA0/0x30 family — silk/jockey or breeding hint |
@@ -228,7 +235,7 @@ US/WE card = 207 bytes = 3 tracks × 69, logical bytes stored **reversed per tra
 | field | location | notes |
 |---|---|---|
 | Personality | **T1 byte 6** (a1[6]) | 0-255 → §3 bands. Editor writes via PERSONALITY_MAP. |
-| Running style | **T1 byte 7** (a1[7]) | 0-255, `floor/51` → 5 styles (§2). Editor does NOT write it. |
+| Run-style seed (NOT the style) | T1 byte 7 (a1[7]) | 0-255 inherited seed; no game code reads it. The style shown is derived from the current externals (§2). Corrected 2026-09-28 |
 | Coat base / modifier | T1 byte 8 / byte 9 | byte8=63 ⇒ special coat keyed by byte9 |
 | Sex | T2 byte 16 (a2[16]) | 0 M / 1 F / 2 gelding |
 | Current externals | T2 bytes 38-43 (a2[38..43]) | start=43,corner=42,oob=41,comp=40,ten=39,spurt=38; **display = value+1** |
@@ -237,10 +244,12 @@ US/WE card = 207 bytes = 3 tracks × 69, logical bytes stored **reversed per tra
 | Retired flag | T3 byte 57 | 0 active / 1 retired |
 | Breed count | T3 byte 53 | offspring = value/2 |
 
-So on a **player card**, personality and running style are first-class STORED bytes (T1[6], T1[7]); the
-externals are stored at full 0-63 resolution (T2[38-43], +1 for display). On the **CPU racing table**
-they are stored at 0-63 too but personality/running-style are derived. On the **sire/dam table** the
-externals are pre-binned to 1-16 and shown with ◎○△✕ symbols.
+So on a **player card**, personality is a STORED byte (T1[6]) and the running style is derived from
+the current externals (T2[38-43], stored 0-63, +1 for display). The card also stores the horse's 0-15
+birth bands as a separate block (us-card.md). On the **CPU racing table** the running style IS stored
+(+21). On the **sire/dam table** the externals are the 0-15 bands, shown with ◎○△✕ symbols.
+(Corrected 2026-09-28: said running style is a stored card byte, CPU style is derived, and the sire/dam
+externals are "pre-binned" from 0-63 values.)
 
 ---
 
@@ -258,40 +267,34 @@ externals are pre-binned to 1-16 and shown with ◎○△✕ symbols.
 | breeding ext scale | 1-16 | 1-16 | 1-16 | 1-16 |
 
 All four use the identical SYSTEM (5 styles, 0-63 racing ext, 1-16 breeding bands, ◎○△✕ quartiles,
-byte-6 personality, byte-7 running style on cards). Only string localization and the derbyoc 28-byte
-packing differ.
+byte-6 personality, running style derived from the current externals on cards). Only string
+localization and the derbyoc 28-byte packing differ. (Corrected 2026-09-28: said "byte-7 running style".)
 
 ---
 
 ## 9. Open questions
 
-1. **Birth-time running-style assignment.** Confirm by SH-4 disassembly whether the game computes a
-   foal's initial byte-7 from its starting externals (the seed's "Start rank among externals" rule) and
-   whether/how training mutates byte 7. The "Leg-Type Change Messages" block (drbyocwc 0x12755C) proves
-   running style *changes during a career* — find the code that rewrites byte 7.
-2. **name+45..47 sire composite.** Decode the 3-byte block (inheritance weights V0-V3? coat/trait +
-   breeding-comment index?). First nibble clusters 0xC-0xE.
+1. **Birth-time running-style assignment.** ANSWERED 2026-09-28: byte 7 is an inherited seed that no
+   game code reads; the style shown follows the current externals and so changes during a career (the
+   "Leg-Type Change Messages" block, drbyocwc 0x12755C). See §2.
+2. **name+45..47 sire composite.** ANSWERED: card-seed-trait-readers.md §2 decodes name+44..47 as coat
+   modifier, coat base, run-style seed and personality.
 3. **`ac` composite formula.** What blend of internals/externals yields ac (name+36, 0-255)?
-4. **Racing-table +21 (0-7) and +24.** Identify (jockey/silk? distance preference? hidden affinity?).
+4. **Racing-table +24.** Identify (jockey/silk? distance preference? hidden affinity?). (+21 is
+   ANSWERED: it is the CPU horse's stored running style, §6.)
 5. **racing +1 (0-2) class flag.** Roster class vs generation vs special-event horse?
-6. **JP on-card personality/running-style.** US cards store them at T1[6]/T1[7]; the derbyo2k/derbyoc
+6. **JP on-card personality/running-style.** US cards store personality at T1[6] (T1[7] is only a
+   seed; the style is derived, corrected 2026-09-28); the derbyo2k/derbyoc
    LR cards appear identity-only (name/sire/dam). Confirm whether JP cabinets keep personality/style
    in nvram keyed by the 0x25-0x27 lead bytes (needs a hardware reader / stat-screen capture).
-7. **Confirm 8-band vs 5-bucket personality in-game.** Capture the "Check" screen for horses with byte6
-   in each band to lock the exact label boundaries (Too soft / Strict edge cases).
+7. **8-band vs 5-bucket personality.** ANSWERED: five classes (§3c).
 
 ---
 
 ## 10. Tool ideas this unlocks
 
-- **Correct running-style authoring**: extend DOC-Card-Creator to actually WRITE a1[7] from a chosen
-  style (style×51 + offset), instead of only deriving a label from externals. Fixes the divergence in §2b.
-- **Aptitude-symbol card view**: render ◎○△✕ per external on the card quick-view by binning the 0-63
-  card externals ÷4 into the 1-16 → symFor() pipeline, so player cards show the same symbols the game's
-  retirement/stud screen shows.
-- **Retirement preview**: given a player card's 0-63 externals, show the 1-16 breeding bands it will
-  register at stud/dam with (the ÷4 quantization), i.e. predict the offspring inheritance table entry.
-- **Personality calculator**: 0-255 byte ⇒ both the 5 English Check labels and the 8 ROM bands, plus the
-  Hug/Praise/Scold/Flatter multiplier (from 0x0E7D00) for the recommended interaction.
-- **CPU roster browser with derived style**: list all 244 CPU horses with their on-the-fly leg type
-  (externals rule) + grade + coat + sex + dirt, since CPU style is not stored.
+An earlier list of tool ideas here was removed on 2026-09-28: four of the five rested on retracted
+claims (byte-7 style authoring, dividing current externals by 4 to get bands, a "retirement preview"
+of bands, the 8-band personality and the 38-float reply table). One idea stands, corrected:
+- **CPU roster browser**: list all 244 CPU horses with their STORED style (+21) + grade + coat + sex +
+  dirt.

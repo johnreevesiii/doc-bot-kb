@@ -1,6 +1,6 @@
 # The Breeder's Cup (v2): how it scores
 
-**Status: LIVE since 2026-09-27** at play.johnreevesiii.com/breeders, open to everyone (no sign-in needed to
+**Status: LIVE since 2026-09-27** at https://play.johnreevesiii.com/breeders, open to everyone (no sign-in needed to
 read it). It was paused 2026-09-12 to 2026-09-27 and came back rebuilt. Any older note saying the Cup is off,
 that it only counts horses with 10+ races, or that it scores birth seals, is out of date.
 
@@ -28,6 +28,8 @@ in the Breeding Lab can get you a better horse, but only racing earns points.
   born on a house cabinet and autosaved to the breeder at birth (cabinet foal autosave began 2026-08-25;
   those foals can't be culled or rerolled). Older cabinet births and self-hosted saves could be discarded
   unsaved, so they never pay a seal bonus. Every other foal still scores by racing, just without the bonus.
+- If you have turned cabinet AUTOSAVE OFF for your account, your cabinet foals are not committed and
+  never pay a seal bonus (they still score by racing).
 
 ## Nominations (Lab foals)
 

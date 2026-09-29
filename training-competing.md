@@ -29,7 +29,8 @@ UPDATE 2026-07-04 -- CURVE FN DEFINITIVELY RULED OUT (was the open structural le
   its table + all race pools + distance table) IS IDENTICAL C vs D.
   REFRAME (John 2026-07-04): internals are MAX CAPS (hit late-career), so NOT the first-8-races effect.
   The real signature is EXTERNALS -- high-external horses dragged in the first ~8 races in Rev D; "competing
-  doesn't matter" = the COMPETING external = the MID-RACE phase (race-formula.md §1). So the nerf is a
+  doesn't matter" = the COMPETING external (the old notes called it the MID-RACE phase; that six-phase
+  model is UNVERIFIED, see race-formula.md §1, corrected 2026-09-28). So the nerf is a
   CODE-LOGIC difference in the race-math (same coefficients, different arithmetic/branches), or in how an
   external stat is computed/fed -- NOT a data/coefficient retune.
   STATIC SWEEP DONE 2026-07-04 -- DEFINITIVELY ALL-IDENTICAL. Disassembled + diffed C vs D:

@@ -50,9 +50,13 @@ All of that is retired: **do not describe indigo, horseshoes, or an "OG tier."**
 
 ## The fact the old arcade crowd most wants
 
-**A card printing 45/45/33 or 40/40/40 IS a 50/50/50 horse underneath.** Those two shapes arise one way
-only: a 45/45/45 base that Band 1 lifted to 50/50/50 while dipping the print. The arcade community named
-these decades ago without knowing why they happened — they had it right.
+**A card printing 45/45/33 or 40/40/40 IS a 50/50/50 horse underneath**, when the pairing reaches
+45/45/45: from that base, those two prints can only come from Band 1 lifting it to 50/50/50 while
+dipping the print. Every checked card agrees (11 of 11 printing 45/45/33 and 2 of 2 printing 40/40/40
+were true 50/50/50). The arcade community named these decades ago without knowing why they happened, 
+they had it right. (Corrected 2026-09-28: said the shapes "arise one way only". In principle other
+paths exist, for example an ordinary 40/40/40 foal, or Band 2 lifting a weaker print, so the rule is
+proven for pairings that reach 45/45/45 and empirical otherwise.)
 
 ## Provisional grades
 

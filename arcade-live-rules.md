@@ -1,37 +1,53 @@
-# The Online Arcade: current rules and features (updated 2026-07-26)
+# The Online Arcade: current rules and features (updated 2026-09-28)
 
-This file describes the LIVE online Derby Owners Club arcade at play.johnreevesiii.com as it works
-today. When an older document in this knowledge base contradicts this file, THIS file wins.
+This file describes the LIVE online Derby Owners Club arcade at https://play.johnreevesiii.com as it
+works today. On SITE RULES AND FEATURES (membership, the Labs, seats, stable, boards), this file wins
+over older documents. On GAME MECHANICS, canon.md (the verified answer key) wins over this file and
+every other document.
 
 ## The arcade at a glance
-- play.johnreevesiii.com is a browser-playable version of the Sega DOC arcade game. The lobby shows
-  live cabinets: two house cabinets, "8-player (A)" and "6-player (B)", plus community-hosted
-  cabinets run by players from their own homes.
+- https://play.johnreevesiii.com is a browser-playable version of the Sega DOC arcade game. The lobby
+  shows live cabinets: four house cabinets (Cab A and Cab B run World Edition Rev C, Cab C is the Rev D
+  "Classic Arcade" cabinet, and a Japanese DOC '99 box), plus community-hosted cabinets run by players
+  from their own homes.
 - You sign in, claim a seat on a live cabinet, and play in the browser. Seats are input-locked to
   their holder. One account, one seat at a time.
-- Your cloud stable lives at play.johnreevesiii.com/stable (works on a phone). From a seat's QR code
+- Your cloud stable lives at https://play.johnreevesiii.com/stable (works on a phone). From a seat's QR code
   you can load a stable horse into the seat, save it back, or leave the seat from your phone.
 - Chat has per-cabinet channels, a 🌐 translate button (for our Japanese players), and self-mute
   tools. There is a per-cabinet "Join Voice" link into the Discord voice rooms.
 
-## Membership tiers
-- Free ("Stable" tier): sign in, play, save up to 25 horses in the cloud stable.
-- Winner's Circle (WC): the supporter tier, granted to donors (the donation model funds the server
-  costs) and by invite. WC perks: the Breeding Lab and foal generator, the community Studbook
-  (publish, browse, share codes, "Potential Mates" matchmaker), the Feeding Advisor (/feeding), the
-  Career Log (/career), Breeding Advisor, one-way card export, skip-the-line into seats, and no seat
-  cooldown. Donations happen via the Membership page.
+## Membership tiers (corrected 2026-09-28)
+- Free ("Stable" tier), for everyone: sign in, race at the cabinets, save up to 25 horses in the cloud
+  stable, breed at a cabinet, and breed online in the free Starter Lab at
+  https://play.johnreevesiii.com/breeding (pick a Rev C CPU sire and dam, one roll per press, 3 rolls
+  a Pacific day per account; name the foal before its first race).
+- Winner's Circle (WC) is a subscription: $8 a month or $80 a year at
+  https://play.johnreevesiii.com/membership (sales open since 2026-08-30; some members are comped). It
+  is NOT a donor or invite-only tier. WC includes the full Breeding Lab and foal generator, the Studbook
+  (publish, browse, share codes, "Potential Mates"), Breeding Advisor, Breeding Planner, Genealogy,
+  the Feeding Advisor (/feeding), the Career Log (/career), one-way card export and a 200-horse stable.
+- Seats: WC members skip the 3-minute cooldown after leaving a seat on Cabs A, B and JP, but not on
+  Cab C (Classic). A hop to a different house cabinet within 3 minutes of racing can still be refused
+  at card load. When every cabinet is full there is one line for the next free seat, and WC members are
+  served first in it (they still wait if every seat is taken). Sitting back down on the cabinet you
+  just left is always allowed, for everyone.
 
 ## Breeding Lab rules (as of 2026-07-26)
 - The 20-breed stud limit was REMOVED on 2026-07-26. No horse's stud or broodmare career ends in the
   Lab anymore, and re-rolling pairings ("shiny hunting" for the rare all-stats +5 jump) is allowed.
   Breed counters (🧬 in-game breeds on the card, 🧪 your Lab uses) still display but are
   informational only.
-- At a REAL cabinet the game itself still enforces its own on-card limit of 20 breedings per retired
-  horse. That is the ROM's rule and unchanged; only the online Lab is uncapped.
-- Parents must be RETIRED to breed (both Lab and game).
+- At a REAL cabinet the card keeps its own breed counter, and a limit of 20 breedings per retired
+  horse is widely stated. (Corrected 2026-09-28: this used to say "that is the ROM's rule"; the cap has
+  not been verified in the ROM yet, so say "believed to be 20".) The online Lab is uncapped.
+- In the Lab, both parents must be RETIRED. (Whether a cabinet can breed from an unretired horse is
+  not verified; the chain lock below exists because some foals on record have an unretired parent.)
+- Retiring is done in-game at the cabinet. The website has no retire button.
 - The "puppy mill" chain lock: a foal bred from a parent that was still unretired and under 20 races
   is locked from breeding until that parent reaches 20 races or retires. It unlocks automatically.
+
+## Breeding Lab: which games, Cab C, naming
 - The Lab breeds for World Edition (Rev C), DOC 2000 (derbyo2k) and DOC '99 (derbyoc), and DOC II has its
   own Labs. Japanese foals get katakana names and real JP pedigree handling.
 - **Cab C (the Rev D "Classic Arcade" cabinet) is cabinet-breeding only.** It is kept as close to the
@@ -41,62 +57,87 @@ today. When an older document in this knowledge base contradicts this file, THIS
   is no date. It's fine to say it exists; don't promise when it opens.
 - You can pick the foal's name, sex, and silk pattern/colors. Sex does not change stats.
 
-## How foal stats actually work (byte-exact, decoded from the ROM)
+## How foal internals work (byte-exact, decoded from the ROM)
 - Internals (speed/stamina/sharp): the foal's base internal is the floor-average of the two parents'
   CURRENT internals, then a soft clamp (any average over 45 loses 5, under 10 gains 5), then the
   pedigree bonus, hard-capped at 45, EXCEPT the rare noise band: roughly 1 in 32 births lands a +5
-  bump to ALL THREE internals, which is how elite pairings reach ~50/50/50 (the ~250 total ceiling
-  players see in-game). This is the "anomaly" or "jackpot" players fish for.
-- Pedigree bonus: the game counts externals where BOTH parents are strong (12+) or BOTH weak (<4);
-  4-5 matches = +1/+2/+2, 6 matches = +3/+2/+3. Breed like-to-like.
-- Externals (Start, Corner, Out-of-box, Competing, Tenacious, Spurt): the foal's external is the
-  plain average of the parents' breeding bands. It does NOT roll: breeding externals are
-  deterministic. The breeding symbols set at retirement (✕ < △ < ○ < ◎) show each external's
-  breeding band.
+  bump to ALL THREE internals, which is how elite pairings reach ~50/50/50. This is the "anomaly" or
+  "jackpot" players fish for.
+- Pedigree bonus: the game counts externals where BOTH parents (sire and dam, counted equally) are
+  strong (12+) or BOTH weak (<4); 4-5 matches = +1/+2/+2, 6 matches = +3/+2/+3. It raises internals,
+  never externals. Breed like-to-like.
 - Dirt aptitude: inherited as the average of the parents' dirt values.
-- IMPORTANT strategy fact: races are won by EXTERNALS (and riding), not by internals. Mass-produced
-  lab "anomalies" with big internals but weak externals race poorly.
+- Wins, earnings and G1 titles are not passed on.
+
+## How breeding symbols (external bands) work: FIXED AT BIRTH
+- Each of the six externals (Start, Corner, Out-of-box, Competing, Tenacious, Spurt) has a breeding
+  band, shown 1-16: ✕ 1-4, △ 5-8, ○ 9-12, ◎ 13-16. A foal's band is the rounded-down average of its
+  sire's and dam's bands. No roll.
+- Bands NEVER change after birth: racing, training, feeding, winning and retiring leave them alone.
+  (Corrected 2026-09-28: this file used to say the symbols are "set at retirement". That was wrong.
+  Verified against the ROM decode and measured on 1,300+ saved horses, 400+ of them retired.)
+- To get better symbols, breed from better parents, over generations. A foal can't beat its better
+  parent's band on any external.
+- The CURRENT externals (shown 1-64) are a separate number: a foal starts near twice its band plus a
+  small roll, then they rise and fall during its career. They affect racing and set running style, but
+  they are NOT passed on, and you can't convert one into a symbol.
+- Unverified (do not state as fact): the common belief that races are won mainly by externals rather
+  than internals.
 
 ## Horse growth (measured from live fleet data, 2026-07-29)
-- A horse's stats grow from RACING, not from time. Growth is front-loaded and the wall is at ~20
-  races. Measured average total stat gain per race, from 4,722 before/after save pairs: ~2.1 (races
-  0-4), ~1.5 (races 5-9), ~1.4 (10-14), ~0.8 (15-19), ~0.15 (20-24), zero from 25 on. Half of a
-  career's growth lands in the first ten races. Training style and feeding shape WHICH stats grow.
-- The Feeding Advisor at /feeding ranks foods by stat gain (from the decoded ROM food table) and can
-  build a feeding plan for a specific stable horse.
+- A horse's INTERNALS (speed, stamina, sharp) grow from RACING, not from time. Growth is front-loaded
+  and the wall is at ~20 races. Measured average total internal gain per race, from 4,722 before/after
+  save pairs: ~2.1 (races 0-4), ~1.5 (races 5-9), ~1.4 (10-14), ~0.8 (15-19), ~0.15 (20-24), about zero
+  on average from 25 on. Half of a career's growth lands in the first ten races. (Corrected 2026-09-28:
+  this curve measures internals only; the externals curve has not been measured.)
+- Training drills are measured to steer the EXTERNALS (Turf builds Start, Slope/Hill and the Spurt
+  drill build Spurt, Dirt builds Tenacious, Wood mainly Corner and OOB). Whether FEEDING raises the
+  internals or the externals is not settled yet: do not call feeding "the internal lever".
+- The Feeding Advisor at /feeding ranks foods by the decoded ROM food table and can build a feeding
+  plan for a specific stable horse. It does not know which foods a cabinet is offering.
 
 ## Running style (leg type)
-- Running style is derived, not stored: it is the rank of the horse's Start value among its 5
-  non-corner externals. 1st = Front-runner, 2nd = Start-dash, 3rd = Last-spurt, 4th/5th =
-  Stretch-runner, all-equal = Almighty.
+- For player horses, running style is derived from the horse's CURRENT externals: the rank of its
+  Start value among Start, Out of the Box, Competing, Tenacious and Spurt (Corner is ignored; a tie
+  goes to Start). 1st = Front-runner, 2nd = Start-dash, 3rd = Last-spurt, 4th/5th = Stretch-runner;
+  all five equal = Almighty (very rare).
+- Because current externals change, running style CAN change during a career; the game announces
+  "Your horse's racing style has changed."
 
 ## Genealogy, Studbook, and bloodlines
 - Genealogy (family tree) shows a 5-generation pedigree. "Linebreeding crosses" notation like
   "Thunder Boy 3S×4D" means that ancestor appears at generation 3 on the sire's side and generation
-  4 on the dam's side. Crosses are informational: the breeding engine gives no bonus or penalty for
-  duplicated ancestors.
-- Bloodline grade seals rate a horse's birth-roll variance; shown in the Studbook, stable, and
-  Genealogy.
+  4 on the dam's side. Crosses are informational: in World Edition, DOC 2000 and DOC '99 the breeding
+  engine gives no bonus or penalty for duplicated ancestors. (DOC II is different: its generator
+  applies small multipliers when ancestors repeat.)
+- Bloodline seals grade a horse's TRUE BIRTH internals (how many reached 45, or 46-50 with the rare
+  band); see bloodline-seals.md. Shown in the Studbook, stable, and Genealogy.
 - The Studbook (WC) lets you publish retired horses for the community to breed with, browse others',
   get "Potential Mates" suggestions scored by the real breeding model, and share ONE-breed codes
   ("poke trades") for private stud deals.
-- 10 DOC 2000 legend horses (Special Week, Tokai Teio, etc., decoded from the JP ROM) are in the
-  breeding pool as sires/dams with real pedigrees; they wear a ⭐ Legend badge.
+- On this site, the 10 real DOC 2000 legend horses (Special Week, Tokai Teio, etc., decoded from the
+  JP ROM) can be bred in the Lab's "All versions" catalog with real pedigrees; they wear a ⭐ Legend
+  badge. Air Groove is the only legend dam; the other nine are sires. In the original game the legends
+  are NOT breeding stock.
 
 ## The Glue Factory (deleted horses) and Restore
 - Deleting a horse sends it to the Glue Factory: an archive that keeps the full card, pedigree, and
   signature, so a horse used for breeding is never truly lost. Its lineage still shows in Genealogy.
-- NEW 2026-07-26: every archived horse has a ♻ Restore button (bottom of the Stable page) that
-  brings it straight back into your live stable, stable space permitting.
+- Every archived horse has a ♻ Restore button (bottom of the Stable page). A restored horse comes back
+  HELD FOR REVIEW: it can race, but can't be a Lab parent until an operator clears it. There is no
+  member-side permanent delete. A foal autosaved at birth on a house cabinet can't be deleted at all;
+  the owner can only request its removal.
 
 ## Records and leaderboards (three DIFFERENT boards, don't mix them up)
 1. ONLINE arcade records: set live on the online cabinets. The default "the record" board.
 2. CLASSIC community leaderboard at doc.johnreevesiii.com: players upload saves from their own home
    setups (Rev C, Rev D, DOC 2000). Separate from the online arcade.
 3. NATIONAL records: the printed 2004 benchmark times from the DOC handbooks. Historical.
-- The arcade Hall of Fame (play.johnreevesiii.com/leaderboard) has wins-by-stable, lifetime breeding
-  (Stud King / Broodmare Queen), Dynasty, Consistent, Iron horse, G1 Champions and Fanciest boards.
-- The Breeder's Cup (play.johnreevesiii.com/breeders, open to everyone) ranks stables by what the horses
+- The arcade Hall of Fame (https://play.johnreevesiii.com/leaderboard) has wins-by-stable, lifetime
+  breeding (Stud King / Broodmare Queen), Dynasty, Consistent, Iron horse, G1 Champions and Fanciest
+  boards. Its Census tab holds the Bloodline Pyramid, the Triple Anomaly Watch (cabinet-born only) and
+  Born vs Built.
+- The Breeder's Cup (https://play.johnreevesiii.com/breeders, open to everyone) ranks stables by what the horses
   they BRED do at the cabinets, in monthly seasons plus an all-time board. Full rules: breeders-cup.md.
 
 ## Hall of Fame clean-data rules (since 2026-09-26)
@@ -134,7 +175,10 @@ The arcade Hall of Fame, its Discord pushes and DOC Bot all use one check, rerun
   pass them. If someone thinks a real card was refused by mistake, they should tell John.
 
 ## Whips and riding
-- Kaerey's community Whip Charts (play.johnreevesiii.com/whip-charts.html) are the riding reference.
+- Kaerey's community Whip Charts (https://play.johnreevesiii.com/whip-charts.html) are the community's
+  riding reference, built from the old player handbooks. They are tradition, not a decoded rule:
+  measured across 5,590 fleet races, how closely a ride follows the chart does not predict the finish
+  (see Ride grades below). Terms like Rocket Start, Super Start and rhythmic whip are handbook terms.
 - The live Whip Charts page at /whips shows real telemetry from the cabinets: race-shape by leg
   type, handbook-zone bands, and a per-rider Race Program that scores your ride against "perfect
   going".
@@ -147,7 +191,7 @@ The arcade Hall of Fame, its Discord pushes and DOC Bot all use one check, rerun
   mean cheated, but it cannot rank/publish/load on community seats. "Under review" clears
   automatically or after an operator glance.
 
-## Cabinet resets (house cabinets A and B)
+## Cabinet resets (house cabinets A, B, C and the JP box)
 - Any server member can run /reset in Discord. Two levels:
   - "Bounce": relaunches the video only. Fixes a black or frozen lobby feed, no reboot, drops
     nobody. Try this first for video problems.
@@ -190,6 +234,8 @@ The arcade Hall of Fame, its Discord pushes and DOC Bot all use one check, rerun
 - Every completed transfer is permanently recorded (who gave it, who received it, when), so a
   horse's chain of ownership is always on record. Transfers don't weaken clone protection: the
   horse MOVES, it is never copied, and duplicate card serials are still blocked everywhere.
+
+## Two-way horse trades (atomic swap)
 - TWO-WAY TRADES have a real ATOMIC SWAP (added same day): both owners mint a transfer code for
   the horse they're giving and exchange the codes; then EITHER owner opens "Have a transfer code?"
   on their Stable page, taps "Two-way trade? Swap two codes atomically", enters both codes, and

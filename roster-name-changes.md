@@ -7,7 +7,9 @@ The DOC breeding roster changed across four versions. In order: **DOC '99** (ori
 
 ## Japanese (DOC 2000) horses and their World Edition names
 
-Sega could not license the real Japanese racehorse names for the Western release, so World Edition renamed the roster. Every plain English WE name below is a real Japanese champion in disguise. 144 horses were renamed; 15 kept their romanized name. (Left = DOC 2000 Japanese name, with kana; right = the World Edition name.)
+Sega could not license the real Japanese racehorse names for the Western release, so World Edition renamed the roster. Every plain English WE name below is a real Japanese champion in disguise. 144 horses were renamed; 15 kept their romanized name. (Left = DOC 2000 Japanese name, with kana; right = the World Edition name.) (Corrected 2026-09-28: counted against the site's byte-exact catalog, rebuilt 2026-08-08, and the ROM tables: 165 of the 167 DOC 2000 catalog horses have an exact World Edition twin, 150 renamed and 15 kept. The table below has the 144 renames found first; 6 more pairs are listed after it. The table is split into five parts so each part is searchable.)
+
+## DOC 2000 Japanese names and their World Edition names, part 1 of 5 (World Edition 5th Avenue to Commander in Charge)
 
 | DOC 2000 (Japan) | Kana | World Edition name |
 |---|---|---|
@@ -40,6 +42,11 @@ Sega could not license the real Japanese racehorse names for the Western release
 | Genuin | ジェニュイン | Clashing Hero |
 | Manjushage | マンジュシャゲ | Cluster Amaryllis |
 | Mihono Bourbon | ミホノブルボン | Commander in Charge |
+
+## DOC 2000 Japanese names and their World Edition names, part 2 of 5 (World Edition Concorde to Happy Trails)
+
+| DOC 2000 (Japan) | Kana | World Edition name |
+|---|---|---|
 | Fusaichi Concorde | フサイチコンコルド | Concorde |
 | Goodbye Halo | グッバイヘイロー | Crazy Cat |
 | Dancing Brave | ダンシングブレーヴ | Dancing Boy |
@@ -69,6 +76,11 @@ Sega could not license the real Japanese racehorse names for the Western release
 | Golden Veil | ゴールデンベール | Golden Ruler |
 | Sears Tower | シアーズタワー | Grand Champion |
 | Bubble Prospector | バブルプロスペクター | Happy Trails |
+
+## DOC 2000 Japanese names and their World Edition names, part 3 of 5 (World Edition Heart Lake to North Angel)
+
+| DOC 2000 (Japan) | Kana | World Edition name |
+|---|---|---|
 | Trot Thunder | トロットサンダー | Heart Lake |
 | Heart of Jay | ハートオブジェイ | Heart of Gold |
 | Sakura Utah | サクラユタカオー | Hector Protector |
@@ -98,6 +110,11 @@ Sega could not license the real Japanese racehorse names for the Western release
 | Valley Queen | バレークイーン | Mountain High |
 | Naomi's Dream | ナオミドリーム | Naiomi's Dream |
 | North Flight | ノースフライト | North Angel |
+
+## DOC 2000 Japanese names and their World Edition names, part 4 of 5 (World Edition Northern Sheriff to Spring Song)
+
+| DOC 2000 (Japan) | Kana | World Edition name |
+|---|---|---|
 | Northern Taste | ノーザンテースト | Northern Sheriff |
 | Meisei Opera | メイセイオペラ | Opera Singer |
 | Gai Lin Xan | ガイリンザン | Outrigger |
@@ -127,6 +144,11 @@ Sega could not license the real Japanese racehorse names for the Western release
 | Special Week | スペシャルウィーク | Special Holiday |
 | Speed Quinn | スピードクイン | Speed Queen |
 | Spring Dress | スプリングドレス | Spring Song |
+
+## DOC 2000 Japanese names and their World Edition names, part 5 of 5 (World Edition Star Light to Zephyr Hills)
+
+| DOC 2000 (Japan) | Kana | World Edition name |
+|---|---|---|
 | Stargazer | スターゲイザー | Star Light |
 | Marzen Papillon | マルゼンパピヨン | Stingray |
 | Sunny Brian | サニーブライアン | Sunny Boy |
@@ -156,15 +178,23 @@ Sega could not license the real Japanese racehorse names for the Western release
 | Stella madrid | ステラマドリッド | Wisteria |
 | Yamanin Zephyr | ヤマニンゼファー | Zephyr Hills |
 
+## DOC 2000 to World Edition: kept names and extra pairs
+
 Kept the same (romanized) name in World Edition: Black Sapphire, Carnegie, Dark Crimson, Final Record, Jade Robbery, Manhattan Lady, Miami Beach, Scarecrow, Snow White, Strawberry Jam, Sunday Silence, Sweet Lady, Timber Country, Tony Bin, White Venus.
 
-Only in DOC 2000, not carried to World Edition: Agnes Flora, Antique Bulb, Hishi Akebono, Hishi Amazon, Maple Dancer, Mill George, Taiki Shuttle, Wakao Raiden, White Pepper.
+Also renamed (exact twins found after the catalog rebuild, missing from the table): Taiki Shuttle (タイキシャトル) = Big Man, Agnes Flora (アグネスフローラ) = Deep Trouble, Antique Bulb (アンティックバルブ) = Antique Doll, Mill George (ミルジョージ) = Prime Suspect, White Pepper (ホワイトペッパー) = Prime Jewel, Kaede Dancer (カエデダンサー, listed before as "Maple Dancer") = Red Tulip. (Corrected 2026-09-28.)
 
-In World Edition with no exact DOC 2000 twin (WE additions or re-statted): Amazon Lady, Antique Doll, Big Man, Deep Trouble, Pentire, Prime Jewel, Prime Suspect, Red Tulip, White Muzzle.
+Note: Spring Gal = Pete O Pete matches a record at the very end of the World Edition Rev C table, outside the 167 horses the site's Rev C catalog uses; in EX (Rev D) Pete O Pete is a regular dam.
 
-## World Edition (Rev C) horses renamed in EX (Rev D)
+## DOC 2000 to World Edition: horses with no exact twin
 
-EX renamed sires and dams "to make it more difficult to identify the strong breeding pairs." 33 were renamed (a few are ambiguous), 30 horses are EX-only additions, and 24 World Edition horses were dropped in EX. (Left = World Edition name, right = EX name.)
+Only in DOC 2000, with no exact World Edition twin: Hishi Akebono and Wakao Raiden. Each has a near twin that was re-statted for World Edition: Hishi Akebono matches Pentire except one external, and Wakao Raiden matches White Muzzle except the dirt value. (Corrected 2026-09-28: this list also named Agnes Flora, Antique Bulb, Hishi Amazon, Maple Dancer, Mill George, Taiki Shuttle and White Pepper. Those came from the old off-by-one JP catalog that was rebuilt on 2026-08-08. Hishi Amazon is not in the DOC 2000 breeding catalog at all; the others have exact twins, see "kept names and extra pairs".)
+
+In World Edition with no exact DOC 2000 twin (WE additions or re-statted): Amazon Lady, Pentire, White Muzzle. (Corrected 2026-09-28: this list also named Antique Doll, Big Man, Deep Trouble, Prime Jewel, Prime Suspect and Red Tulip, which do have exact DOC 2000 twins.)
+
+## World Edition (Rev C) horses renamed in EX (Rev D), part 1 of 2
+
+No Sega source giving a reason for the EX renames has been found; the export community believed it was "to make it more difficult to identify the strong breeding pairs" (COMMUNITY CLAIM, see community-english-we). Matched by identity (same stats): 2 sires and about 34 dams were renamed, 24 World Edition sires were dropped, about 30 horses are EX-only additions, and 58 sires and 49 dams kept their names. Never say "all 84 dams were renamed". The table lists 32 of the renames; four more are in the next section. (Corrected 2026-09-28: this said "33 were renamed (a few are ambiguous)" and stated the renaming reason as fact.) (Left = World Edition name, right = EX name.)
 
 | World Edition | EX |
 |---|---|
@@ -185,8 +215,13 @@ EX renamed sires and dams "to make it more difficult to identify the strong bree
 | Flower Garden | Killer Queen |
 | Flower Lady | Cupcake |
 | Happy Trails | She'saQuickChick |
+
+## World Edition (Rev C) to EX (Rev D) renames, part 2 of 2
+
+| World Edition | EX |
+|---|---|
 | Hey Jude | Can't Stop Now |
-| Hitmaker | Hit Maker |
+| Hit Maker | Hit Maker (not a rename: the WE sire is already spelled Hit Maker and keeps it; the dam "Hitmaker is Sega" also keeps her name. Corrected 2026-09-28) |
 | Ice Queen | Pharos's Daughter |
 | K.L. Hibiscus | Rose Wood |
 | Morning Glory | Pillow Mint |
@@ -202,7 +237,13 @@ EX renamed sires and dams "to make it more difficult to identify the strong bree
 | Top Skater | 16 Candles |
 | Viking Victory | Braided Mane |
 
-Ambiguous (WE mare matches two EX names): Jupiter Queen -> ['Jupiter Queen', 'Two Months Salary']; Ski Tour -> ['Apple of my Eye', 'Cherry on Top']; Snow White -> ['Easy Street', 'Make a Move']; Sweet Lady -> ['Pioneer Girl', 'Rising Star'].
+## EX (Rev D) breeding catalog: more renames, and copies of four mares
+
+More renames not in the table above: Shampoo & Conditioner became Nice Shampoo, Snow White became Easy Street, Ski Tour became Apple of my Eye, Sweet Lady became Pioneer Girl. Jupiter Queen kept her name.
+
+Copies: at the end of its table EX adds exact copies of four World Edition mares under new names, while the originals stay: Make a Move = Hollywood Hills, Root Beer Float = Peach Girl, Cherry on Top = Mountain High, Rising Star = K.L. Hibiscus. So Hollywood Hills and Mountain High keep their names in EX, Peach Girl is Lucky Laurie (copy: Root Beer Float), and K.L. Hibiscus is Rose Wood (copy: Rising Star). (Corrected 2026-09-28: an earlier line here listed Jupiter Queen, Ski Tour, Snow White and Sweet Lady as ambiguous with other targets; a stat match against both ROMs and the site catalog gives the mapping above.)
+
+## EX (Rev D) breeding catalog: EX-only additions and horses dropped from World Edition
 
 EX-only additions (not in World Edition): Ben O Matic, Bet the Rent, Big E, Can't Teach Speed, Cash Me Out, Drew's Due, Dust in your Eyes, Flash in the Pan, Green Bottle Lover, Haberdasher, Handsome Dave, He's a Fast Cat, He's da Boss, House of Fire, Jim's Gent, Ladies Man, Lighting Strikes, Magic Man, Malski, Matty Man, Maverick, NJT, Pierogi Prince, Root Beer Float, Rose Tide, Runnin Rickie, Shaken Not Stirred, Tak O Shay, The Rain Maker, Vinny.
 
@@ -218,4 +259,4 @@ The two Japanese games are mostly different rosters. About 93 horses share a Jap
 - "What did <WE horse> get renamed to in EX?" Use the WE -> EX table. Example: Butter Popcorn became Layin Back.
 - Reverse lookups work the same way (both columns are in the tables). Peach Girl (WE) became Lucky Laurie (EX).
 - Wild Sun is in BOTH World Edition and EX under the same name (a WE sire, not EX-only).
-- These maps are CONFIRMED byte-exact from the decoded rosters, so you can state them plainly. For the few ambiguous mares, say the target is one of two named horses.
+- These maps are CONFIRMED byte-exact from the decoded rosters, so you can state them plainly. For Peach Girl and K.L. Hibiscus, EX has two identical copies; name both (see "EX (Rev D) breeding catalog: more renames, and copies of four mares"). (Corrected 2026-09-28.)

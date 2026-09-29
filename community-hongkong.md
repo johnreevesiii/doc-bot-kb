@@ -66,7 +66,9 @@ to inherit the blood of the parent with the stronger heredity," layering on bloo
 so Hong Kong's simplification is the one that matches World Edition, and Sega's vaguer wording is
 the outlier.** The striking result: on breeding, the relay was more accurate than the source it
 relayed. (Two things the project's decode adds that appear in no Hong Kong source: the roughly
-one-in-thirty-two jackpot and dud bands on foal internals, and the birth caps. Hong Kong had the
+one-in-thirty-two birth noise bands (one lifts all three true internals while printing lower
+numbers, the other changes only the printed numbers; corrected 2026-09-28, this said "jackpot
+and dud bands on foal internals"), and the birth caps. Hong Kong had the
 clean rule, not the rare exceptions to it.)
 
 ## The Hong Kong Boys: who carried it (public handles only)

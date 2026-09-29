@@ -59,10 +59,10 @@ Record anchors (record-start convention, matches handoff):
 
 (ROM-Studio's `recBase` = record-start + 9; its RACING_F field offsets are relative to that anchor. Both conventions reconciled below.)
 
-### MAJOR FINDING — the 32-byte stat table is byte-identical across revc, revd, AND o2k
+### MAJOR FINDING: the 32-byte race-opponent stat table is byte-identical in revc and revd (o2k shares 222 of 244 records)
 - `revc == revd` for all 244 records: **TRUE** (byte-exact).
-- `revc == o2k` for all 244 records: **TRUE** (byte-exact).
-So WE Rev C, WE EX Rev D, and JP DOC 2000 ship the **same horse stat data**; they differ only in the NAME tables, dialogue text, and code. Only **oc (DOC '99)** uses a different 28-byte layout and different stat values.
+- `revc == o2k`: 222 of 244 records identical, 22 differ. (Corrected 2026-09-28: an earlier line here said "TRUE for all 244"; the adversarial re-check in verify-version-diff refuted it, and a byte read on 2026-09-28 found the same 22 differences.)
+So WE Rev C and WE EX Rev D ship the **same race-opponent stat data**, and DOC 2000 shares about 91% of it. Only **oc (DOC '99)** uses a different 28-byte layout and different stat values. (Corrected 2026-09-28: this said the versions "differ only in the NAME tables, dialogue text, and code". That holds for this one table, not for the games: Rev D also has a surface-split going system and a changed breeding catalog; see section 4d.)
 *How verified:* `vfull.py` compared all 244 records pairwise.
 
 ### Full 32-byte field map (offsets from record-start) — EXTENDED (was ~10/32 mapped)
@@ -130,7 +130,7 @@ JP name-table bases were *found*, not previously documented: walk back in 18-byt
 ## 4. ROSTER DIFFERENCES (the headline) — VERIFIED
 
 ### WE Rev C → Rev D: exactly 16 racing names changed (`vname.py`)
-Real-world racehorse names in Rev C were swapped for fictional names in the Export Rev D build (licensing), plus 2 typo/case fixes:
+Real-world racehorse names in Rev C were swapped for fictional names in the Export Rev D build, plus 2 typo/case fixes (so 14 real-name swaps, not 16). These are race-opponent names, not breeding-catalog names. (Corrected 2026-09-28: this gave the reason as "licensing", which has no source; no Sega source giving a reason has been found. For the breeding horses, the export community believed EX renamed them to hide the strong breeding pairs, a COMMUNITY CLAIM, see community-english-we.)
 
 | # | Rev C | Rev D |
 |---|-------|-------|
@@ -151,11 +151,22 @@ Real-world racehorse names in Rev C were swapped for fictional names in the Expo
 | 201 | Brocco | Time Flies |
 | 207 | Flower Dance | Mr. Vice President |
 
-### WE Rev C → Rev D breeders: 26 sires + ALL 84 dams renamed (`vsd.py`)
-The Export build replaced essentially the entire female (dam) breeder roster (84/84 differ) and 26 of 84 sires. Real names (Sunday Silence, Helissio, Tony Bin, Carnegie as sires; many dams) → generic fictional names (Big E, Maverick, Vinny, Pierogi Prince, etc.). Stride 60, externals at name-12 (8 meaningful bytes, 1–16 bands), 4-byte composite "ac" at name+36 (first byte = dirt aptitude 0–255). Sire/dam bases: revc 0x10BF1C / 0x10D2CC; revd 0x10D264 / 0x10E614.
+## 4b. WE Rev C → Rev D breeding catalog: what changed (`vsd.py`), corrected 2026-09-28
+Matched by identity (same stats, externals and dirt), not by slot: of the 84 Rev C sires, 58 keep their name, 2 were renamed (Sunday Silence became It's About Time, Northern Sheriff became Mr. Original) and 24 were dropped; of the Rev C dams, 49 keep their name, about 34 were renamed and none were dropped; about 30 new EX horses were added. Never say "all 84 dams were renamed". Full lists: roster-name-changes.
+(Corrected 2026-09-28: this said "26 sires + ALL 84 dams renamed" and that EX "replaced essentially the entire female (dam) breeder roster". Those counts compared slot k with slot k, but the Rev D dam order is shuffled and the Rev D dam base below assumes 84 sire records, so the slots were misaligned. Helissio, Tony Bin and Carnegie were dropped, not renamed, and Big E, Maverick, Vinny and Pierogi Prince are new EX horses, not renames.)
+Record format: stride 60, externals at name-12 (8 meaningful bytes, 1-16 bands), 4-byte composite "ac" at name+36 (first byte = dirt aptitude 0-255). Sire/dam bases: revc 0x10BF1C / 0x10D2CC; revd 0x10D264 / 0x10E614 (this revd dam base is 5 records early if Rev D has 89 sires, as breeding-system says; whether Rev D records 85 to 89 are sires or dams is OPEN).
 
-### JP DOC '99 → DOC 2000: 64 racing names changed (`vjp3.py`)
-Far larger refresh than the WE Rev C→D change. The first ~2 horses shared (アイオーユー, アインブライド) then heavy divergence — the 2000 edition rotated in newer real Japanese horses (テイエムオペラオー, アドマイヤベガ, ナリタトップロード, etc.) replacing the '99 roster (ナリタブライアン-era names). 64/244 differ. (See file for full list; representative: #3 アドラーブル→コクトジュリアン, #195 アラビアンナイト→テイエムオペラオー, #197 エミーローズ→アグネスワールド.)
+## 4c. JP DOC '99 → DOC 2000: 64 racing names changed (`vjp3.py`)
+These 64 slots hold different horses, not renamed ones: none of the 64 changed slots keeps the same stats (Corrected 2026-09-28: checked by byte read; do not call them "renames"). Far larger refresh than the WE Rev C→D change. The first ~2 horses shared (アイオーユー, アインブライド) then heavy divergence, the 2000 edition rotated in newer real Japanese horses (テイエムオペラオー, アドマイヤベガ, ナリタトップロード, etc.) replacing the '99 roster (ナリタブライアン-era names). 64/244 differ. (See file for full list; representative: #3 アドラーブル→コクトジュリアン, #195 アラビアンナイト→テイエムオペラオー, #197 エミーローズ→アグネスワールド.)
+
+## 4d. Rev C vs Rev D: what differs besides names (summary added 2026-09-28)
+The race-opponent stat table is byte-identical, but Rev D is not "the same game with new names":
+- Going (track condition): Rev C uses one scale (Good, Good to Soft, Soft, Heavy); Rev D splits it by surface (dirt: Fast, Good, Heavy, Muddy; turf: Firm, Good, Soft, Yielding) and has no "Good to Soft". VERIFIED-ROM, see track-condition-revd.
+- Race-roster names: 16 changed (14 real names swapped for fictional ones, 2 spelling fixes). VERIFIED-ROM.
+- Breeding catalog: by identity 2 sires and about 34 dams renamed, 24 sires dropped, about 30 horses added (section 4b). VERIFIED-ROM.
+- Text: dialogue edited and relocated, restricted-race text added (game-text). VERIFIED-ROM.
+- Sega's EX product page lists a new race call, tournament software with 3 modes, and an on-screen display of the last 6 race results. OFFICIAL, see community-english-we.
+- Players report Rev D treats strong young horses differently. Owner observation, not confirmed (training-competing, OPEN).
 
 ## 5. G1 races & tracks — VERIFIED
 
@@ -188,12 +199,12 @@ Diffing the edited `beer_effects_test.ic22` vs base drbyocwc (`vbeer.py`) shows 
 
 ## 9. Open questions
 - Decode racing-record +1, +16, +21, +23, +24 (the 5 unmapped variable bytes). Likely growth-type / leg-type / hidden-ability. Cross-ref a known horse's in-game growth label vs these bytes.
-- Locate o2k/oc sire & dam tables and confirm whether the JP breeder roster matches the WE one (the 32-byte stat table already proves stats are shared o2k==revc).
+- Locate o2k/oc sire & dam tables and confirm whether the JP breeder roster matches the WE one (the 32-byte race-opponent stat table is shared for 222 of 244 records o2k vs revc; corrected 2026-09-28, it said fully shared).
 - Confirm the item/feed table layout at 0x167200 (what each slot/byte means; does it exist at the same offset in revd/o2k/oc?).
-- JP on-card stats/sex/leg-type: stats are NOT in the racing table on the card; the racing-table identity (o2k==revc) suggests the cabinet keys career data by horse ID — confirm against nvram.
+- JP on-card stats/sex/leg-type: stats are NOT in the racing table on the card; the near-identity of the racing table (o2k vs revc: 222 of 244 records, corrected 2026-09-28) suggests the cabinet keys career data by horse ID, confirm against nvram.
 
 ## 10. Tool ideas this unlocks
 - **Version fingerprinter**: read 0x8000 (16B) + 0x130 date + 0x134 serial → exact build ID, even on edited ROMs.
-- **Roster diff viewer**: side-by-side 244 racing names + 84+84 breeders across all 4, highlighting the 16 (WE C→D) / 64 (JP '99→2000) / 110 breeder changes.
-- **Unified horse editor**: since revc/revd/o2k share the 32-byte stat table byte-for-byte, one editor writes stats to all three (only the name table offset changes per version); oc needs the 28-byte packer.
+- **Roster diff viewer**: side-by-side 244 racing names + 84+84 breeders across all 4, highlighting the 16 (WE C→D) / 64 (JP '99→2000) racing changes and the breeder changes (by identity about 36 renames, 24 drops, about 30 additions; corrected 2026-09-28, it said 110 breeder changes).
+- **Unified horse editor**: since revc/revd share the 32-byte stat table byte-for-byte, one editor writes stats to both (only the name table offset changes per version); o2k differs on 22 of 244 records, so it needs per-record care; oc needs the 28-byte packer. (Corrected 2026-09-28: this said revc/revd/o2k are all byte-identical.)
 - **Cross-version patch transposer**: apply a stat edit made on revc to revd/o2k automatically (same bytes, different base) and to oc (re-pack 32→28).
