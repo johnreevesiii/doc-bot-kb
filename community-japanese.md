@@ -121,7 +121,7 @@ ratchets aptitude upward without limit. Unverified and worth testing. (Note ther
 internal inconsistency on our own side: the arcade's flat-dirt-number model has matched live
 foals, yet the ROM decode says the flat number is not what is inherited — unresolved.)
 
-## Training, feeding, and the damper
+## Training and feeding
 
 - **The training menus — COMMUNITY CLAIM.** Regular structure: each solo menu raises one
   external a lot; each paired menu raises two (one a lot, one a little). Solo turf → Start;
@@ -135,28 +135,21 @@ foals, yet the ROM decode says the flat number is not what is inherited — unre
   Perfect runs ~8 gauge at the low end up to ~14 at the high end) — the strongest internal
   corroboration in the archive, agreeing to within one point. Practical lesson that follows:
   train the stats your horse is already good at, and use food for the ones it is not.
-- **Why a horse stops improving — CONFIRMED (and the community had the cause right in effect).**
+- **Why a horse stops improving: COMMUNITY CLAIM (the cause is held).**
   Every period source noticed growth stops and none could measure it ("correcting ability
   through training cannot be done forever," 競馬エクウス, 1999; a 2ch thread: "with nothing but
-  Perfects it stops growing from race 10-12"). Our decode: the gain coefficient falls from 1.0
-  to 0.10 as the sum of the six externals climbs from 220 to 300. It is not a budget you spend,
-  it is a tax on how strong you already are — Perfects early get you to a high total early,
-  which is exactly why growth appears to stop. One player (GUTCHI, Feb 2000) called the cause
-  correctly: a high Out-of-box is a disadvantage "because when Out-of-box is high, the speed of
-  parameter gain dulls sooner" — four months before anyone else.
-- **Failure used on purpose — COMMUNITY CLAIM (with a CONFIRMED sting).** Failing costs a flat
-  amount and drops specific stats. Because running style is re-derived from current stats every
-  race, players deliberately *failed* a chosen menu to bring one stat back down and reset a
-  horse's style. The sting they never found: negative deltas bypass the growth damper entirely
-  and are amplified ×2 or ×3, so late in a career one bad training can cost several sessions of
-  gain.
-- **Hearts — the mechanic nobody in period got right (CONFIRMED, our biggest edge over them).**
-  The community treated hearts as a bond/whip-response meter with no numeric thresholds. In
-  fact hearts *gate internal-stat growth* in the once-per-race settlement: the scale is 0-63
-  with thresholds around 24/36/42 (roughly 6/9/11 displayed hearts). Low hearts quietly rot a
-  horse — crossing a threshold can flip a +1 into a -1, or -1 into -3. (Honest caveat that
-  should travel with this: from race 20 on, a code quirk means only about 6% of races move
-  anything at all, heavily damping the ladder's practical impact.)
+  Perfects it stops growing from race 10-12"). One player (GUTCHI, Feb 2000) blamed a high
+  Out-of-box: "when Out-of-box is high, the speed of parameter gain dulls sooner." The project
+  has a candidate explanation from the ROM, but it is held until John clears it for publication.
+  Don't quote a formula, a threshold or numbers for when or why growth slows. UNKNOWN (held).
+- **Failure used on purpose: COMMUNITY CLAIM.** Failing costs a flat amount and drops specific
+  stats. Because running style is re-derived from current stats every race, players deliberately
+  *failed* a chosen menu to bring one stat back down and reset a horse's style. How much a failure
+  costs later in a career is part of the held decode; don't quote multipliers.
+- **Hearts: the period community's reading (COMMUNITY CLAIM).** The community treated hearts as a
+  bond and whip-response meter with no numeric thresholds. Whether hearts also affect how a
+  horse's stats grow, and by how much, is part of a decode that is held until John clears it for
+  publication. Don't quote heart thresholds or say low hearts shrink stats. UNKNOWN (held).
 
 ## Food (direction DISPUTED, COMMUNITY CLAIM specifics)
 

@@ -157,9 +157,7 @@ English/Japanese agreement is often the same knowledge twice, not independent co
 The gaps matter as much as the hits. Nothing recovered in the entire English corpus mentions: the
 ~1-in-32 birth noise bands (one lifts the true internals while the card prints lower numbers,
 the other changes only the printed numbers; corrected 2026-09-28, this said "jackpot/dud bands on
-foal internals"); the 45 internal birth cap; the internals-sum-160
-growth wall on Rev D; the hearts thresholds gating internal growth (or hearts as anything more than
-a relationship meter); the training damper driven by the externals total; or that running style is
+foal internals"); the 45 internal birth cap; or that running style is
 recomputed before every race rather than stored (they knew the rule but not that it is re-run).
 Where the Japanese scene was a mechanics-research culture, the English scene was a technique-and-
 logistics culture: whip charts, schedules, records, tournaments, trading.
@@ -227,11 +225,9 @@ because the export localisation's errors are themselves findings.
 - **Whip charts** were the English scene's native art form: per-distance, per-leg-type schedules of
   exactly when to whip and hold. "The Great Escape" (front-runner meta chart, credited "Thanks to
   expertdoc in Hong Kong"); "Wing's Menu" (the most-referenced chart, deliberately never posted).
-  Read against the project's race decode before believing the mechanics: the confirmed whip
-  findings (one grade-blind whip input, a 16-tick refractory lockout, placement worth nothing at
-  matched whip count) mean the charts can't work for the reason the community thought — but spaced
-  whips at counted intervals are exactly what a refractory lockout rewards, so the technique may
-  have been right while the theory was wrong. OOP's line every arcade rat needed: "If you are
+  The whip rules the game actually uses are still being verified and are held until John
+  clears them, so don't read the charts' theory as confirmed. Measured across 5,590 fleet races,
+  how closely a ride follows a handbook chart does not predict the finish. OOP's line every arcade rat needed: "If you are
   losing close races, it is not your horse that is the problem... it is your jockey skills."
 - **Tournaments on two continents.** OFFICIAL: the Sega May Derby (May 2004), a UK national
   tournament Sega ran itself across nine sites with a £4,500 purse and text-message registration —

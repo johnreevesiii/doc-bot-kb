@@ -97,11 +97,9 @@ Subtract what Hong Kong relayed from Sega and a real body of original Hong Kong 
   form; the Western scene credited it inline by name. The canonical front-runner meta chart,
   "The Great Escape," carries the line "Thanks to expertdoc in Hong Kong" on the American sites.
   "Wing's Menu" was the single most-referenced purchasable chart in the scene. expertdoc's
-  lastspurt.htm gives a full 12-distance whipping-point and final-dash-point table. Important
-  caveat: the project's confirmed whip findings mean the charts cannot work for the mechanical
-  reason the scene thought — but the charts prescribe *spaced whips at counted intervals*, which
-  is what a refractory whip lockout actually rewards, so the technique may have been right while
-  the theory was wrong. Either way, the craft of writing them down per distance and per leg type
+  lastspurt.htm gives a full 12-distance whipping-point and final-dash-point table. Caveat: the whip
+  rules the game actually uses are still being verified (held until John clears them), so the
+  charts' theory is not confirmed. Either way, the craft of writing them down per distance and per leg type
   is a Hong Kong invention.
 - **The first English-language board — COMMUNITY CLAIM.** expertdoc's VoyForums board 109792,
   opened 2002, is the first English-language DOC board on record. Before doc.rbcb.net (August
