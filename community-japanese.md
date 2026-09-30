@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** (1) The 19-round calendar and 19-bit G1 field are DOC '99 (the card test ran on a DOC '99 cabinet). DOC 2000 names 21 G1 races and its card has room for 21 titles; its round order is not verified yet (FAQ doc2000-g1-races, doc99-g1-calendar). (2) The six-equal Almighty rule (Corner included) marked DISPUTED below is now verified from the ROM; the five-equal reading is the wrong one (FAQ almighty). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # What the Japanese Community Knew (1999-2001)
 
 KEY: `community-japanese`

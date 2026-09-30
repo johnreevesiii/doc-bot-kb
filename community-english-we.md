@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** The 'Almighty when all five are equal' reading is wrong. Almighty needs ALL SIX current externals equal, Corner INCLUDED; if Start, Out of the Box, Competing, Tenacious and Spurt are equal but Corner differs, the horse is a Front-runner (FAQ almighty). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # What the Export / World Edition (Western) Community Knew (2002-2011)
 
 KEY: `community-english-we`

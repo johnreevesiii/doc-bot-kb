@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** DOC II is no longer uninvestigated: its card format, breeding roster, parent marks, grade, ranks, G1 titles, honours and retirement are decoded and on the FAQ (the doc2-* entries). Still open for DOC II: the race and track tables, food effects and the running-style rule. Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Derby Owners Club RE — Open Questions, Shaky Claims & Ranked Next Steps
 
 A completeness critic's pass over all 13 subsystem findings and their verifier verdicts.

@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** The 8-band personality mapping here (Rough, Imposing, Calm, Firm, Sensitive, Moody, Gentle, Proud) is not in the ROM: the game has five personalities, Imposing, Honest, Rough, Coward and Sloppy (FAQ personality-types). The English catalog is 84 sires + 83 dams = 167 on Rev C and 89 + 88 = 177 on Rev D. Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Derby Owners Club — NAOMI / SH-4 Program Architecture
 
 KEY: `architecture`

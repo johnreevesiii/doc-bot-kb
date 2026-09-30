@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** The Rev D ceiling is now verified: racing raises each internal only to 55, and growth switches off once the three total more than 160 (about 161 in practice); quote it (FAQ revd-stat-ceiling). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Arcade FAQ: the questions players actually ask (updated 2026-09-28)
 
 Player-facing answers for the online arcade at https://play.johnreevesiii.com. Written from real

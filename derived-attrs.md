@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** The Almighty line here ('all five exactly equal, Corner may differ') is wrong. Almighty needs ALL SIX current externals equal, Corner INCLUDED; if Start, Out of the Box, Competing, Tenacious and Spurt are equal but Corner differs, the horse is a Front-runner (FAQ almighty). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Derby Owners Club — Derived / Seldom-Documented Attributes
 
 Subsystem KEY: `derived-attrs`

@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** 'JP cards confirmed identity-only' is superseded: JP cards (DOC 2000, DOC '99) are NOT identity-only: they store name, sire and dam in katakana, current and birth speed/stamina/sharp, the six current externals, the six breeding values, wins/places/shows/unplaced, hearts, earnings, G1 titles, sex, coat, personality and silks, sealed by a checksum the cabinet enforces (FAQ jp-card-format; jp-card-io.md). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Appearance — Coat colors, silks, hood (`appearance`)
 
 KEY: `appearance` · Subsystem: how a horse's *visual* identity (coat color incl. starred specials,

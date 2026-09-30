@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** Minor: the Rev C catalog is 84 sires + 83 dams = 167 records (not 84 + 84 / 168). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Card bytes 62 (a1[7] "running-style seed") and 93 (a2[45] "birth trait"): what the game actually does with them
 
 Static SH-4 RE, epr-22336c.ic22 (WE Rev C), docre convention (RAM = file + 0x0C020000).

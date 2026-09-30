@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** The 'no two-parent average' conclusion holds only for the breeding-screen offering routine; the average is real and lives in the foal-build routine (decode-foal_average.md). The idea that averaging happens at retirement is wrong. Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Foal Cross Routine — SH-4 Static RE (epr-22336c.ic22)
 
 ROM base 0x0C000000; runtime = static + 0x20000; pointers baked in ROM are runtime.

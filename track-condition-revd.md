@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** Which surface gets which Rev D words is disputed: a later static trace reads the renderer's surface flag the other way round (turf -> Fast/Good/Heavy/Muddy, dirt -> Firm/Good/Soft/Yielding). Until a Cab C screenshot settles it, say only that Rev C has one scale (Good, Good to Soft, Soft, Heavy) and Rev D has no Good to Soft and picks its words by surface (FAQ going-by-version). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Myth #1 on Rev D: the going system is DIFFERENT (and surface-specific)
 
 ROMs: Rev C epr-22336c.ic22 vs Rev D epr-22336d.ic22 (World Edition EX). Ran the

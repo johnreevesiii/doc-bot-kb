@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** The running-style line 'all five equal = Almighty' is wrong. Almighty needs ALL SIX current externals equal, Corner INCLUDED; if Start, Out of the Box, Competing, Tenacious and Spurt are equal but Corner differs, the horse is a Front-runner (FAQ almighty). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # The Online Arcade: current rules and features (updated 2026-09-28)
 
 This file describes the LIVE online Derby Owners Club arcade at https://play.johnreevesiii.com as it

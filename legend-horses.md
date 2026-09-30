@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** 'JP RAM base = file + 0x0C010000' is wrong: DOC 2000 loads at file + 0x0C020000 like World Edition (jp-card-io.md section 0), so the legend table at file 0x153F94 is RAM 0x0C173F94. DOC '99 carries the same legend table; World Edition does not (FAQ legend-horses). Seven of the ten legends also have an ordinary DOC 2000 catalog entry with a lower speed + stamina + sharp total (FAQ legends-breedable). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # SP Horse Program (legend horses) -- epr-22284a.ic22 (DOC 2000 JP)
 
 ROM: **epr-22284a.ic22** (Japanese DOC 2000, "Ver.6/16" per the on-ROM string at

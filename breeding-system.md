@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** Still out of date here: The JP catalog anchor 0x11106C (DOC 2000) / 0x0F9680 (DOC '99), index first with the name at +4, is the pre-fix reading: records are name-first from file 0x111034 (DOC 2000, #1 = モミジサンデー) and 0x0F964C (DOC '99), fixed 2026-08-08. jp_mater_names.json was extracted with that pre-fix reading (it lacks モミジサンデー). The running-style line 'All five exactly equal = Almighty' is wrong: Almighty needs ALL SIX current externals equal, Corner INCLUDED; if Start, Out of the Box, Competing, Tenacious and Spurt are equal but Corner differs, the horse is a Front-runner (FAQ almighty). The 8-range personality table is not ROM text; the game has five personalities (FAQ personality-types). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Breeding / Mater Inheritance System — Core Knowledge
 
 KEY: `breeding-system`

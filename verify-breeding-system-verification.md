@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** History file. Its JP rows repeat the pre-fix index-first bases and the 'Trot Thunder = #1' alignment. The JP catalog anchor 0x11106C (DOC 2000) / 0x0F9680 (DOC '99), index first with the name at +4, is the pre-fix reading: records are name-first from file 0x111034 (DOC 2000, #1 = モミジサンデー) and 0x0F964C (DOC '99), fixed 2026-08-08. The 167 / 177 counts it established are correct. Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Breeding / Mater Inheritance System — Adversarial Verification
 
 Verifier pass over `breeding-system.md`. Every claim below was re-extracted directly from the four

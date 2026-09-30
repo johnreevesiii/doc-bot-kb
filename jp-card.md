@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** The status line at the top and sections 4 to 7 (tracks 2-3 as heap leak, lead bytes as identity, 'STATS ARE NOT ON THE CARD', the trailer as a nonce) are the June identity-only model and are SUPERSEDED by sections 11 and 11b. JP cards (DOC 2000, DOC '99) are NOT identity-only: they store name, sire and dam in katakana, current and birth speed/stamina/sharp, the six current externals, the six breeding values, wins/places/shows/unplaced, hearts, earnings, G1 titles, sex, coat, personality and silks, sealed by a checksum the cabinet enforces (FAQ jp-card-format; jp-card-io.md). The JP catalog anchor 0x11106C (DOC 2000) / 0x0F9680 (DOC '99), index first with the name at +4, is the pre-fix reading: records are name-first from file 0x111034 (DOC 2000, #1 = モミジサンデー) and 0x0F964C (DOC '99), fixed 2026-08-08. Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # JP Card — Full Decode + the On-Card-vs-Cabinet Question
 
 KEY: `jp-card`

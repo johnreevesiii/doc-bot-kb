@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** Minor: the Rev C catalog is 84 sires + 83 dams = 167 (not 84 + 84), Rev D 89 + 88 = 177 (FAQ rev-c-rev-d-renames). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Derby Owners Club — Systematic 4-Version Diff (version-diff)
 
 Definitive cross-version offset + roster map for the four 4 MB NAOMI program ROMs.

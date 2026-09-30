@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** The headline ('foal-compute routine not pinned; averaging cannot be confirmed') is superseded by decode-foal_average.md: the two-parent floor average is real and lives in the foal-build routine (CODE 0x0C052B0C). The RNG finding here still stands. Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # Derby Owners Club — Foal Inheritance / Breeding-Compute Static RE
 
 ROM: `epr-22336c.ic22` (Rev C World Edition, "drbyocwc"), SH-4 LE, static base **0x0C000000**

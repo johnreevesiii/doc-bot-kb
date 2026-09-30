@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** Superseded: 'races = (card[0x12] >> 4) + 1'. The 0x12 high nibble is the unplaced (OUT) counter and races = wins + places + shows + unplaced (40 of 40 DOC '99 snapshots; doc99-card-codec). The JP catalog anchor 0x11106C (DOC 2000) / 0x0F9680 (DOC '99), index first with the name at +4, is the pre-fix reading: records are name-first from file 0x111034 (DOC 2000, #1 = モミジサンデー) and 0x0F964C (DOC '99), fixed 2026-08-08. Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # JP DOC 2000 card I/O routine + career-block byte map (from the JP program ROM)
 
 Static SH-4 RE of `derbyo2k/epr-22284a.ic22` (DOC 2000, product code BBX0, 4,194,304

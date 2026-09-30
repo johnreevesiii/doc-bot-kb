@@ -1,3 +1,5 @@
+> **CORRECTION 2026-09-30 (knowledge archive pass after the FAQ decode review):** Two items are out of date: the Almighty rule quoted here ('Corner excluded; all-equal -> Almighty') is wrong (Almighty needs ALL SIX current externals equal, Corner INCLUDED; if Start, Out of the Box, Competing, Tenacious and Spurt are equal but Corner differs, the horse is a Front-runner (FAQ almighty).), and the DOC 2000 / DOC '99 'identity-only cards' note is superseded: JP cards (DOC 2000, DOC '99) are NOT identity-only: they store name, sire and dam in katakana, current and birth speed/stamina/sharp, the six current externals, the six breeding values, wins/places/shows/unplaced, hearts, earnings, G1 titles, sex, coat, personality and silks, sealed by a checksum the cabinet enforces (FAQ jp-card-format; jp-card-io.md). Source: the public FAQ (play.johnreevesiii.com/faq), FAQ decode review 2026-09-30.
+
 # US / World Edition Card — Full 207-byte Decode (`us-card`)
 
 **Status:** Container + every load-bearing field VERIFIED against real `.card` bytes (Jun 2026).
